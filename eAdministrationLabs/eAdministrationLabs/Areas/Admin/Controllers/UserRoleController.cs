@@ -9,11 +9,14 @@ using eAdministrationLabs.Dtos.Create;
 using eAdministrationLabs.Dtos.Edit;
 using eAdministrationLabs.Models;
 using X.PagedList.Extensions;
+using Microsoft.AspNetCore.Authorization;
 
 namespace eAdministrationLabs.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Route("admin/userRole")]
+    [Authorize(Policy = "AdminOnly")]
+    [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
     public class UserRoleController : Controller
     {
         private readonly EAdministrationLabsContext _context;

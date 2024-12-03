@@ -8,11 +8,14 @@ using Microsoft.EntityFrameworkCore;
 using eAdministrationLabs.Dtos.Create;
 using eAdministrationLabs.Dtos.Edit;
 using eAdministrationLabs.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Test.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Route("admin/role")]
+    [Authorize(Policy = "AdminOnly")]
+    [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
     public class RoleController : Controller
     {
         private readonly EAdministrationLabsContext _context;

@@ -8,11 +8,14 @@ using Microsoft.EntityFrameworkCore;
 using eAdministrationLabs.Dtos.Create;
 using eAdministrationLabs.Dtos.Edit;
 using eAdministrationLabs.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace eAdministrationLabs.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Route("admin/labUsageLog")]
+    [Authorize(Policy = "AdminOnly")]
+    [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
     public class LabUsageLogController : Controller
     {
         private readonly EAdministrationLabsContext _context;

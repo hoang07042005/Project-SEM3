@@ -16,8 +16,8 @@ namespace eAdministrationLabs.Areas.Admin.Controllers
     [Route("admin")]
     [Route("admin/homeadmin")]
     ////[Authorize(Roles = "Admin, Manager, Technician, Staff")]
-    //[Authorize(Policy = "AdminOnly")]
-    //[ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
+    [Authorize(Policy = "AdminOnly")]
+    [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
     public class HomeAdminController : Controller
     {
         [Route("")]
