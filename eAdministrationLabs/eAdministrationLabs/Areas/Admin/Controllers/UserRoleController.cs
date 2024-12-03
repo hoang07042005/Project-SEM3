@@ -5,11 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using eAdministrationLabs.Models;
+using Microsoft.AspNetCore.Authorization;
 using eAdministrationLabs.Dtos.Create;
 using eAdministrationLabs.Dtos.Edit;
-using eAdministrationLabs.Models;
-using X.PagedList.Extensions;
-using Microsoft.AspNetCore.Authorization;
 
 namespace eAdministrationLabs.Areas.Admin.Controllers
 {
@@ -26,34 +25,16 @@ namespace eAdministrationLabs.Areas.Admin.Controllers
             _context = context;
         }
 
-        // GET: UserRole
+        // GET: Admin/UserRole
         [Route("")]
         [Route("index")]
-        public async Task<IActionResult> Index(int? page)
+        public async Task<IActionResult> Index()
         {
-            int pageSize = 6;
-            int pageNumber = page == null || page < 0 ? 1 : page.Value;
-
-            // Map the query to a DTO or model class
-            var userRoles = await _context.UserRoles
-                .Include(u => u.Role)
-                .Include(u => u.User)
-                .GroupBy(u => u.UserId)
-                .Select(group => new
-                {
-                    Id = group.Key,
-                    FullName = group.First().User.FullName,
-                    Roles = string.Join(", ", group.Select(u => u.Role.RoleName))
-                })
-                .ToListAsync();
-
-            // Create a PagedList from the userRoles list
-            var pagedList = userRoles.ToPagedList(pageNumber, pageSize);
-
-            return View(pagedList);
+            var eAdministrationLabsContext = _context.UserRoles.Include(u => u.Role).Include(u => u.User);
+            return View(await eAdministrationLabsContext.ToListAsync());
         }
 
-        // GET: UserRole/Details/5
+        // GET: Admin/UserRole/Details/5
         [Route("Details")]
         public async Task<IActionResult> Details(int? id)
         {
@@ -74,35 +55,41 @@ namespace eAdministrationLabs.Areas.Admin.Controllers
             return View(userRole);
         }
 
-        // GET: UserRole/Create
+        // GET: Admin/UserRole/Create
         [Route("Create")]
         public IActionResult Create()
         {
-            ViewData["RoleId"] = new SelectList(_context.Roles, "Id", "Id");
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id");
+            ViewData["RoleId"] = new SelectList(_context.Roles, "Id", "RoleName");
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "FullName");
             return View();
         }
 
-        // POST: UserRole/Create
+        // POST: Admin/UserRole/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [Route("Create")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,UserId,RoleId")] UserRole userRole)
+        public async Task<IActionResult> Create(UserRoleCreateDto createDto)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(userRole);
+                UserRole createUserRole = new UserRole()
+                {
+                    UserId = createDto.UserId,
+                    RoleId = createDto.RoleId
+                };
+
+                _context.Add(createUserRole);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["RoleId"] = new SelectList(_context.Roles, "Id", "Id", userRole.RoleId);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", userRole.UserId);
-            return View(userRole);
+            ViewData["RoleId"] = new SelectList(_context.Roles, "Id", "RoleName", createDto.RoleId);
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "FullName", createDto.UserId);
+            return View(new UserRole());
         }
 
-        // GET: UserRole/Edit/5
+        // GET: Admin/UserRole/Edit/5
         [Route("Edit")]
         public async Task<IActionResult> Edit(int? id)
         {
@@ -116,20 +103,20 @@ namespace eAdministrationLabs.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            ViewData["RoleId"] = new SelectList(_context.Roles, "Id", "Id", userRole.RoleId);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", userRole.UserId);
+            ViewData["RoleId"] = new SelectList(_context.Roles, "Id", "RoleName", userRole.RoleId);
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "FullName", userRole.UserId);
             return View(userRole);
         }
 
-        // POST: UserRole/Edit/5
+        // POST: Admin/UserRole/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [Route("Edit")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,UserId,RoleId")] UserRole userRole)
+        public async Task<IActionResult> Edit(int id, UserRoleEditDto editDto)
         {
-            if (id != userRole.Id)
+            if (id != editDto.Id)
             {
                 return NotFound();
             }
@@ -138,12 +125,22 @@ namespace eAdministrationLabs.Areas.Admin.Controllers
             {
                 try
                 {
-                    _context.Update(userRole);
+                    var editUserRole = await _context.UserRoles.FindAsync(id);
+                    if (editUserRole == null)
+                    {
+                        return NotFound();
+                    }
+
+                    // Update the properties of the existing entity
+                    editUserRole.UserId = editDto.UserId;
+                    editUserRole.RoleId = editDto.RoleId;
+
+                    _context.Update(editUserRole);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!UserRoleExists(userRole.Id))
+                    if (!UserRoleExists(id))
                     {
                         return NotFound();
                     }
@@ -154,12 +151,12 @@ namespace eAdministrationLabs.Areas.Admin.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["RoleId"] = new SelectList(_context.Roles, "Id", "Id", userRole.RoleId);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", userRole.UserId);
-            return View(userRole);
+            ViewData["RoleId"] = new SelectList(_context.Roles, "Id", "RoleName", editDto.RoleId);
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "FullName", editDto.UserId);
+            return View(editDto);
         }
 
-        // GET: UserRole/Delete/5
+        // GET: Admin/UserRole/Delete/5
         [Route("Delete")]
         public async Task<IActionResult> Delete(int? id)
         {
@@ -180,7 +177,7 @@ namespace eAdministrationLabs.Areas.Admin.Controllers
             return View(userRole);
         }
 
-        // POST: UserRole/Delete/5
+        // POST: Admin/UserRole/Delete/5
         [Route("Delete")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]

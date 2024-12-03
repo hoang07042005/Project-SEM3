@@ -65,15 +65,19 @@ namespace Test.Areas.Admin.Controllers
         [Route("Create")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,RoleName")] Role role)
+        public async Task<IActionResult> Create(RoleCreateDto createDto)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(role);
+                Role createRole = new Role()
+                {
+                    RoleName = createDto.RoleName
+                };
+                _context.Add(createRole);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(role);
+            return View(new Role());
         }
 
         // GET: Role/Edit/5
@@ -99,9 +103,9 @@ namespace Test.Areas.Admin.Controllers
         [Route("Edit")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,RoleName")] Role role)
+        public async Task<IActionResult> Edit(int id, RoleEditDto editDto)
         {
-            if (id != role.Id)
+            if (id != editDto.Id)
             {
                 return NotFound();
             }
@@ -110,12 +114,21 @@ namespace Test.Areas.Admin.Controllers
             {
                 try
                 {
-                    _context.Update(role);
+                    var editRole = await _context.Roles.FindAsync(id);
+                    if (editRole == null)
+                    {
+                        return NotFound();
+                    }
+
+                    // Update the properties of the existing entity
+                    editRole.RoleName = editDto.RoleName;
+
+                    _context.Update(editRole);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!RoleExists(role.Id))
+                    if (!RoleExists(id))
                     {
                         return NotFound();
                     }
@@ -126,7 +139,7 @@ namespace Test.Areas.Admin.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(role);
+            return View(editDto);
         }
 
         // GET: Role/Delete/5
