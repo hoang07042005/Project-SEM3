@@ -75,9 +75,9 @@ public class AccountController : Controller
         {
             // Kiểm tra người dùng có trong cơ sở dữ liệu không
             var user = await _context.Users
-                                      .Include(u => u.UserRoles)
-                                      .ThenInclude(ur => ur.Role)
-                                      .FirstOrDefaultAsync(u => u.Email == model.Email);
+                .Include(u => u.UserRoles)
+                .ThenInclude(ur => ur.Role)
+                .FirstOrDefaultAsync(u => u.Email == model.Email);
             if (user != null && BCrypt.Net.BCrypt.Verify(model.Password, user.Password))
             {
                 // Tạo Claims cho người dùng
@@ -108,11 +108,11 @@ public class AccountController : Controller
                 HttpContext.Session.SetInt32("UserID", user.Id);
                 HttpContext.Session.SetString("Roles", string.Join(",", roles));
 
-                if (roles.Contains("Admin") || roles.Contains("Technician") || roles.Contains("Lecturer"))
+                if (roles.Contains("Admin") || roles.Contains("HOD") || roles.Contains("Lecturer") || roles.Contains("Technical Staff"))
                 {
                     return RedirectToAction("Index", "HomeAdmin", new { area = "Admin" });
                 }
-                else if (roles.Contains("User"))
+                else if (roles.Contains("Students"))
                 {
                     return RedirectToAction("Index", "Home");
                 }

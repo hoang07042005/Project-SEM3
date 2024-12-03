@@ -45,7 +45,7 @@
                             <div class="d-flex flex-wrap align-items-center gap-3">
                                 @foreach (var role in ViewBag.Roles)
                                 {
-                                    if (role.RoleName == "User")
+                                    if (role.RoleName == "Students")
                                     {
                                         <div class="form-check form-check-inline">
                                             <input type="checkbox" name="SelectedRoleIds" value="@role.Id" class="form-check-input" checked />
