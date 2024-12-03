@@ -4,6 +4,10 @@
 # Azure Functions localsettings file
 local.settings.json
 
+# Asp.NET Core Web App (MVC)
+appsettings.json
+appsettings.Development.json
+
 # User-specific files
 *.suo
 *.user
