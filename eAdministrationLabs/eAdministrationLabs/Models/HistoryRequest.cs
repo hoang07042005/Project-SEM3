@@ -7,6 +7,8 @@ public partial class HistoryRequest
 {
     public int Id { get; set; }
 
+    public int UserId { get; set; }
+
     public int RequestId { get; set; }
 
     public int StatusRequestId { get; set; }
@@ -20,4 +22,6 @@ public partial class HistoryRequest
     public virtual Request Request { get; set; } = null!;
 
     public virtual StatusRequest StatusRequest { get; set; } = null!;
+
+    public virtual User User { get; set; } = null!;
 }

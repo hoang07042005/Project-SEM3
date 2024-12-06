@@ -7,8 +7,6 @@ public partial class Request
 {
     public int Id { get; set; }
 
-    public int UserId { get; set; }
-
     public int LabId { get; set; }
 
     public int? EquipmentId { get; set; }
@@ -24,6 +22,4 @@ public partial class Request
     public virtual RequestImage Image { get; set; } = null!;
 
     public virtual Lab Lab { get; set; } = null!;
-
-    public virtual User User { get; set; } = null!;
 }

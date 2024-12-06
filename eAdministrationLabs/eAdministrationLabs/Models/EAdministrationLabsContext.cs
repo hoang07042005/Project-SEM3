@@ -54,7 +54,7 @@ public partial class EAdministrationLabsContext : DbContext
     {
         modelBuilder.Entity<EquiLab>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__EquiLabs__80AC09911AF6FCC0");
+            entity.HasKey(e => e.Id).HasName("PK__EquiLabs__80AC09910675DFE1");
 
             entity.Property(e => e.Id).HasColumnName("EquiLabID");
             entity.Property(e => e.EquipmentId).HasColumnName("EquipmentID");
@@ -76,7 +76,7 @@ public partial class EAdministrationLabsContext : DbContext
 
         modelBuilder.Entity<Equipment>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Equipmen__34474599C099BD7A");
+            entity.HasKey(e => e.Id).HasName("PK__Equipmen__3447459958A3481B");
 
             entity.Property(e => e.Id).HasColumnName("EquipmentID");
             entity.Property(e => e.NameEquipment).HasMaxLength(50);
@@ -88,13 +88,14 @@ public partial class EAdministrationLabsContext : DbContext
 
         modelBuilder.Entity<HistoryRequest>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__HistoryR__4D7B4ADD9C22A41E");
+            entity.HasKey(e => e.Id).HasName("PK__HistoryR__4D7B4ADD8A14BF35");
 
             entity.Property(e => e.Id).HasColumnName("HistoryID");
             entity.Property(e => e.ChangedAt).HasDefaultValueSql("(getdate())");
             entity.Property(e => e.ChangedBy).HasMaxLength(100);
             entity.Property(e => e.RequestId).HasColumnName("RequestID");
             entity.Property(e => e.StatusRequestId).HasColumnName("StatusRequestID");
+            entity.Property(e => e.UserId).HasColumnName("UserID");
 
             entity.HasOne(d => d.Request).WithMany(p => p.HistoryRequests)
                 .HasForeignKey(d => d.RequestId)
@@ -103,11 +104,15 @@ public partial class EAdministrationLabsContext : DbContext
             entity.HasOne(d => d.StatusRequest).WithMany(p => p.HistoryRequests)
                 .HasForeignKey(d => d.StatusRequestId)
                 .HasConstraintName("FK__HistoryRe__Statu__693CA210");
+
+            entity.HasOne(d => d.User).WithMany(p => p.HistoryRequests)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("FK__HistoryRe__UserI__6754599E");
         });
 
         modelBuilder.Entity<Lab>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Labs__EDBD773AFD35145D");
+            entity.HasKey(e => e.Id).HasName("PK__Labs__EDBD773A77FA477F");
 
             entity.Property(e => e.Id).HasColumnName("LabID");
             entity.Property(e => e.CreatedAt)
@@ -127,7 +132,7 @@ public partial class EAdministrationLabsContext : DbContext
 
         modelBuilder.Entity<LabUsageLog>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__LabUsage__5E5499A891CDA483");
+            entity.HasKey(e => e.Id).HasName("PK__LabUsage__5E5499A8EB6A0186");
 
             entity.Property(e => e.Id).HasColumnName("LogID");
             entity.Property(e => e.CreatedAt)
@@ -149,7 +154,7 @@ public partial class EAdministrationLabsContext : DbContext
 
         modelBuilder.Entity<Notification>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Notifica__20CF2E327F781F3A");
+            entity.HasKey(e => e.Id).HasName("PK__Notifica__20CF2E3234B214C8");
 
             entity.Property(e => e.Id).HasColumnName("NotificationID");
             entity.Property(e => e.CreatedAt)
@@ -167,7 +172,7 @@ public partial class EAdministrationLabsContext : DbContext
 
         modelBuilder.Entity<Request>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Requests__33A8519A2D96C229");
+            entity.HasKey(e => e.Id).HasName("PK__Requests__33A8519A00162311");
 
             entity.Property(e => e.Id).HasColumnName("RequestID");
             entity.Property(e => e.CreatedAt)
@@ -176,29 +181,24 @@ public partial class EAdministrationLabsContext : DbContext
             entity.Property(e => e.EquipmentId).HasColumnName("EquipmentID");
             entity.Property(e => e.ImageId).HasColumnName("ImageID");
             entity.Property(e => e.LabId).HasColumnName("LabID");
-            entity.Property(e => e.UserId).HasColumnName("UserID");
 
             entity.HasOne(d => d.Equipment).WithMany(p => p.Requests)
                 .HasForeignKey(d => d.EquipmentId)
                 .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("FK__Requests__Equipm__6383C8BA");
+                .HasConstraintName("FK__Requests__Equipm__628FA481");
 
             entity.HasOne(d => d.Image).WithMany(p => p.Requests)
                 .HasForeignKey(d => d.ImageId)
-                .HasConstraintName("FK__Requests__ImageI__6477ECF3");
+                .HasConstraintName("FK__Requests__ImageI__6383C8BA");
 
             entity.HasOne(d => d.Lab).WithMany(p => p.Requests)
                 .HasForeignKey(d => d.LabId)
-                .HasConstraintName("FK__Requests__LabID__628FA481");
-
-            entity.HasOne(d => d.User).WithMany(p => p.Requests)
-                .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK__Requests__UserID__619B8048");
+                .HasConstraintName("FK__Requests__LabID__619B8048");
         });
 
         modelBuilder.Entity<RequestImage>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__RequestI__7516F4EC9B4E4FB6");
+            entity.HasKey(e => e.Id).HasName("PK__RequestI__7516F4EC4DE8D026");
 
             entity.Property(e => e.Id).HasColumnName("ImageID");
             entity.Property(e => e.CreatedAt)
@@ -208,7 +208,7 @@ public partial class EAdministrationLabsContext : DbContext
 
         modelBuilder.Entity<Role>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Roles__8AFACE3A12AC46C2");
+            entity.HasKey(e => e.Id).HasName("PK__Roles__8AFACE3A4754D5DB");
 
             entity.Property(e => e.Id).HasColumnName("RoleID");
             entity.Property(e => e.RoleName).HasMaxLength(50);
@@ -216,7 +216,7 @@ public partial class EAdministrationLabsContext : DbContext
 
         modelBuilder.Entity<Software>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Software__25EDB8DC784E20C8");
+            entity.HasKey(e => e.Id).HasName("PK__Software__25EDB8DCBF9069AC");
 
             entity.Property(e => e.Id).HasColumnName("SoftwareID");
             entity.Property(e => e.CreatedAt)
@@ -239,7 +239,7 @@ public partial class EAdministrationLabsContext : DbContext
 
         modelBuilder.Entity<StatusLab>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__StatusLa__072A22DFBE90E538");
+            entity.HasKey(e => e.Id).HasName("PK__StatusLa__072A22DFB420707C");
 
             entity.Property(e => e.Id).HasColumnName("StatusLabID");
             entity.Property(e => e.StatusName).HasMaxLength(100);
@@ -247,7 +247,7 @@ public partial class EAdministrationLabsContext : DbContext
 
         modelBuilder.Entity<StatusRequest>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__StatusRe__B62FB50E9DBB1A7F");
+            entity.HasKey(e => e.Id).HasName("PK__StatusRe__B62FB50E95575741");
 
             entity.Property(e => e.Id).HasColumnName("StatusRequestID");
             entity.Property(e => e.StatusName).HasMaxLength(100);
@@ -255,11 +255,11 @@ public partial class EAdministrationLabsContext : DbContext
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Users__1788CCACD9780C3D");
+            entity.HasKey(e => e.Id).HasName("PK__Users__1788CCAC10AD3EDE");
 
             entity.ToTable(tb => tb.HasTrigger("trg_Users_UpdatedAt"));
 
-            entity.HasIndex(e => e.Email, "UQ__Users__A9D1053471AAC870").IsUnique();
+            entity.HasIndex(e => e.Email, "UQ__Users__A9D105344E93A6A9").IsUnique();
 
             entity.Property(e => e.Id).HasColumnName("UserID");
             entity.Property(e => e.CreatedAt)
@@ -275,7 +275,7 @@ public partial class EAdministrationLabsContext : DbContext
 
         modelBuilder.Entity<UserRole>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__UserRole__3D978A55F8AEFCEB");
+            entity.HasKey(e => e.Id).HasName("PK__UserRole__3D978A55B7812925");
 
             entity.Property(e => e.Id).HasColumnName("UserRoleID");
             entity.Property(e => e.RoleId).HasColumnName("RoleID");

@@ -19,11 +19,11 @@ public partial class User
 
     public virtual ICollection<EquiLab> EquiLabs { get; set; } = new List<EquiLab>();
 
+    public virtual ICollection<HistoryRequest> HistoryRequests { get; set; } = new List<HistoryRequest>();
+
     public virtual ICollection<LabUsageLog> LabUsageLogs { get; set; } = new List<LabUsageLog>();
 
     public virtual ICollection<Notification> Notifications { get; set; } = new List<Notification>();
-
-    public virtual ICollection<Request> Requests { get; set; } = new List<Request>();
 
     public virtual ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
 }
