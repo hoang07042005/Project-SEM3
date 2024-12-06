@@ -13,17 +13,19 @@ public partial class Lab
 
     public int Capacity { get; set; }
 
-    public string? Status { get; set; }
+    public int StatusLabId { get; set; }
 
     public DateTime? CreatedAt { get; set; }
 
     public DateTime? UpdatedAt { get; set; }
 
-    public virtual ICollection<Computer> Computers { get; set; } = new List<Computer>();
+    public virtual ICollection<EquiLab> EquiLabs { get; set; } = new List<EquiLab>();
 
     public virtual ICollection<LabUsageLog> LabUsageLogs { get; set; } = new List<LabUsageLog>();
 
-    public virtual ICollection<MaintenanceRequest> MaintenanceRequests { get; set; } = new List<MaintenanceRequest>();
+    public virtual ICollection<Request> Requests { get; set; } = new List<Request>();
 
     public virtual ICollection<Software> Softwares { get; set; } = new List<Software>();
+
+    public virtual StatusLab StatusLab { get; set; } = null!;
 }

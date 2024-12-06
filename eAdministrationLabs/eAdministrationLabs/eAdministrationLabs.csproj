@@ -24,4 +24,9 @@
     <PackageReference Include="X.PagedList.Mvc.Core" Version="10.5.7" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Dtos\Create\" />
+    <Folder Include="Dtos\Edit\" />
+  </ItemGroup>
+
 </Project>
