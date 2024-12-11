@@ -1,0 +1,57 @@
+﻿@model eAdministrationLabs.Models.HistoryRequest
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h1>Edit</h1>
+
+<h4>HistoryRequest</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="UserId" class="control-label"></label>
+                <select asp-for="UserId" class="form-control" asp-items="ViewBag.UserId"></select>
+                <span asp-validation-for="UserId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RequestId" class="control-label"></label>
+                <select asp-for="RequestId" class="form-control" asp-items="ViewBag.RequestId"></select>
+                <span asp-validation-for="RequestId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StatusRequestId" class="control-label"></label>
+                <select asp-for="StatusRequestId" class="form-control" asp-items="ViewBag.StatusRequestId"></select>
+                <span asp-validation-for="StatusRequestId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ChangedBy" class="control-label"></label>
+                <input asp-for="ChangedBy" class="form-control" />
+                <span asp-validation-for="ChangedBy" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ChangedAt" class="control-label"></label>
+                <input asp-for="ChangedAt" class="form-control" />
+                <span asp-validation-for="ChangedAt" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Notes" class="control-label"></label>
+                <input asp-for="Notes" class="form-control" />
+                <span asp-validation-for="Notes" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

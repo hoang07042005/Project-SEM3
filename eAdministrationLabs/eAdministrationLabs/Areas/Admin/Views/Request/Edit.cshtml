@@ -1,0 +1,47 @@
+﻿@model eAdministrationLabs.Models.Request
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h1>Edit</h1>
+
+<h4>Request</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="LabId" class="control-label"></label>
+                <select asp-for="LabId" class="form-control" asp-items="ViewBag.LabId"></select>
+                <span asp-validation-for="LabId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EquipmentId" class="control-label"></label>
+                <select asp-for="EquipmentId" class="form-control" asp-items="ViewBag.EquipmentId"></select>
+                <span asp-validation-for="EquipmentId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ImageId" class="control-label"></label>
+                <select asp-for="ImageId" class="form-control" asp-items="ViewBag.ImageId"></select>
+                <span asp-validation-for="ImageId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CreatedAt" class="control-label"></label>
+                <input asp-for="CreatedAt" class="form-control" />
+                <span asp-validation-for="CreatedAt" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
