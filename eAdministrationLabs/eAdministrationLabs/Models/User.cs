@@ -17,6 +17,10 @@ public partial class User
 
     public DateTime? UpdatedAt { get; set; }
 
+    public string? PasswordResetToken { get; set; } 
+
+    public DateTime? TokenExpirationTime { get; set; }
+
     public virtual ICollection<EquiLab> EquiLabs { get; set; } = new List<EquiLab>();
 
     public virtual ICollection<HistoryRequest> HistoryRequests { get; set; } = new List<HistoryRequest>();

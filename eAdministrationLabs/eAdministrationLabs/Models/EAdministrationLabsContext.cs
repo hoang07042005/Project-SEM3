@@ -271,6 +271,12 @@ public partial class EAdministrationLabsContext : DbContext
             entity.Property(e => e.UpdatedAt)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
+            entity.Property(e => e.PasswordResetToken)
+            .HasColumnName("ResetToken")
+            .HasMaxLength(255);
+            entity.Property(e => e.TokenExpirationTime)
+                .HasColumnName("TokenExpiry")
+                .HasColumnType("datetime");
         });
 
         modelBuilder.Entity<UserRole>(entity =>

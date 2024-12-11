@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Dtos\**" />
+    <Content Remove="Dtos\**" />
+    <EmbeddedResource Remove="Dtos\**" />
+    <None Remove="Dtos\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="wwwroot\LayoutAdmin\.DS_Store" />
   </ItemGroup>
 
@@ -22,11 +29,6 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.7" />
     <PackageReference Include="Portable.BouncyCastle" Version="1.9.0" />
     <PackageReference Include="X.PagedList.Mvc.Core" Version="10.5.7" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Dtos\Create\" />
-    <Folder Include="Dtos\Edit\" />
   </ItemGroup>
 
 </Project>

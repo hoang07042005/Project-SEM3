@@ -1,4 +1,4 @@
-﻿namespace eAdministrationLabs.Models
+﻿namespace eAdministrationLabs.Models.ViewModels
 {
     public class LoginViewModel
     {

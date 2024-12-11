@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace eAdministrationLabs.Models
+namespace eAdministrationLabs.Models.ViewModels
 {
     public class RegisterViewModel
     {
