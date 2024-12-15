@@ -186,6 +186,34 @@ public class AccountController : Controller
         return View();
     }
 
+    //[HttpPost]
+    //public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
+    //{
+    //    if (ModelState.IsValid)
+    //    {
+    //        var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == model.Email);
+    //        if (user != null)
+    //        {
+    //            var token = Guid.NewGuid().ToString();
+    //            user.PasswordResetToken = token;
+    //            user.TokenExpirationTime = DateTime.UtcNow.AddHours(1);
+    //            await _context.SaveChangesAsync();
+
+    //            var resetLink = Url.Action("ResetPassword", "Account", new { token, email = user.Email }, Request.Scheme);
+    //            var emailBody = $"Click vào đây để đặt lại mật khẩu: <a href='{resetLink}'>Đặt lại mật khẩu</a>";
+    //            await _emailService.SendEmailAsync(user.Email, "Đặt lại mật khẩu", emailBody);
+
+    //            ViewBag.Message = "Email đặt lại mật khẩu đã được gửi.";
+    //            return RedirectToAction("ForgotPasswordConfirmation", "Account");
+    //        }
+
+    //        ModelState.AddModelError("", "Không tìm thấy email.");
+    //    }
+
+    //    return View(model);
+    //}
+
+
     [HttpPost]
     public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
     {
@@ -200,7 +228,77 @@ public class AccountController : Controller
                 await _context.SaveChangesAsync();
 
                 var resetLink = Url.Action("ResetPassword", "Account", new { token, email = user.Email }, Request.Scheme);
-                var emailBody = $"Click vào đây để đặt lại mật khẩu: <a href='{resetLink}'>Đặt lại mật khẩu</a>";
+                var emailBody = $@"
+                <!DOCTYPE html>
+                <html lang='vi'>
+                <head>
+                    <meta charset='UTF-8'>
+                    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+                    <title>Đặt lại mật khẩu - Dịch vụ của chúng tôi</title>
+                    <style>
+                        body, table, td, a {{
+                            font-family: Arial, sans-serif;
+                            font-size: 16px;
+                            color: #333;
+                        }}
+                        .container {{
+                            width: 100%;
+                            max-width: 600px;
+                            margin: 0 auto;
+                            padding: 20px;
+                        }}
+                        .header {{
+                            text-align: center;
+                            padding: 20px 0;
+                        }}
+                        .content {{
+                            padding: 20px;
+                            background-color: #f4f4f4;
+                            border-radius: 5px;
+                        }}
+                        .content h1 {{
+                            color: #333;
+                        }}
+                        .content p {{
+                            line-height: 1.6;
+                        }}
+                        .content a {{
+                            display: inline-block;
+                            background-color: #007bff;
+                            color: #fff;
+                            padding: 10px 20px;
+                            text-decoration: none;
+                            border-radius: 5px;
+                        }}
+                        .footer {{
+                            text-align: center;
+                            padding: 20px 0;
+                            font-size: 14px;
+                            color: #666;
+                        }}
+                    </style>
+                </head>
+                <body>
+                    <div class='container'>
+                        <div class='header'>
+                            <h1>Đặt lại mật khẩu</h1>
+                        </div>
+                        <div class='content'>
+                            <p>Xin chào,</p>
+                            <p>Chúng tôi nhận thấy rằng bạn đã yêu cầu đặt lại mật khẩu cho tài khoản của mình. Để tiếp tục, vui lòng nhấp vào liên kết bên dưới:</p>
+                            <p><a href='{resetLink}'>Đặt lại mật khẩu</a></p>
+                            <p>Lưu ý rằng liên kết này sẽ hết hạn sau 1 giờ từ lúc yêu cầu. Nếu bạn không yêu cầu đặt lại mật khẩu, xin vui lòng bỏ qua email này.</p>
+                            <p>Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi.</p>
+                        </div>
+                        <div class='footer'>
+                            <p>Trường hợp gặp khó khăn hoặc cần trợ giúp, vui lòng liên hệ với chúng tôi qua email hoặc gọi đến đường dây hỗ trợ của chúng tôi.</p>
+                            <p><small>&copy; Dịch vụ của chúng tôi. Mọi quyền được bảo lưu.</small></p>
+                        </div>
+                    </div>
+                </body>
+                </html>
+            ";
+
                 await _emailService.SendEmailAsync(user.Email, "Đặt lại mật khẩu", emailBody);
 
                 ViewBag.Message = "Email đặt lại mật khẩu đã được gửi.";
@@ -212,6 +310,7 @@ public class AccountController : Controller
 
         return View(model);
     }
+
 
 
     public IActionResult ForgotPasswordConfirmation()

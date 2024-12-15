@@ -53,7 +53,15 @@
                 @Html.DisplayFor(modelItem => item.UpdatedAt)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.StatusLab.Id)
+                    @Html.DisplayFor(modelItem => item.StatusLab.StatusName)
+                @* <select class="form-control status-select" data-id="@item.Id" style="color: #000000;">
+                    @foreach (var status in ViewBag.StatusOptions)
+                    {
+                        <option value="@status.Id" style="color: #000000;">
+                            @status.StatusName
+                        </option>
+                    }
+                </select> *@
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
@@ -64,3 +72,30 @@
 }
     </tbody>
 </table>
+
+ @* @section Scripts {
+     <script>
+         $(document).ready(function () {
+             $(".status-select").change(function () {
+
+                 var id = $(this).data("id");
+                 var statusId = $(this).val();
+
+                 $.ajax({
+                     url: '@Url.Action("UpdateStatus")',
+                     type: 'POST',
+                     data: {
+                         id: id,
+                         statusId: statusId
+                     },
+                     success: function (result) {
+                         alert("Status update successful.");
+                     },
+                     error: function () {
+                         alert("There was an error updating status.");
+                     }
+                 });
+             });
+         });
+     </script>
+ } *@

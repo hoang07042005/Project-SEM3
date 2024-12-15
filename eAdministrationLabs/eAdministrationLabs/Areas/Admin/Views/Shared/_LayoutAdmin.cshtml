@@ -50,23 +50,11 @@
                             <i class="mdi mdi-home menu-icon"></i>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-area="admin" asp-controller="RequestImage" asp-action="Index">
-                            <span class="menu-title">Request Image</span>
-                            <i class="mdi mdi-home menu-icon"></i>
-                        </a>
-                    </li>
+                    
                     <li class="nav-item">
                         <a class="nav-link" asp-area="admin" asp-controller="User" asp-action="Index">
                             <span class="menu-title">Account</span>
                             <i class="mdi mdi-home menu-icon"></i>
-                        </a>
-                    </li>
-                    
-                    @* <li class="nav-item">
-                        <a class="nav-link" asp-area="admin" asp-controller="Computer" asp-action="Index">
-                            <span class="menu-title">Computer</span>
-                            <i class="fas fa-desktop menu-icon"></i>
                         </a>
                     </li>
                     <li class="nav-item">
@@ -76,23 +64,42 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" asp-area="admin" asp-controller="LabUsageLog" asp-action="Index">
-                            <span class="menu-title">LabUsageLog</span>
-                            <i class="fas fa-clipboard-list menu-icon"></i>
+                        <a class="nav-link" asp-area="admin" asp-controller="EquiLab" asp-action="Index">
+                            <span class="menu-title">EquiLab</span>
+                            <i class="fas fa-laptop-code menu-icon"></i>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" asp-area="admin" asp-controller="MaintenanceRequest" asp-action="Index">
-                            <span class="menu-title">MaintenanceRequest</span>
+                        <a class="nav-link" asp-area="admin" asp-controller="Equipment" asp-action="Index">
+                            <span class="menu-title">Equipment</span>
+                            <i class="fas fa-laptop-code menu-icon"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="admin" asp-controller="Request" asp-action="Index">
+                            <span class="menu-title">Request</span>
                             <i class="fas fa-tools menu-icon"></i>
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" asp-area="admin" asp-controller="RequestImage" asp-action="Index">
+                            <span class="menu-title">Request Image</span>
+                            <i class="mdi mdi-home menu-icon"></i>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="admin" asp-controller="HistoryRequest" asp-action="Index">
+                            <span class="menu-title">History Request</span>
+                            <i class="fas fa-laptop-code menu-icon"></i>
+                        </a>
+                    </li>
+                 @*    <li class="nav-item">
                         <a class="nav-link" asp-area="admin" asp-controller="Notification" asp-action="Index">
                             <span class="menu-title">Notification</span>
                             <i class="fas fa-bell menu-icon"></i>
                         </a>
-                    </li>
+                    </li> *@
                     <li class="nav-item">
                         <a class="nav-link" asp-area="admin" asp-controller="Software" asp-action="Index">
                             <span class="menu-title">Software</span>
@@ -100,21 +107,11 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
-                            <span class="menu-title">
-                                Account
-                            </span>
-                            <i class="menu-arrow"></i>
-                            <i class="bi bi-person menu-icon"></i>
+                        <a class="nav-link" asp-area="admin" asp-controller="LabUsageLog" asp-action="Index">
+                            <span class="menu-title">LabUsageLog</span>
+                            <i class="fas fa-clipboard-list menu-icon"></i>
                         </a>
-                        <div class="collapse" id="ui-basic">
-                            <ul class="nav flex-column sub-menu">
-                                <li class="nav-item"> <a class="nav-link" asp-area="admin" asp-controller="User" asp-action="Index">User</a></li>
-                                <li class="nav-item"> <a class="nav-link" asp-area="admin" asp-controller="UserRole" asp-action="Index">User Role</a></li>
-                                <li class="nav-item"> <a class="nav-link " asp-area="admin" asp-controller="Role" asp-action="Index">Role</a></li>
-                            </ul>
-                        </div>
-                    </li> *@
+                    </li>
                     
                      
                 </ul>

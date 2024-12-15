@@ -1,0 +1,27 @@
+﻿@model eAdministrationLabs.Models.ViewModels.RequestViewModel
+
+@{
+    ViewData["Title"] = "Chi tiết yêu cầu";
+}
+
+<h1>Chi tiết yêu cầu</h1>
+
+<div>
+    <h3>@Model.LabName - @Model.EquipmentName</h3>
+    <p><strong>Trạng thái:</strong> @Model.StatusName</p>
+    <p><strong>Thời gian tạo:</strong> @Model.CreatedAt.ToString("dd/MM/yyyy HH:mm:ss")</p>
+    <p><strong>Được thay đổi bởi:</strong> @Model.ChangedBy</p>
+    <p><strong>Ghi chú:</strong> @Model.Notes</p>
+
+    @if (!string.IsNullOrEmpty(Model.ImageBase64))
+    {
+        <img src="data:image/jpeg;base64,@Model.ImageBase64" alt="Request Image" style="max-height: 100px; max-width: 100px;" />
+    }
+    else
+    {
+        <p>Không có ảnh</p>
+    }
+
+</div>
+
+<a href="@Url.Action("Notifications", "Request")" class="btn btn-secondary mt-3">Quay lại</a>

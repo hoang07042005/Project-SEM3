@@ -15,5 +15,13 @@ public partial class Notification
 
     public DateTime? CreatedAt { get; set; }
 
+    public int? RequestId { get; set; }
+
+    public int? LabUsageLogId { get; set; }
+
     public virtual User User { get; set; } = null!;
+
+    public virtual Request? Request { get; set; }
+
+    public virtual LabUsageLog? LabUsageLog { get; set; }
 }

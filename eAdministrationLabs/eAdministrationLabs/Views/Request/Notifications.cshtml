@@ -1,0 +1,50 @@
+﻿@model IEnumerable<eAdministrationLabs.Models.Notification>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Message</th>
+            <th>Status</th>
+            <th>Created At</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var notification in Model.OrderByDescending(n => n.ReadStatus == "Unread"))
+        {
+            <tr id="notification-@notification.Id">
+                <td>@notification.Message</td>
+                <td id="status-@notification.Id">
+                    @if (notification.ReadStatus == "Unread")
+                    {
+                        <span class="badge bg-warning"> Unread </span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-success">  Read </span>
+                    }
+                </td>
+                <td>@notification.CreatedAt</td>
+
+                <td>
+                    @if (notification.RequestId.HasValue)
+                    {
+                        <a href="@Url.Action("Details", "Request", new { id = notification.RequestId })" class="btn btn-info btn-sm">
+                            Request details
+                        </a>
+                    }
+                    else if (notification.LabUsageLogId.HasValue)
+                    {
+                        <a href="@Url.Action("Details", "LabUsageLogs", new { id = notification.LabUsageLogId })" class="btn btn-info btn-sm">
+                            Reservation details
+                        </a>
+                    }
+                    else
+                    {
+                        <span>There are no inquiries or room registrations involved</span>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

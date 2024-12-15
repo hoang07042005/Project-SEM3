@@ -123,28 +123,6 @@ namespace eAdministrationLabs.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Notifications",
-                columns: table => new
-                {
-                    NotificationID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserID = table.Column<int>(type: "int", nullable: false),
-                    Message = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ReadStatus = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true, defaultValue: "Unread"),
-                    CreatedAt = table.Column<DateTime>(type: "datetime", nullable: true, defaultValueSql: "(getdate())")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK__Notifica__20CF2E3234B214C8", x => x.NotificationID);
-                    table.ForeignKey(
-                        name: "FK__Notificat__UserI__6EF57B66",
-                        column: x => x.UserID,
-                        principalTable: "Users",
-                        principalColumn: "UserID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "UserRoles",
                 columns: table => new
                 {
@@ -178,11 +156,16 @@ namespace eAdministrationLabs.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     EquipmentID = table.Column<int>(type: "int", nullable: false),
                     LabID = table.Column<int>(type: "int", nullable: false),
-                    UserID = table.Column<int>(type: "int", nullable: false)
+                    UserId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK__EquiLabs__80AC09910675DFE1", x => x.EquiLabID);
+                    table.ForeignKey(
+                        name: "FK_EquiLabs_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "UserID");
                     table.ForeignKey(
                         name: "FK__EquiLabs__Equipm__4BAC3F29",
                         column: x => x.EquipmentID,
@@ -194,12 +177,6 @@ namespace eAdministrationLabs.Migrations
                         column: x => x.LabID,
                         principalTable: "Labs",
                         principalColumn: "LabID",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK__EquiLabs__UserID__4D94879B",
-                        column: x => x.UserID,
-                        principalTable: "Users",
-                        principalColumn: "UserID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -327,6 +304,42 @@ namespace eAdministrationLabs.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Notifications",
+                columns: table => new
+                {
+                    NotificationID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserID = table.Column<int>(type: "int", nullable: false),
+                    Message = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ReadStatus = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true, defaultValue: "Unread"),
+                    CreatedAt = table.Column<DateTime>(type: "datetime", nullable: true, defaultValueSql: "(getdate())"),
+                    RequestID = table.Column<int>(type: "int", nullable: true),
+                    LabUsageLogID = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK__Notifica__20CF2E3234B214C8", x => x.NotificationID);
+                    table.ForeignKey(
+                        name: "FK_Notifications_LabUsageLogs_LabUsageLogID",
+                        column: x => x.LabUsageLogID,
+                        principalTable: "LabUsageLogs",
+                        principalColumn: "LogID",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK__Notificat__UserI__6EF57B66",
+                        column: x => x.UserID,
+                        principalTable: "Users",
+                        principalColumn: "UserID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK__Notification__RequestId__F9F9A3A7",
+                        column: x => x.RequestID,
+                        principalTable: "Requests",
+                        principalColumn: "RequestID",
+                        onDelete: ReferentialAction.SetNull);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_EquiLabs_EquipmentID",
                 table: "EquiLabs",
@@ -338,9 +351,9 @@ namespace eAdministrationLabs.Migrations
                 column: "LabID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_EquiLabs_UserID",
+                name: "IX_EquiLabs_UserId",
                 table: "EquiLabs",
-                column: "UserID");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_HistoryRequests_RequestID",
@@ -371,6 +384,16 @@ namespace eAdministrationLabs.Migrations
                 name: "IX_LabUsageLogs_UserID",
                 table: "LabUsageLogs",
                 column: "UserID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Notifications_LabUsageLogID",
+                table: "Notifications",
+                column: "LabUsageLogID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Notifications_RequestID",
+                table: "Notifications",
+                column: "RequestID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Notifications_UserID",
@@ -424,9 +447,6 @@ namespace eAdministrationLabs.Migrations
                 name: "HistoryRequests");
 
             migrationBuilder.DropTable(
-                name: "LabUsageLogs");
-
-            migrationBuilder.DropTable(
                 name: "Notifications");
 
             migrationBuilder.DropTable(
@@ -436,10 +456,13 @@ namespace eAdministrationLabs.Migrations
                 name: "UserRoles");
 
             migrationBuilder.DropTable(
-                name: "Requests");
+                name: "StatusRequests");
 
             migrationBuilder.DropTable(
-                name: "StatusRequests");
+                name: "LabUsageLogs");
+
+            migrationBuilder.DropTable(
+                name: "Requests");
 
             migrationBuilder.DropTable(
                 name: "Roles");

@@ -11,11 +11,11 @@ public partial class EquiLab
 
     public int LabId { get; set; }
 
-    public int UserId { get; set; }
+
 
     public virtual Equipment Equipment { get; set; } = null!;
 
     public virtual Lab Lab { get; set; } = null!;
 
-    public virtual User User { get; set; } = null!;
+
 }

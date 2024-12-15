@@ -59,7 +59,7 @@ public partial class EAdministrationLabsContext : DbContext
             entity.Property(e => e.Id).HasColumnName("EquiLabID");
             entity.Property(e => e.EquipmentId).HasColumnName("EquipmentID");
             entity.Property(e => e.LabId).HasColumnName("LabID");
-            entity.Property(e => e.UserId).HasColumnName("UserID");
+    
 
             entity.HasOne(d => d.Equipment).WithMany(p => p.EquiLabs)
                 .HasForeignKey(d => d.EquipmentId)
@@ -69,9 +69,7 @@ public partial class EAdministrationLabsContext : DbContext
                 .HasForeignKey(d => d.LabId)
                 .HasConstraintName("FK__EquiLabs__LabID__4CA06362");
 
-            entity.HasOne(d => d.User).WithMany(p => p.EquiLabs)
-                .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK__EquiLabs__UserID__4D94879B");
+            
         });
 
         modelBuilder.Entity<Equipment>(entity =>
@@ -163,11 +161,26 @@ public partial class EAdministrationLabsContext : DbContext
             entity.Property(e => e.ReadStatus)
                 .HasMaxLength(50)
                 .HasDefaultValue("Unread");
-            entity.Property(e => e.UserId).HasColumnName("UserID");
 
+            entity.Property(e => e.UserId).HasColumnName("UserID");
             entity.HasOne(d => d.User).WithMany(p => p.Notifications)
                 .HasForeignKey(d => d.UserId)
                 .HasConstraintName("FK__Notificat__UserI__6EF57B66");
+
+            entity.Property(e => e.RequestId).HasColumnName("RequestID");
+            entity.HasOne(d => d.Request)
+                .WithMany() 
+                .HasForeignKey(d => d.RequestId)
+                .OnDelete(DeleteBehavior.SetNull) 
+                .HasConstraintName("FK__Notification__RequestId__F9F9A3A7");
+
+            entity.Property(e => e.LabUsageLogId).HasColumnName("LabUsageLogID");
+            entity.HasOne(d => d.LabUsageLog)
+                .WithMany()
+                .HasForeignKey(n => n.LabUsageLogId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+
         });
 
         modelBuilder.Entity<Request>(entity =>

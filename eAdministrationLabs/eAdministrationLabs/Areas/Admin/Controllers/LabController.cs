@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using eAdministrationLabs.Models;
 using Microsoft.AspNetCore.Authorization;
+using eAdministrationLabs.Dtos.Create;
+using eAdministrationLabs.Dtos.Edit;
 
 namespace eAdministrationLabs.Areas.Admin.Controllers
 {
@@ -30,8 +32,11 @@ namespace eAdministrationLabs.Areas.Admin.Controllers
         public async Task<IActionResult> Index()
         {
             var eAdministrationLabsContext = _context.Labs.Include(l => l.StatusLab);
+            ViewBag.StatusOptions = _context.StatusLabs.ToList();
             return View(await eAdministrationLabsContext.ToListAsync());
         }
+
+
 
         // GET: Admin/Lab/Details/5
         [Route("Details")]
@@ -57,7 +62,7 @@ namespace eAdministrationLabs.Areas.Admin.Controllers
         [Route("Create")]
         public IActionResult Create()
         {
-            ViewData["StatusLabId"] = new SelectList(_context.StatusLabs, "Id", "Id");
+            ViewData["StatusLabId"] = new SelectList(_context.StatusLabs, "Id", "StatusName");
             return View();
         }
 
@@ -67,16 +72,25 @@ namespace eAdministrationLabs.Areas.Admin.Controllers
         [Route("Create")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,LabName,Location,Capacity,StatusLabId,CreatedAt,UpdatedAt")] Lab lab)
+        public async Task<IActionResult> Create(CreateLabDto createLabDto)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(lab);
+
+                Lab createLab = new Lab()
+                {
+                    LabName = createLabDto.LabName,
+                    Location = createLabDto.Location,
+                    Capacity = createLabDto.Capacity,
+                    StatusLabId = createLabDto.StatusLabId
+                };
+
+                _context.Add(createLab);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["StatusLabId"] = new SelectList(_context.StatusLabs, "Id", "Id", lab.StatusLabId);
-            return View(lab);
+            ViewData["StatusLabId"] = new SelectList(_context.StatusLabs, "Id", "StatusName", createLabDto.StatusLabId);
+            return View(new Lab());
         }
 
         // GET: Admin/Lab/Edit/5
@@ -93,7 +107,7 @@ namespace eAdministrationLabs.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            ViewData["StatusLabId"] = new SelectList(_context.StatusLabs, "Id", "Id", lab.StatusLabId);
+            ViewData["StatusLabId"] = new SelectList(_context.StatusLabs, "Id", "StatusName", lab.StatusLabId);
             return View(lab);
         }
 
@@ -103,9 +117,9 @@ namespace eAdministrationLabs.Areas.Admin.Controllers
         [Route("Edit")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,LabName,Location,Capacity,StatusLabId,CreatedAt,UpdatedAt")] Lab lab)
+        public async Task<IActionResult> Edit(int id, EditLabDto editLabDto)
         {
-            if (id != lab.Id)
+            if (id != editLabDto.Id)
             {
                 return NotFound();
             }
@@ -114,12 +128,28 @@ namespace eAdministrationLabs.Areas.Admin.Controllers
             {
                 try
                 {
-                    _context.Update(lab);
+
+                    var editLab = await _context.Labs.FindAsync(id);
+                    if (editLab == null)
+                    {
+                        return NotFound();
+                    }
+
+                    editLab.LabName = editLabDto.LabName;
+                    editLab.Location = editLabDto.Location;
+                    editLab.Capacity = editLabDto.Capacity;
+                    editLab.StatusLabId = editLabDto.StatusLabId;
+                    editLab.CreatedAt = editLabDto.CreatedAt;
+                    editLab.UpdatedAt = editLabDto.UpdatedAt;
+
+
+
+                    _context.Update(editLab);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!LabExists(lab.Id))
+                    if (!LabExists(id))
                     {
                         return NotFound();
                     }
@@ -130,8 +160,8 @@ namespace eAdministrationLabs.Areas.Admin.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["StatusLabId"] = new SelectList(_context.StatusLabs, "Id", "Id", lab.StatusLabId);
-            return View(lab);
+            ViewData["StatusLabId"] = new SelectList(_context.StatusLabs, "Id", "StatusName", editLabDto.StatusLabId);
+            return View(editLabDto);
         }
 
         // GET: Admin/Lab/Delete/5

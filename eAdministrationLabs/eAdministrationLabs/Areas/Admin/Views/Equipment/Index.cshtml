@@ -1,4 +1,8 @@
-﻿@model IEnumerable<eAdministrationLabs.Models.Equipment>
+﻿@using X.PagedList;
+@using X.PagedList.Mvc.Core;
+@model X.PagedList.IPagedList<Equipment>
+  
+@*   @model IEnumerable<eAdministrationLabs.Models.Equipment> *@
 
 @{
     ViewData["Title"] = "Index";
@@ -14,13 +18,13 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.NameEquipment)
+                NameEquipment
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Type)
+                Type
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PurchaseDate)
+                PurchaseDate
             </th>
             <th></th>
         </tr>
@@ -46,3 +50,11 @@
 }
     </tbody>
 </table>
+
+<div style="margin-top: 5vh;">
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page = page }), new PagedListRenderOptions
+{
+    LiElementClasses = new List<string> { "page-item" },
+    PageClasses = new List<string> { "page-link" }
+})
+</div>  

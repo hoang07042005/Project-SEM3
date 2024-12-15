@@ -12,7 +12,7 @@ using eAdministrationLabs.Models;
 namespace eAdministrationLabs.Migrations
 {
     [DbContext(typeof(EAdministrationLabsContext))]
-    [Migration("20241211030700_CreateData")]
+    [Migration("20241214120621_CreateData")]
     partial class CreateData
     {
         /// <inheritdoc />
@@ -42,9 +42,8 @@ namespace eAdministrationLabs.Migrations
                         .HasColumnType("int")
                         .HasColumnName("LabID");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int")
-                        .HasColumnName("UserID");
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id")
                         .HasName("PK__EquiLabs__80AC09910675DFE1");
@@ -234,6 +233,10 @@ namespace eAdministrationLabs.Migrations
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("(getdate())");
 
+                    b.Property<int?>("LabUsageLogId")
+                        .HasColumnType("int")
+                        .HasColumnName("LabUsageLogID");
+
                     b.Property<string>("Message")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -244,12 +247,20 @@ namespace eAdministrationLabs.Migrations
                         .HasColumnType("nvarchar(50)")
                         .HasDefaultValue("Unread");
 
+                    b.Property<int?>("RequestId")
+                        .HasColumnType("int")
+                        .HasColumnName("RequestID");
+
                     b.Property<int>("UserId")
                         .HasColumnType("int")
                         .HasColumnName("UserID");
 
                     b.HasKey("Id")
                         .HasName("PK__Notifica__20CF2E3234B214C8");
+
+                    b.HasIndex("LabUsageLogId");
+
+                    b.HasIndex("RequestId");
 
                     b.HasIndex("UserId");
 
@@ -525,18 +536,13 @@ namespace eAdministrationLabs.Migrations
                         .IsRequired()
                         .HasConstraintName("FK__EquiLabs__LabID__4CA06362");
 
-                    b.HasOne("eAdministrationLabs.Models.User", "User")
+                    b.HasOne("eAdministrationLabs.Models.User", null)
                         .WithMany("EquiLabs")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("FK__EquiLabs__UserID__4D94879B");
+                        .HasForeignKey("UserId");
 
                     b.Navigation("Equipment");
 
                     b.Navigation("Lab");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("eAdministrationLabs.Models.HistoryRequest", b =>
@@ -604,12 +610,27 @@ namespace eAdministrationLabs.Migrations
 
             modelBuilder.Entity("eAdministrationLabs.Models.Notification", b =>
                 {
+                    b.HasOne("eAdministrationLabs.Models.LabUsageLog", "LabUsageLog")
+                        .WithMany()
+                        .HasForeignKey("LabUsageLogId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("eAdministrationLabs.Models.Request", "Request")
+                        .WithMany()
+                        .HasForeignKey("RequestId")
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .HasConstraintName("FK__Notification__RequestId__F9F9A3A7");
+
                     b.HasOne("eAdministrationLabs.Models.User", "User")
                         .WithMany("Notifications")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("FK__Notificat__UserI__6EF57B66");
+
+                    b.Navigation("LabUsageLog");
+
+                    b.Navigation("Request");
 
                     b.Navigation("User");
                 });

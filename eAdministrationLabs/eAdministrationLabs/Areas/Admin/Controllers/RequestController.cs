@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using eAdministrationLabs.Models;
 using Microsoft.AspNetCore.Authorization;
+using eAdministrationLabs.Dtos.Create;
+using eAdministrationLabs.Dtos.Edit;
+
 
 namespace eAdministrationLabs.Areas.Admin.Controllers
 {
@@ -59,9 +62,9 @@ namespace eAdministrationLabs.Areas.Admin.Controllers
         [Route("Create")]
         public IActionResult Create()
         {
-            ViewData["EquipmentId"] = new SelectList(_context.Equipments, "Id", "Id");
-            ViewData["ImageId"] = new SelectList(_context.RequestImages, "Id", "Id");
-            ViewData["LabId"] = new SelectList(_context.Labs, "Id", "Id");
+            ViewData["EquipmentId"] = new SelectList(_context.Equipments, "Id", "NameEquipment");
+            ViewData["ImageId"] = new SelectList(_context.RequestImages, "Id", "Image");
+            ViewData["LabId"] = new SelectList(_context.Labs, "Id", "LabName");
             return View();
         }
 
@@ -71,18 +74,25 @@ namespace eAdministrationLabs.Areas.Admin.Controllers
         [Route("Create")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,LabId,EquipmentId,ImageId,CreatedAt")] Request request)
+        public async Task<IActionResult> Create(CreateRequestDto createRequestDto)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(request);
+                Request createRequest = new Request()
+                {
+                    EquipmentId = createRequestDto.EquipmentId,
+                    ImageId = createRequestDto.ImageId,
+                    LabId = createRequestDto.LabId
+                };
+
+                _context.Add(createRequest);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["EquipmentId"] = new SelectList(_context.Equipments, "Id", "Id", request.EquipmentId);
-            ViewData["ImageId"] = new SelectList(_context.RequestImages, "Id", "Id", request.ImageId);
-            ViewData["LabId"] = new SelectList(_context.Labs, "Id", "Id", request.LabId);
-            return View(request);
+            ViewData["EquipmentId"] = new SelectList(_context.Equipments, "Id", "NameEquipment", createRequestDto.EquipmentId);
+            ViewData["ImageId"] = new SelectList(_context.RequestImages, "Id", "Image", createRequestDto.ImageId);
+            ViewData["LabId"] = new SelectList(_context.Labs, "Id", "LabName", createRequestDto.LabId);
+            return View(new Request());
         }
 
         // GET: Admin/Request/Edit/5
@@ -99,9 +109,9 @@ namespace eAdministrationLabs.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            ViewData["EquipmentId"] = new SelectList(_context.Equipments, "Id", "Id", request.EquipmentId);
-            ViewData["ImageId"] = new SelectList(_context.RequestImages, "Id", "Id", request.ImageId);
-            ViewData["LabId"] = new SelectList(_context.Labs, "Id", "Id", request.LabId);
+            ViewData["EquipmentId"] = new SelectList(_context.Equipments, "Id", "NameEquipment", request.EquipmentId);
+            ViewData["ImageId"] = new SelectList(_context.RequestImages, "Id", "Image", request.ImageId);
+            ViewData["LabId"] = new SelectList(_context.Labs, "Id", "LabName", request.LabId);
             return View(request);
         }
 
@@ -111,9 +121,9 @@ namespace eAdministrationLabs.Areas.Admin.Controllers
         [Route("Edit")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,LabId,EquipmentId,ImageId,CreatedAt")] Request request)
+        public async Task<IActionResult> Edit(int id, EditRequestDto editRequestDto)
         {
-            if (id != request.Id)
+            if (id != editRequestDto.Id)
             {
                 return NotFound();
             }
@@ -122,12 +132,24 @@ namespace eAdministrationLabs.Areas.Admin.Controllers
             {
                 try
                 {
-                    _context.Update(request);
+                    var editRequest = await _context.Requests.FindAsync(id);
+                    if (editRequest == null)
+                    {
+                        return NotFound();
+                    }
+
+                    editRequest.EquipmentId = editRequestDto.EquipmentId;
+                    editRequest.ImageId = editRequestDto.ImageId;
+                    editRequest.LabId = editRequestDto.LabId;
+                    editRequest.CreatedAt = editRequestDto.CreatedAt;
+                   
+
+                    _context.Update(editRequest);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!RequestExists(request.Id))
+                    if (!RequestExists(id))
                     {
                         return NotFound();
                     }
@@ -138,10 +160,10 @@ namespace eAdministrationLabs.Areas.Admin.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["EquipmentId"] = new SelectList(_context.Equipments, "Id", "Id", request.EquipmentId);
-            ViewData["ImageId"] = new SelectList(_context.RequestImages, "Id", "Id", request.ImageId);
-            ViewData["LabId"] = new SelectList(_context.Labs, "Id", "Id", request.LabId);
-            return View(request);
+            ViewData["EquipmentId"] = new SelectList(_context.Equipments, "Id", "NameEquipment", editRequestDto.EquipmentId);
+            ViewData["ImageId"] = new SelectList(_context.RequestImages, "Id", "Image", editRequestDto.ImageId);
+            ViewData["LabId"] = new SelectList(_context.Labs, "Id", "LabName", editRequestDto.LabId);
+            return View(editRequestDto);
         }
 
         // GET: Admin/Request/Delete/5

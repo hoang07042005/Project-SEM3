@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -7,6 +8,14 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/eAdministrationLabs.styles.css" asp-append-version="true" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation-unobtrusive@3.2.0/jquery.validate.unobtrusive.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+@*     <script src="https://cdn.tailwindcss.com"></script>
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">  *@
 </head>
 <body>
     <header>
@@ -22,13 +31,51 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
+                         @* <li class="nav-item">
+                             <a class="nav-link text-dark" asp-area="" asp-controller="Request" asp-action="Index">Request</a>
+                         </li> *@
+                          <li class="nav-item" style="position: relative;">
+                             <a class="nav-link text-dark" href="#" id="requestMenu" style="display: inline-block;">Request</a>
+                             <ul class="dropdown-menu" id="requestDropdown" style="display: none; position: absolute; list-style-type: none; margin: 0; padding: 0; background-color: white; border: 1px solid #ccc; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+                                 <li><a class="dropdown-item" asp-area="" asp-controller="Request" asp-action="Create" style="padding: 8px 16px; text-decoration: none; color: #333;">Submit a request</a></li>
+                                 <li><a class="dropdown-item" asp-area="" asp-controller="Request" asp-action="Index" style="padding: 8px 16px; text-decoration: none; color: #333;">View all requests</a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="Request" asp-action="MyRequest" style="padding: 8px 16px; text-decoration: none; color: #333;">My Request</a></li>
+
+                             </ul>
+                         </li>
                         
+                        
+
+
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="LabUsageLogs" asp-action="Index">Classroom</a>
+                        </li>
                     </ul>
 
-                    
+                    <ul class="text-end" style="list-style: none; padding-top:15px;">
+                        <li>
+                            <a class="dropdown-item"
+                               asp-area=""
+                               asp-controller="Request"
+                               asp-action="Notifications"
+                               style="position: relative;">
+                                <i class="fa-solid fa-bell"></i>
+                                @if (ViewData["UnreadCount"] != null && (int)ViewData["UnreadCount"] > 0)
+                                {
+                                    <span style="position: absolute; top: -5px; right: -5px;
+                            background-color: red; color: white;
+                            border-radius: 50%; font-size: 0.8rem;
+                            padding: 0.3em 0.6em;">
+                                        @ViewData["UnreadCount"]
+                                    </span>
+                                }
+                            </a>
+                        </li>
+                    </ul>
+
+
+
+
                      @await Html.PartialAsync("LoginPartial") 
 
                 </div>
@@ -46,9 +93,35 @@
             &copy; 2024 - eAdministrationLabs - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
+
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
+
+
+<script>
+    // Toggle dropdown visibility when the 'Request' link is clicked
+    document.getElementById('requestMenu').addEventListener('click', function (event) {
+        event.preventDefault(); // Prevent the default link action
+        var dropdown = document.getElementById('requestDropdown');
+
+        // Toggle dropdown visibility (if it's hidden, show it; if visible, hide it)
+        dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+    });
+
+    // Optional: Close the dropdown when clicking outside of it
+    document.addEventListener('click', function (event) {
+        var dropdown = document.getElementById('requestDropdown');
+        var requestMenu = document.getElementById('requestMenu');
+
+        // If the clicked target is not the 'Request' link or the dropdown, hide the dropdown
+        if (!requestMenu.contains(event.target) && !dropdown.contains(event.target)) {
+            dropdown.style.display = 'none';
+        }
+    });
+</script>
+

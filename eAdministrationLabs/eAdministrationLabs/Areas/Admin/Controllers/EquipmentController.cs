@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using eAdministrationLabs.Models;
 using Microsoft.AspNetCore.Authorization;
+using eAdministrationLabs.Dtos.Create;
+using eAdministrationLabs.Dtos.Edit;
+using X.PagedList;
 
 namespace eAdministrationLabs.Areas.Admin.Controllers
 {
@@ -27,9 +30,14 @@ namespace eAdministrationLabs.Areas.Admin.Controllers
         // GET: Admin/Equipment
         [Route("")]
         [Route("index")]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? page)
         {
-            return View(await _context.Equipments.ToListAsync());
+            int pageSize = 8;
+            int pageNumber = page == null || page < 0 ? 1 : page.Value;
+            var equipment = await _context.Equipments.ToListAsync();
+
+            PagedList<Equipment> equipments = new PagedList<Equipment>(equipment, pageNumber, pageSize);
+            return View(equipments);
         }
 
         // GET: Admin/Equipment/Details/5
@@ -64,15 +72,22 @@ namespace eAdministrationLabs.Areas.Admin.Controllers
         [Route("Create")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,NameEquipment,Type,PurchaseDate")] Equipment equipment)
+        public async Task<IActionResult> Create(CreateEquipmentDto createEquipmentDto)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(equipment);
+                Equipment createEquipment = new Equipment()
+                {
+                    NameEquipment = createEquipmentDto.NameEquipment,
+                    Type = createEquipmentDto.Type,
+                    PurchaseDate = createEquipmentDto.PurchaseDate
+                };
+
+                _context.Add(createEquipment);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(equipment);
+            return View(new Equipment());
         }
 
         // GET: Admin/Equipment/Edit/5
@@ -98,9 +113,9 @@ namespace eAdministrationLabs.Areas.Admin.Controllers
         [Route("Edit")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,NameEquipment,Type,PurchaseDate")] Equipment equipment)
+        public async Task<IActionResult> Edit(int id, EditEquipmentDto editEquipmentDto)
         {
-            if (id != equipment.Id)
+            if (id != editEquipmentDto.Id)
             {
                 return NotFound();
             }
@@ -109,12 +124,25 @@ namespace eAdministrationLabs.Areas.Admin.Controllers
             {
                 try
                 {
-                    _context.Update(equipment);
+
+                    var editEquipment = await _context.Equipments.FindAsync(id);
+                    if (editEquipment == null)
+                    {
+                        return NotFound();
+                    }
+
+                    editEquipment.NameEquipment = editEquipmentDto.NameEquipment;
+                    editEquipment.Type = editEquipmentDto.Type;
+                    editEquipment.PurchaseDate = editEquipmentDto.PurchaseDate;
+                    
+
+
+                    _context.Update(editEquipment);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!EquipmentExists(equipment.Id))
+                    if (!EquipmentExists(id))
                     {
                         return NotFound();
                     }
@@ -125,7 +153,7 @@ namespace eAdministrationLabs.Areas.Admin.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(equipment);
+            return View(editEquipmentDto);
         }
 
         // GET: Admin/Equipment/Delete/5

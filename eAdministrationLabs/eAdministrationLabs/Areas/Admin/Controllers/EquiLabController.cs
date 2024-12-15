@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using eAdministrationLabs.Models;
 using Microsoft.AspNetCore.Authorization;
+using eAdministrationLabs.Dtos.Create;
+using eAdministrationLabs.Dtos.Edit;
 
 namespace eAdministrationLabs.Areas.Admin.Controllers
 {
@@ -30,7 +32,7 @@ namespace eAdministrationLabs.Areas.Admin.Controllers
         [Route("index")]
         public async Task<IActionResult> Index()
         {
-            var eAdministrationLabsContext = _context.EquiLabs.Include(e => e.Equipment).Include(e => e.Lab).Include(e => e.User);
+            var eAdministrationLabsContext = _context.EquiLabs.Include(e => e.Equipment).Include(e => e.Lab);
             return View(await eAdministrationLabsContext.ToListAsync());
         }
 
@@ -46,7 +48,6 @@ namespace eAdministrationLabs.Areas.Admin.Controllers
             var equiLab = await _context.EquiLabs
                 .Include(e => e.Equipment)
                 .Include(e => e.Lab)
-                .Include(e => e.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (equiLab == null)
             {
@@ -60,9 +61,8 @@ namespace eAdministrationLabs.Areas.Admin.Controllers
         [Route("Create")]
         public IActionResult Create()
         {
-            ViewData["EquipmentId"] = new SelectList(_context.Equipments, "Id", "Id");
-            ViewData["LabId"] = new SelectList(_context.Labs, "Id", "Id");
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id");
+            ViewData["EquipmentId"] = new SelectList(_context.Equipments, "Id", "NameEquipment");
+            ViewData["LabId"] = new SelectList(_context.Labs, "Id", "LabName");
             return View();
         }
 
@@ -72,18 +72,23 @@ namespace eAdministrationLabs.Areas.Admin.Controllers
         [Route("Create")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,EquipmentId,LabId,UserId")] EquiLab equiLab)
+        public async Task<IActionResult> Create(CreateEquiLabDto createEquiLabDto)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(equiLab);
+                EquiLab createEquiLab = new EquiLab()
+                {
+                    EquipmentId = createEquiLabDto.EquipmentId,
+                    LabId = createEquiLabDto.LabId
+                };
+
+                _context.Add(createEquiLab);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["EquipmentId"] = new SelectList(_context.Equipments, "Id", "Id", equiLab.EquipmentId);
-            ViewData["LabId"] = new SelectList(_context.Labs, "Id", "Id", equiLab.LabId);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", equiLab.UserId);
-            return View(equiLab);
+            ViewData["EquipmentId"] = new SelectList(_context.Equipments, "Id", "NameEquipment", createEquiLabDto.EquipmentId);
+            ViewData["LabId"] = new SelectList(_context.Labs, "Id", "LabName", createEquiLabDto.LabId);
+            return View(new EquiLab());
         }
 
         // GET: Admin/EquiLab/Edit/5
@@ -100,9 +105,8 @@ namespace eAdministrationLabs.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            ViewData["EquipmentId"] = new SelectList(_context.Equipments, "Id", "Id", equiLab.EquipmentId);
-            ViewData["LabId"] = new SelectList(_context.Labs, "Id", "Id", equiLab.LabId);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", equiLab.UserId);
+            ViewData["EquipmentId"] = new SelectList(_context.Equipments, "Id", "NameEquipment", equiLab.EquipmentId);
+            ViewData["LabId"] = new SelectList(_context.Labs, "Id", "LabName", equiLab.LabId);
             return View(equiLab);
         }
 
@@ -112,9 +116,9 @@ namespace eAdministrationLabs.Areas.Admin.Controllers
         [Route("Edit")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,EquipmentId,LabId,UserId")] EquiLab equiLab)
+        public async Task<IActionResult> Edit(int id, EditEquiLabDto editEquiLabDto)
         {
-            if (id != equiLab.Id)
+            if (id != editEquiLabDto.Id)
             {
                 return NotFound();
             }
@@ -123,12 +127,22 @@ namespace eAdministrationLabs.Areas.Admin.Controllers
             {
                 try
                 {
-                    _context.Update(equiLab);
+
+                    var editEquiLab = await _context.EquiLabs.FindAsync(id);
+                    if (editEquiLab == null)
+                    {
+                        return NotFound();
+                    }
+
+                    editEquiLab.EquipmentId = editEquiLabDto.EquipmentId;
+                    editEquiLab.LabId = editEquiLabDto.LabId;
+
+                    _context.Update(editEquiLab);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!EquiLabExists(equiLab.Id))
+                    if (!EquiLabExists(id))
                     {
                         return NotFound();
                     }
@@ -139,10 +153,10 @@ namespace eAdministrationLabs.Areas.Admin.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["EquipmentId"] = new SelectList(_context.Equipments, "Id", "Id", equiLab.EquipmentId);
-            ViewData["LabId"] = new SelectList(_context.Labs, "Id", "Id", equiLab.LabId);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", equiLab.UserId);
-            return View(equiLab);
+            ViewData["EquipmentId"] = new SelectList(_context.Equipments, "Id", "NameEquipment", editEquiLabDto.EquipmentId);
+            ViewData["LabId"] = new SelectList(_context.Labs, "Id", "LabName", editEquiLabDto.LabId);
+
+            return View(editEquiLabDto);
         }
 
         // GET: Admin/EquiLab/Delete/5
@@ -157,7 +171,7 @@ namespace eAdministrationLabs.Areas.Admin.Controllers
             var equiLab = await _context.EquiLabs
                 .Include(e => e.Equipment)
                 .Include(e => e.Lab)
-                .Include(e => e.User)
+
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (equiLab == null)
             {
