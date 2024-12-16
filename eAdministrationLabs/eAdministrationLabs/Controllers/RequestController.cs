@@ -60,7 +60,7 @@ namespace eAdministrationLabs.Controllers
 
             if (currentUser == null)
             {
-                return RedirectToAction("Index", "Home"); // Nếu không tìm thấy tài khoản, chuyển hướng về trang chính
+                return RedirectToAction("Login", "Account"); // Nếu không tìm thấy tài khoản, chuyển hướng về đăng nhập
             }
 
             // Lấy danh sách tất cả requests của người dùng hiện tại
@@ -141,6 +141,10 @@ namespace eAdministrationLabs.Controllers
                     Text = u.FullName
                 })
                 .FirstOrDefaultAsync();
+            if (currentUser == null)
+            {
+                return RedirectToAction("Login", "Account"); // Nếu không tìm thấy tài khoản, chuyển hướng về đăng nhập
+            }
 
             ViewBag.CurrentUser = currentUser;
 
@@ -284,7 +288,7 @@ namespace eAdministrationLabs.Controllers
                 var currentFullName = User.Identity?.Name;
                 if (string.IsNullOrEmpty(currentFullName))
                 {
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("login", "Account");
                 }
 
                 var currentUser = await _context.Users
@@ -292,7 +296,7 @@ namespace eAdministrationLabs.Controllers
 
                 if (currentUser == null)
                 {
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("login", "Account");
                 }
 
                 var notifications = await _context.Notifications
