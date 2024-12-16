@@ -14,7 +14,7 @@
     else
     {
         <li class="nav-item dropdown" style="position: relative;">
-            <span class="nav-link text-dark" style="cursor: pointer;">@Context.Session.GetString("FullName")</span>
+            <span class="nav-link text-dark" style="cursor: pointer;">Wellcom - @Context.Session.GetString("FullName")</span>
             <ul class="dropdown-menu" style="position: absolute; display: none; list-style-type: none; padding: 0; margin: 0; background-color: #fff; border: 1px solid #ccc;">
                 <li class="nav-item">
                     <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="ChangePassword">Change Password</a>
