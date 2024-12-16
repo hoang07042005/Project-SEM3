@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using eAdministrationLabs.Models.ViewModels;
 using X.PagedList;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
+using eAdministrationLabs.Services;
 
 
 namespace eAdministrationLabs.Controllers
@@ -16,17 +19,21 @@ namespace eAdministrationLabs.Controllers
         private readonly EAdministrationLabsContext _context;
         private readonly IWebHostEnvironment _hostingEnvironment;
         private readonly ILogger<RequestController> _logger;
+        private readonly EmailService _emailService;
 
-        public RequestController(EAdministrationLabsContext context, IWebHostEnvironment hostingEnvironment, ILogger<RequestController> logger)
+        public RequestController(EAdministrationLabsContext context, IWebHostEnvironment hostingEnvironment, ILogger<RequestController> logger, EmailService emailService)
         {
             _context = context;
             _hostingEnvironment = hostingEnvironment;
             _logger = logger;
+            _emailService = emailService;
         }
+
 
 
         public async Task<IActionResult> Index(int? page)
         {
+            
             int pageSize = 2;
             int pageNumber = page == null || page < 0 ? 1 : page.Value;
 
@@ -381,7 +388,144 @@ namespace eAdministrationLabs.Controllers
             return View(requestViewModel);
         }
 
-        
+        [Authorize] // Đảm bảo action chỉ truy cập được bởi người dùng đã đăng nhập
+        public async Task<IActionResult> GetRequestsByChangedBy()
+        {
+           
+            ViewBag.StatusOptions = _context.StatusRequests.ToList();
+            
+
+            // Lấy tên đầy đủ của người dùng đang đăng nhập
+            var fullName = User.Identity?.Name;  // Trong trường hợp này, User.Identity.Name là tên đăng nhập của người dùng. Nếu bạn cần sử dụng tên đầy đủ, có thể lấy từ database hoặc thông qua claims.
+
+            if (string.IsNullOrEmpty(fullName))
+            {
+                ModelState.AddModelError("", "Không thể xác định tên đầy đủ của tài khoản đang đăng nhập.");
+                return View(new List<RequestViewModel>());
+            }
+
+            try
+            {
+                // Lấy danh sách requests có ChangedBy trùng với tên đầy đủ của tài khoản đăng nhập
+                var requests = await _context.Requests
+                    .Select(r => new
+                    {
+                        Request = r,
+                        LatestHistory = r.HistoryRequests.OrderByDescending(h => h.ChangedAt).FirstOrDefault()
+                    })
+                    .Where(x => x.LatestHistory.ChangedBy == fullName)
+                    .Select(x => new RequestViewModel
+                    {
+                        Id = x.Request.Id,
+                        LabName = x.Request.Lab.LabName,
+                        EquipmentName = x.Request.Equipment != null ? x.Request.Equipment.NameEquipment : "N/A",
+                        StatusName = x.LatestHistory.StatusRequest.StatusName,
+                        Notes = x.LatestHistory.Notes,
+                        ChangedBy = x.LatestHistory.ChangedBy,
+                        CreatedAt = x.Request.CreatedAt ?? DateTime.Now,
+                        ImageBase64 = x.Request.Image != null ? Convert.ToBase64String(x.Request.Image.Image) : null
+                    })
+                    .ToListAsync();
+
+                ViewData["ChangedBy"] = fullName; // Truyền tên đầy đủ vào View
+                return View(requests);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", "Đã xảy ra lỗi khi tải dữ liệu.");
+                return View(new List<RequestViewModel>());
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateStatus(int id, int statusId)
+        {
+            try
+            {
+                var historyRequest = await _context.HistoryRequests
+                    .Include(h => h.Request)
+                    .Include(r => r.User)
+                    .FirstOrDefaultAsync(c => c.Id == id);
+
+                if (historyRequest == null)
+                    return Json(new { success = false, message = "History request not found" });
+
+                var status = await _context.StatusRequests.FirstOrDefaultAsync(s => s.Id == statusId);
+                if (status == null)
+                    return Json(new { success = false, message = "Invalid status" });
+
+                using (var transaction = await _context.Database.BeginTransactionAsync())
+                {
+                    try
+                    {
+                        // Cập nhật trạng thái
+                        historyRequest.StatusRequestId = statusId;
+                        await _context.SaveChangesAsync();
+
+                        // Tạo thông báo
+                        var notification = new Notification
+                        {
+                            UserId = historyRequest.UserId,
+                            Message = $"Your request has been updated to: {status.StatusName}",
+                            ReadStatus = "Unread",
+                            CreatedAt = DateTime.UtcNow,
+                            RequestId = historyRequest.RequestId
+                        };
+
+                        await _context.Notifications.AddAsync(notification);
+                        await _context.SaveChangesAsync();
+
+                        // Lấy thông tin người dùng
+                        var user = historyRequest.User;
+                        if (user != null && !string.IsNullOrEmpty(user.Email))
+                        {
+                            // Gửi email dựa trên trạng thái
+                            string subject = string.Empty;
+                            string body = string.Empty;
+
+                            if (status.StatusName == "Approved" || status.StatusName == "Complete")
+                            {
+                                subject = $"Your request has been {status.StatusName}";
+                                body = $@"
+                            <p>Dear {user.FullName},</p>
+                            <p>Your request (ID: {historyRequest.RequestId}) has been updated to <strong>{status.StatusName}</strong>.</p>
+                            <p>Thank you for using our service.</p>";
+                            }
+                            else if (status.StatusName == "Reject")
+                            {
+                                subject = "Your request has been rejected";
+                                body = $@"
+                            <p>Dear {user.FullName},</p>
+                            <p>We regret to inform you that your request (ID: {historyRequest.RequestId}) has been <strong>rejected</strong>.</p>
+                            <p>If you have any questions, please contact our support team.</p>";
+                            }
+
+                            // Gửi email nếu có tiêu đề và nội dung
+                            if (!string.IsNullOrEmpty(subject) && !string.IsNullOrEmpty(body))
+                            {
+                                await _emailService.SendEmailAsync(user.Email, subject, body);
+                            }
+                        }
+
+                        await transaction.CommitAsync();
+
+                        return Json(new { success = true, updatedStatus = status.StatusName });
+                    }
+                    catch
+                    {
+                        await transaction.RollbackAsync();
+                        return Json(new { success = false, message = "An error occurred while updating the status." });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log lỗi (tùy framework logging của bạn)
+                return Json(new { success = false, message = "An unexpected error occurred." });
+            }
+        }
+
+
 
     }
 }

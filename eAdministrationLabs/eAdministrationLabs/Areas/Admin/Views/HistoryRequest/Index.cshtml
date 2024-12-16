@@ -38,8 +38,18 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.ChangedBy)
+                <select class="form-control user-select-technical-staff" id="changedByDropdown-@item.Id" data-id="@item.Id" style="color: #000000;">
+                    @foreach (var staff in ViewBag.TechnicalStaffUsers)
+                    {
+                        <option value="@staff.Id" style="color: #000000;">
+                            @staff.FullName
+                        </option>
+                    }
+                </select>
             </td>
+
+
+
             <td>
                 @Html.DisplayFor(modelItem => item.ChangedAt)
             </td>
@@ -50,14 +60,15 @@
                 @Html.DisplayFor(modelItem => item.Request.Id)
             </td>
             <td>
-                <select class="form-control status-select" data-id="@item.Id" style="color: #000000;">
+                @Html.DisplayFor(modelItem => item.StatusRequest.StatusName)
+                @* <select class="form-control status-select" data-id="@item.Id" style="color: #000000;">
                     @foreach (var status in ViewBag.StatusOptions)
                     {
                         <option value="@status.Id" style="color: #000000;">
                             @status.StatusName
                         </option>
                     }
-                </select>
+                </select> *@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.User.FullName)
@@ -75,26 +86,65 @@
 @section Scripts {
     <script>
         $(document).ready(function () {
-            $(".status-select").change(function () {
-
+            $(".user-select-technical-staff").change(function () {
                 var id = $(this).data("id");
-                var statusId = $(this).val();
+                var userId = $(`#changedByDropdown-${id}`).val();
+
+                console.log("Sending data:", { id, userId });
 
                 $.ajax({
-                    url: '@Url.Action("UpdateStatus")',
+                    url: '@Url.Action("UpdateChangedBy")',
                     type: 'POST',
                     data: {
                         id: id,
-                        statusId: statusId
+                        userId: userId
                     },
                     success: function (result) {
-                        alert("Status update successful.");
+                        if (result.success) {
+                            alert("Update successful.");
+                        } else {
+                            alert(result.message || "Update failed.");
+                        }
                     },
                     error: function () {
-                        alert("There was an error updating status.");
+                        alert("There was an error updating.");
+                    }
+                });
+            });
+        });
+
+    </script>
+} 
+@* @section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('.updateChangedByBtn').click(function () {
+                const id = $(this).data('id');
+                const userId = $(`#changedByDropdown-${id}`).val();
+
+   
+
+                $.ajax({
+                    url: '@Url.Action("UpdateChangedBy")',
+                    type: 'POST',
+                    data: {
+                        id: id,
+                        userId: userId
+                    },
+                    success: function (response) {
+                        if (response.success) {
+                            alert(response.message);
+                            location.reload(); // Tải lại trang để cập nhật thay đổi
+                        } else {
+                            alert(response.message);
+                        }
+                    },
+                    error: function () {
+                        alert('Đã xảy ra lỗi khi cập nhật.');
                     }
                 });
             });
         });
     </script>
-}
+
+} *@

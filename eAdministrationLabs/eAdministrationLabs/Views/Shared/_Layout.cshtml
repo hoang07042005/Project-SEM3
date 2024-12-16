@@ -31,21 +31,30 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                         @* <li class="nav-item">
-                             <a class="nav-link text-dark" asp-area="" asp-controller="Request" asp-action="Index">Request</a>
-                         </li> *@
-                          <li class="nav-item" style="position: relative;">
+
+                         @*  <li class="nav-item" style="position: relative;">
                              <a class="nav-link text-dark" href="#" id="requestMenu" style="display: inline-block;">Request</a>
                              <ul class="dropdown-menu" id="requestDropdown" style="display: none; position: absolute; list-style-type: none; margin: 0; padding: 0; background-color: white; border: 1px solid #ccc; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
                                  <li><a class="dropdown-item" asp-area="" asp-controller="Request" asp-action="Create" style="padding: 8px 16px; text-decoration: none; color: #333;">Submit a request</a></li>
                                  <li><a class="dropdown-item" asp-area="" asp-controller="Request" asp-action="Index" style="padding: 8px 16px; text-decoration: none; color: #333;">View all requests</a></li>
                                 <li><a class="dropdown-item" asp-area="" asp-controller="Request" asp-action="MyRequest" style="padding: 8px 16px; text-decoration: none; color: #333;">My Request</a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="Request" asp-action="Assgine" style="padding: 8px 16px; text-decoration: none; color: #333;">Assgine</a></li>
 
                              </ul>
-                         </li>
-                        
-                        
+                         </li> *@
+                        <li class="nav-item" style="position: relative;">
+                            <a class="nav-link text-dark" href="#" id="requestMenu" style="display: inline-block;">Request</a>
+                            <ul class="dropdown-menu" id="requestDropdown" style="display: none; position: absolute; list-style-type: none; margin: 0; padding: 0; background-color: white; border: 1px solid #ccc; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); z-index: 1000;">
+                                <li><a class="dropdown-item" asp-area="" asp-controller="Request" asp-action="Create" style="padding: 8px 16px; text-decoration: none; color: #333;">Submit a request</a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="Request" asp-action="Index" style="padding: 8px 16px; text-decoration: none; color: #333;">View all requests</a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="Request" asp-action="MyRequest" style="padding: 8px 16px; text-decoration: none; color: #333;">My Request</a></li>
 
+                                @if (User.IsInRole("technical staff"))
+                                {
+                                    <li><a class="dropdown-item" asp-area="" asp-controller="Request" asp-action="GetRequestsByChangedBy" style="padding: 8px 16px; text-decoration: none; color: #333;">Assgine</a></li>
+                                }
+                            </ul>
+                        </li>
 
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="LabUsageLogs" asp-action="Index">Classroom</a>

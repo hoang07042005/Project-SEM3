@@ -1,0 +1,101 @@
+﻿@model List<eAdministrationLabs.Models.ViewModels.RequestViewModel>
+
+<h2>Danh sách Requests được thay đổi bởi: @ViewData["ChangedBy"]</h2>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Lab Name</th>
+            <th scope="col">Equipment</th>
+            <th scope="col">Status</th>
+            <th scope="col">Notes</th>
+            <th scope="col">Changed By</th>
+            <th scope="col">Created At</th>
+            <th scope="col">Image</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Count > 0)
+        {
+            foreach (var request in Model)
+            {
+                <tr>
+                    <th scope="row">@request.Id</th>
+                    <td>@request.LabName</td>
+                    <td>@request.EquipmentName</td>
+                    <td>
+                        <select class="form-control status-select" data-id="@request.Id" style="color: #000000;">
+                            @foreach (var status in ViewBag.StatusOptions)
+                            {
+                                // Check if the status is not "Reject"
+                                if (status.StatusName != "Reject")
+                                {
+                                    <option value="@status.Id" style="color: #000000;">
+                                        @status.StatusName
+                                    </option>
+                                }
+                            }
+                        </select>
+                    </td>
+
+                    <td title="@request.Notes">
+                        @if (!string.IsNullOrEmpty(request.Notes))
+                        {
+                            @(request.Notes.Length > 50 ? request.Notes.Substring(0, 50) + "..." : request.Notes)
+                        }
+                        else
+                        {
+                            <span class="text-muted">No notes</span>
+                        }
+                    </td>
+                    <td>@request.ChangedBy</td>
+                    <td>@request.CreatedAt.ToString("dd/MM/yyyy")</td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(request.ImageBase64))
+                        {
+                            <img src="data:image/png;base64,@request.ImageBase64" class="img-thumbnail" style="max-width: 100px; max-height: 100px;" alt="Request Image" />
+                        }
+                        else
+                        {
+                            <span class="text-muted">No image</span>
+                        }
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="8" class="text-center text-muted"><em>Không có dữ liệu phù hợp để hiển thị.</em></td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $(".status-select").change(function () {
+
+                var id = $(this).data("id");
+                var statusId = $(this).val();
+
+                $.ajax({
+                    url: '@Url.Action("UpdateStatus")',
+                    type: 'POST',
+                    data: {
+                        id: id,
+                        statusId: statusId
+                    },
+                    success: function (result) {
+                        alert("Status update successful.");
+                    },
+                    error: function () {
+                        alert("There was an error updating status.");
+                    }
+                });
+            });
+        });
+    </script>
+}

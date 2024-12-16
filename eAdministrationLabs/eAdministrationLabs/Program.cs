@@ -42,7 +42,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("AdminOnly", policy =>
-        policy.RequireRole("administrator", "HOD", "technicalstaff", "instructors"));
+        policy.RequireRole("administrator"));
 });
 
 var app = builder.Build();
