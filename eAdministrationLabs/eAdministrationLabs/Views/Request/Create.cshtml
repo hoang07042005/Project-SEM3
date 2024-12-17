@@ -1,104 +1,111 @@
-﻿
- @model eAdministrationLabs.Models.ViewModels.RequestCreateModel
+﻿@model eAdministrationLabs.Models.ViewModels.RequestCreateModel
 
 @{
     ViewData["Title"] = "Create Request";
 }
 
-<div class="container">
-    <div class="row">
-        <div class="col-md-8 offset-md-2">
-            <h2>Create Request</h2>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <h2 class="text-center mb-4" style="color: #4CAF50;">Create New Request</h2>
 
             <!-- Form -->
             <form asp-action="Create" method="post" enctype="multipart/form-data">
                 @Html.AntiForgeryToken()
 
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <!-- Validation Summary -->
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger mb-3"></div>
 
-                <!-- Lab -->
-                <div class="form-group">
-                    <label asp-for="LabId" class="control-label">Select Laboratory</label>
-                    <select asp-for="LabId" class="form-control" id="LabId">
-                        <option value="" disabled selected>Select a lab</option>
-                        @if (ViewBag.Labs != null)
-                        {
-                            foreach (var lab in ViewBag.Labs as IEnumerable<SelectListItem>)
+                <div class="row">
+                    <!-- First Column -->
+                    <div class="col-md-6 form-group">
+                        <label asp-for="LabId" class="control-label font-weight-bold">Select Laboratory <span class="text-danger">*</span></label>
+                        <select asp-for="LabId" class="form-control shadow-sm" id="LabId" required>
+                            <option value="" disabled selected>Select a laboratory</option>
+                            @if (ViewBag.Labs != null)
                             {
-                                <option value="@lab.Value">@lab.Text</option>
+                                foreach (var lab in ViewBag.Labs as IEnumerable<SelectListItem>)
+                                {
+                                    <option value="@lab.Value">@lab.Text</option>
+                                }
                             }
-                        }
-                    </select>
-                    <span asp-validation-for="LabId" class="text-danger"></span>
+                        </select>
+                        <span asp-validation-for="LabId" class="text-danger"></span>
+                    </div>
+
+                    <!-- Equipment Selection (Optional) -->
+                    <div class="col-md-6 form-group">
+                        <label asp-for="EquipmentId" class="control-label font-weight-bold">Select Equipment (Optional)</label>
+                        <select asp-for="EquipmentId" class="form-control shadow-sm" id="EquipmentId">
+                            <option value="" disabled selected>Select equipment</option>
+                        </select>
+                        <span asp-validation-for="EquipmentId" class="text-danger"></span>
+                    </div>
                 </div>
 
-                <!-- Equipment -->
-                <div class="form-group">
-                    <label asp-for="EquipmentId" class="control-label">Select Equipment (Optional)</label>
-                    <select asp-for="EquipmentId" class="form-control" id="EquipmentId">
-                        <option value="" disabled selected>Select equipment</option>
-                    </select>
-                    <span asp-validation-for="EquipmentId" class="text-danger"></span>
-                </div>
-
-                <!-- User -->
-                <div class="form-group">
-                    <label asp-for="UserId" class="control-label">Select User</label>
-                    <select asp-for="UserId" class="form-control">
-                        @if (ViewBag.CurrentUser != null)
-                        {
-                            var currentUser = (SelectListItem)ViewBag.CurrentUser;
-                            <option value="@currentUser.Value" selected>@currentUser.Text</option>
-                        }
-                        else
-                        {
-                            <option value="" disabled selected>No user found</option>
-                        }
-                    </select>
-                    <span asp-validation-for="UserId" class="text-danger"></span>
-                </div>
-
-
-                <!-- Status Request -->
-                <div class="form-group">
-                    <label asp-for="StatusRequestId" class="control-label">Select Status</label>
-                    <select asp-for="StatusRequestId" class="form-control">
-                        <option value="" disabled selected>Select a status</option>
-                        @if (ViewBag.StatusRequests != null)
-                        {
-                            foreach (var status in ViewBag.StatusRequests as IEnumerable<SelectListItem>)
+                <div class="row">
+                    <!-- User Selection -->
+                    <div class="col-md-6 form-group">
+                        <label asp-for="UserId" class="control-label font-weight-bold">Select User <span class="text-danger">*</span></label>
+                        <select asp-for="UserId" class="form-control shadow-sm" required>
+                            @if (ViewBag.CurrentUser != null)
                             {
-                                <option value="@status.Value">@status.Text</option>
+                                var currentUser = (SelectListItem)ViewBag.CurrentUser;
+                                <option value="@currentUser.Value" selected>@currentUser.Text</option>
                             }
-                        }
-                    </select>
-                    <span asp-validation-for="StatusRequestId" class="text-danger"></span>
+                            else
+                            {
+                                <option value="" disabled selected>No user found</option>
+                            }
+                        </select>
+                        <span asp-validation-for="UserId" class="text-danger"></span>
+                    </div>
+
+                    <!-- Status Request -->
+                    <div class="col-md-6 form-group">
+                        <label asp-for="StatusRequestId" class="control-label font-weight-bold">Request Status <span class="text-danger">*</span></label>
+                        <select asp-for="StatusRequestId" class="form-control shadow-sm" required>
+                            <option value="" disabled selected>Select request status</option>
+                            @if (ViewBag.StatusRequests != null)
+                            {
+                                foreach (var status in ViewBag.StatusRequests as IEnumerable<SelectListItem>)
+                                {
+                                    <option value="@status.Value">@status.Text</option>
+                                }
+                            }
+                        </select>
+                        <span asp-validation-for="StatusRequestId" class="text-danger"></span>
+                    </div>
                 </div>
 
-                <!-- Changed By -->
-                <div class="form-group">
+                <!-- Hidden Field for Changed By -->
+                <div class="form-group d-none">
                     <label class="control-label">Changed By</label>
                     <input type="hidden" name="ChangedBy" value="administrator" />
                 </div>
 
-                <!-- Notes -->
+                <!-- Notes (Optional) -->
                 <div class="form-group">
-                    <label asp-for="Notes" class="control-label">Notes (Optional)</label>
-                    <textarea asp-for="Notes" class="form-control"></textarea>
+                    <label asp-for="Notes" class="control-label font-weight-bold">Additional Notes (Optional)</label>
+                    <textarea asp-for="Notes" class="form-control shadow-sm" rows="3"></textarea>
                     <span asp-validation-for="Notes" class="text-danger"></span>
                 </div>
 
-                <!-- Image -->
-                <div class="form-group">
-                    <label asp-for="Image" class="control-label">Upload Image</label>
-                    <input asp-for="Image" class="form-control" type="file" accept="image/*" />
-                    <small class="form-text text-muted">Allowed formats: JPG, PNG, GIF. Max size: 5MB.</small>
-                    <span asp-validation-for="Image" class="text-danger"></span>
+                <!-- Image Upload -->
+                <div class="form-group row">
+                    <label asp-for="Image" class="col-sm-2 col-form-label font-weight-bold">Upload Image</label>
+                    <div class="col-sm-8">
+                        <input asp-for="Image" class="form-control-file shadow-sm" type="file" accept="image/*" id="ImageInput" />
+                        <small class="form-text text-muted">Allowed formats: JPG, PNG, GIF. Max size: 5MB.</small>
+                    </div>
+                    <div class="col-sm-2" id="ImagePreview" style="display: none;">
+                        <img id="previewImage" src="" alt="Image Preview" class="img-fluid border rounded" style="max-height: 150px; object-fit: cover;" />
+                    </div>
                 </div>
 
                 <!-- Submit Button -->
-                <div class="form-group">
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                <div class="form-group text-center">
+                    <button type="submit" class="btn btn-success btn-lg shadow-sm">Submit Request</button>
                 </div>
             </form>
         </div>
@@ -127,6 +134,21 @@
                     // Clear the Equipment dropdown if no lab is selected
                     $('#EquipmentId').empty();
                     $('#EquipmentId').append('<option value="" disabled selected>Select equipment</option>');
+                }
+            });
+
+            // Image preview functionality
+            $('#ImageInput').change(function (event) {
+                var file = event.target.files[0];
+                if (file) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('#ImagePreview').show();
+                        $('#previewImage').attr('src', e.target.result);
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    $('#ImagePreview').hide();
                 }
             });
         });

@@ -3,32 +3,59 @@
 @{
     ViewData["Title"] = "Login";
 }
+
+<!-- Container -->
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-6">
-            <div class="card">
-                <div class="card-header text-dark text-center">
-                    <h4>Login</h4>
+            <!-- Card -->
+            <div class="card border-0 shadow-lg rounded-4">
+                <div class="card-header bg-dark text-white text-center p-4 rounded-top">
+                    <h4 class="font-weight-bold mb-0">Login</h4>
                 </div>
-                <div class="card-body">
+                <div class="card-body p-4">
                     <form asp-action="Login" method="post">
                         <!-- Email -->
-                        <div class="form-group mb-3">
-                            <label for="username">Email</label>
-                            <input type="text" name="email" id="email" class="form-control" required />
+                        <div class="mb-4">
+                            <label for="email" class="form-label text-dark font-weight-bold">Email Address</label>
+                            <input type="email" name="email" id="email" class="form-control form-control-lg rounded-3 border-0 shadow-sm" placeholder="Enter your email" required />
+                            <span asp-validation-for="Email" class="text-danger"></span>
                         </div>
+
                         <!-- Password -->
-                        <div class="form-group mb-3">
-                            <label for="password">Password</label>
-                            <input type="password" name="password" id="password" class="form-control" required />
+                        <div class="mb-4">
+                            <label for="password" class="form-label text-dark font-weight-bold">Password</label>
+                            <input type="password" name="password" id="password" class="form-control form-control-lg rounded-3 border-0 shadow-sm" placeholder="Enter your password" required />
+                            <span asp-validation-for="Password" class="text-danger"></span>
                         </div>
-                        <button type="submit" class="btn btn-primary w-100">Login</button>
-                        
+
+                        <!-- Submit Button -->
+                        <div class="d-grid mb-4">
+                            <button type="submit" class="btn btn-dark btn-lg rounded-3 shadow-sm">
+                                Login <i class="fas fa-sign-in-alt ml-2"></i>
+                            </button>
+                        </div>
                     </form>
-                    <p class="mt-3 text-center"><a asp-action="ForgotPassword">Forgot Password ?</a></p>
-                    <p class="mt-3 text-center">Don't have an account? <a asp-action="Register">Register here</a></p>
+                    <p class="mt-3 text-center">
+                        <a asp-action="ForgotPassword" class="text-dark font-weight-bold text-decoration-none hover-link">Forgot Password?</a>
+                    </p>
+                    <p class="mt-3 text-center">
+                        Don't have an account? <a asp-action="Register" class="text-dark font-weight-bold text-decoration-none hover-link">Register here</a>
+                    </p>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<!-- Add FontAwesome for Icons -->
+<script src="https://kit.fontawesome.com/a076d05399.js"></script>
+
+<!-- Custom CSS for Link Hover Effect -->
+<style>
+    .hover-link:hover {
+        color: #007bff;
+        text-decoration: underline;
+    }
+</style>
+
