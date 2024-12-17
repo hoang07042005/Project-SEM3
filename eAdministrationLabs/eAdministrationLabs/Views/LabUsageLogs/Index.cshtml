@@ -7,47 +7,47 @@
 
 <!-- Tiêu đề trang -->
 <div class="container mt-5">
-    <h1 class="text-center text-success font-weight-bold mb-4" style="font-size: 2.5rem;">Lab Usage Log</h1>
+    <h1 class="text-center text-dark font-weight-bold mb-4" style="font-size: 2.5rem;">Lab Usage Log</h1>
 
     <!-- Nút Create New -->
     <div class="text-center mb-4">
-        <a asp-action="Create" class="btn btn-lg btn-success px-4 py-2 shadow-lg border-0 rounded-pill">
+        <a asp-action="Create" class="btn btn-lg btn-dark px-4 py-2 shadow-lg border-0 rounded-pill">
             <i class="fas fa-plus-circle"></i> Create New Log
         </a>
     </div>
 
     <!-- Bảng dữ liệu -->
     <div class="table-responsive">
-        <table class="table table-striped table-hover table-bordered table-sm">
-            <thead class="thead-dark">
+        <table class="table table-hover table-bordered" style="border-collapse: separate; border-spacing: 0 10px; background-color: white;">
+            <thead style="background-color: #333; color: white;">
                 <tr>
-                    <th>@Html.DisplayNameFor(model => model.Lab)</th>
-                    <th>@Html.DisplayNameFor(model => model.User)</th>
-                    <th>@Html.DisplayNameFor(model => model.Purpose)</th>
-                    <th>@Html.DisplayNameFor(model => model.StartTime)</th>
-                    <th>@Html.DisplayNameFor(model => model.EndTime)</th>
-                    <th>@Html.DisplayNameFor(model => model.CreatedAt)</th>
+                    <th class="text-center">@Html.DisplayNameFor(model => model.Lab)</th>
+                    <th class="text-center">@Html.DisplayNameFor(model => model.User)</th>
+                    <th class="text-center">@Html.DisplayNameFor(model => model.Purpose)</th>
+                    <th class="text-center">@Html.DisplayNameFor(model => model.StartTime)</th>
+                    <th class="text-center">@Html.DisplayNameFor(model => model.EndTime)</th>
+                    <th class="text-center">@Html.DisplayNameFor(model => model.CreatedAt)</th>
                     <th class="text-center">Actions</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var item in Model)
                 {
-                    <tr>
-                        <td>@Html.DisplayFor(modelItem => item.Lab.LabName)</td>
-                        <td>@Html.DisplayFor(modelItem => item.User.FullName)</td>
-                        <td>@Html.DisplayFor(modelItem => item.Purpose)</td>
-                        <td>@Html.DisplayFor(modelItem => item.StartTime)</td>
-                        <td>@Html.DisplayFor(modelItem => item.EndTime)</td>
-                        <td>@Html.DisplayFor(modelItem => item.CreatedAt)</td>
-                        <td class="text-center">
-                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm rounded-pill shadow-sm">
+                    <tr style="background-color: #f8f8f8;">
+                        <td class="align-middle text-center">@Html.DisplayFor(modelItem => item.Lab.LabName)</td>
+                        <td class="align-middle text-center">@Html.DisplayFor(modelItem => item.User.FullName)</td>
+                        <td class="align-middle text-center">@Html.DisplayFor(modelItem => item.Purpose)</td>
+                        <td class="align-middle text-center">@Html.DisplayFor(modelItem => item.StartTime)</td>
+                        <td class="align-middle text-center">@Html.DisplayFor(modelItem => item.EndTime)</td>
+                        <td class="align-middle text-center">@Html.DisplayFor(modelItem => item.CreatedAt)</td>
+                        <td class="align-middle text-center">
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-dark btn-sm rounded-pill shadow-sm">
                                 <i class="fas fa-edit"></i> Edit
                             </a>
-                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm rounded-pill shadow-sm">
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-secondary btn-sm rounded-pill shadow-sm">
                                 <i class="fas fa-info-circle"></i> Details
                             </a>
-                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm rounded-pill shadow-sm" onclick="return confirm('Are you sure you want to delete this log?');">
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-danger btn-sm rounded-pill shadow-sm" onclick="return confirm('Are you sure you want to delete this log?');">
                                 <i class="fas fa-trash-alt"></i> Delete
                             </a>
                         </td>
@@ -56,6 +56,56 @@
             </tbody>
         </table>
     </div>
-
-   
 </div>
+
+<style>
+    .table-hover tbody tr:hover {
+        background-color: #e9e9e9;
+    }
+
+    th, td {
+        padding: 15px;
+        vertical-align: middle;
+    }
+
+    th {
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    td {
+        font-size: 0.95rem;
+        color: #333;
+    }
+
+    .btn-outline-dark {
+        border-color: #333;
+        color: #333;
+    }
+
+        .btn-outline-dark:hover {
+            background-color: #333;
+            color: white;
+        }
+
+    .btn-outline-secondary {
+        border-color: #666;
+        color: #666;
+    }
+
+        .btn-outline-secondary:hover {
+            background-color: #666;
+            color: white;
+        }
+
+    .btn-outline-danger {
+        border-color: #cc0000;
+        color: #cc0000;
+    }
+
+        .btn-outline-danger:hover {
+            background-color: #cc0000;
+            color: white;
+        }
+</style>

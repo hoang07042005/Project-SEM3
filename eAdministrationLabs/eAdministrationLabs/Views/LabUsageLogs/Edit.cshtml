@@ -1,57 +1,87 @@
 ﻿@model eAdministrationLabs.Models.LabUsageLog
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edit Lab Usage Log";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Edit</h1>
+<div class="container mt-5">
+    <!-- Tiêu đề -->
+    <h1 class="text-center text-dark font-weight-bold mb-5" style="font-size: 2.5rem;">EDIT LAB USAGE LOG</h1>
 
-<h4>LabUsageLog</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="LabId" class="control-label"></label>
-                <select asp-for="LabId" class="form-control" asp-items="ViewBag.LabId"></select>
-                <span asp-validation-for="LabId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UserId" class="control-label"></label>
-                <select asp-for="UserId" class="form-control" asp-items="ViewBag.UserId"></select>
-                <span asp-validation-for="UserId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Purpose" class="control-label"></label>
-                <input asp-for="Purpose" class="form-control" />
-                <span asp-validation-for="Purpose" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="StartTime" class="control-label"></label>
-                <input asp-for="StartTime" class="form-control" />
-                <span asp-validation-for="StartTime" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="EndTime" class="control-label"></label>
-                <input asp-for="EndTime" class="form-control" />
-                <span asp-validation-for="EndTime" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CreatedAt" class="control-label"></label>
-                <input asp-for="CreatedAt" class="form-control" />
-                <span asp-validation-for="CreatedAt" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Form chỉnh sửa -->
+            <form asp-action="Edit" class="shadow-lg p-4 rounded bg-white">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                <input type="hidden" asp-for="Id" />
+
+                <!-- Bố cục 2 cột -->
+                <div class="row">
+                    <!-- Lab Selection -->
+                    <div class="col-md-6 mb-4">
+                        <label asp-for="LabId" class="font-weight-bold text-dark">LAB</label>
+                        <select asp-for="LabId" class="form-control shadow-sm border-dark">
+                            <option value="">-- Select Lab --</option>
+                            @Html.Raw(ViewBag.LabId)
+                        </select>
+                        <span asp-validation-for="LabId" class="text-danger"></span>
+                    </div>
+
+                    <!-- User Selection -->
+                    <div class="col-md-6 mb-4">
+                        <label asp-for="UserId" class="font-weight-bold text-dark">USER</label>
+                        <select asp-for="UserId" class="form-control shadow-sm border-dark">
+                            <option value="">-- Select User --</option>
+                            @Html.Raw(ViewBag.UserId)
+                        </select>
+                        <span asp-validation-for="UserId" class="text-danger"></span>
+                    </div>
+
+                    <!-- Purpose -->
+                    <div class="col-md-6 mb-4">
+                        <label asp-for="Purpose" class="font-weight-bold text-dark">PURPOSE</label>
+                        <input asp-for="Purpose" class="form-control shadow-sm border-dark" />
+                        <span asp-validation-for="Purpose" class="text-danger"></span>
+                    </div>
+
+                    <!-- Start Time -->
+                    <div class="col-md-6 mb-4">
+                        <label asp-for="StartTime" class="font-weight-bold text-dark">START TIME</label>
+                        <input asp-for="StartTime" type="datetime-local" class="form-control shadow-sm border-dark" />
+                        <span asp-validation-for="StartTime" class="text-danger"></span>
+                    </div>
+
+                    <!-- End Time -->
+                    <div class="col-md-6 mb-4">
+                        <label asp-for="EndTime" class="font-weight-bold text-dark">END TIME</label>
+                        <input asp-for="EndTime" type="datetime-local" class="form-control shadow-sm border-dark" />
+                        <span asp-validation-for="EndTime" class="text-danger"></span>
+                    </div>
+
+                    <!-- Created At -->
+                    <div class="col-md-6 mb-4">
+                        <label asp-for="CreatedAt" class="font-weight-bold text-dark">CREATED AT</label>
+                        <input asp-for="CreatedAt" type="datetime-local" class="form-control shadow-sm border-dark" />
+                        <span asp-validation-for="CreatedAt" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <!-- Nút lưu -->
+                <div class="text-center">
+                    <button type="submit" class="btn btn-lg btn-dark px-5 py-2 shadow-lg border-0 rounded-pill">
+                        SAVE
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Link quay lại -->
+    <div class="text-center mt-4">
+        <a asp-action="Index" class="btn btn-link text-dark">
+            <i class="fas fa-arrow-left"></i> BACK TO LIST
+        </a>
     </div>
 </div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-

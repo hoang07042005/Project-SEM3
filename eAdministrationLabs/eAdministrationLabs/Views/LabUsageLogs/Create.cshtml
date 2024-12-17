@@ -5,9 +5,9 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1 class="text-center my-5 font-weight-bold text-success">Create Lab Usage Log</h1>
+<h1 class="text-center my-5 font-weight-bold text-dark">CREATE LAB USAGE LOG</h1>
 
-<h4 class="text-center mb-4 text-muted">Lab Usage Log Details</h4>
+
 <hr class="my-4" />
 
 <div class="row justify-content-center">
@@ -18,8 +18,8 @@
             <!-- Row 1 - Lab and User -->
             <div class="row">
                 <div class="col-md-6 mb-3">
-                    <label asp-for="CreateLabUsageLogDto.LabId" class="control-label font-weight-semibold text-success text-uppercase">Lab</label>
-                    <select asp-for="CreateLabUsageLogDto.LabId" class="form-control form-control-lg">
+                    <label asp-for="CreateLabUsageLogDto.LabId" class="control-label font-weight-semibold text-dark text-uppercase">LAB</label>
+                    <select asp-for="CreateLabUsageLogDto.LabId" class="form-control form-control-lg border-dark">
                         <option value="">Select a Lab</option>
                         @foreach (var lab in Model.Labs)
                         {
@@ -29,8 +29,8 @@
                     <span asp-validation-for="CreateLabUsageLogDto.LabId" class="text-danger"></span>
                 </div>
                 <div class="col-md-6 mb-3">
-                    <label asp-for="CreateLabUsageLogDto.UserId" class="control-label font-weight-semibold text-success text-uppercase">User</label>
-                    <select asp-for="CreateLabUsageLogDto.UserId" class="form-control form-control-lg">
+                    <label asp-for="CreateLabUsageLogDto.UserId" class="control-label font-weight-semibold text-dark text-uppercase">USER</label>
+                    <select asp-for="CreateLabUsageLogDto.UserId" class="form-control form-control-lg border-dark">
                         <option value="">Select a User</option>
                         @foreach (var user in Model.Users)
                         {
@@ -44,25 +44,25 @@
             <!-- Row 2 - Purpose, Start Time, and End Time -->
             <div class="row">
                 <div class="col-md-12 mb-3">
-                    <label asp-for="CreateLabUsageLogDto.Purpose" class="control-label font-weight-semibold text-success text-uppercase">Purpose</label>
-                    <input asp-for="CreateLabUsageLogDto.Purpose" class="form-control form-control-lg" placeholder="Enter purpose for lab usage" />
+                    <label asp-for="CreateLabUsageLogDto.Purpose" class="control-label font-weight-semibold text-dark text-uppercase">PURPOSE</label>
+                    <input asp-for="CreateLabUsageLogDto.Purpose" class="form-control form-control-lg border-dark" placeholder="Enter purpose for lab usage" />
                     <span asp-validation-for="CreateLabUsageLogDto.Purpose" class="text-danger"></span>
                 </div>
                 <div class="col-md-6 mb-3">
-                    <label asp-for="CreateLabUsageLogDto.StartTime" class="control-label font-weight-semibold text-success text-uppercase">Start Time</label>
-                    <input asp-for="CreateLabUsageLogDto.StartTime" class="form-control form-control-lg" type="datetime-local" />
+                    <label asp-for="CreateLabUsageLogDto.StartTime" class="control-label font-weight-semibold text-dark text-uppercase">START TIME</label>
+                    <input asp-for="CreateLabUsageLogDto.StartTime" class="form-control form-control-lg border-dark" type="datetime-local" />
                     <span asp-validation-for="CreateLabUsageLogDto.StartTime" class="text-danger"></span>
                 </div>
                 <div class="col-md-6 mb-3">
-                    <label asp-for="CreateLabUsageLogDto.EndTime" class="control-label font-weight-semibold text-success text-uppercase">End Time</label>
-                    <input asp-for="CreateLabUsageLogDto.EndTime" class="form-control form-control-lg" type="datetime-local" />
+                    <label asp-for="CreateLabUsageLogDto.EndTime" class="control-label font-weight-semibold text-dark text-uppercase">END TIME</label>
+                    <input asp-for="CreateLabUsageLogDto.EndTime" class="form-control form-control-lg border-dark" type="datetime-local" />
                     <span asp-validation-for="CreateLabUsageLogDto.EndTime" class="text-danger"></span>
                 </div>
             </div>
 
             <!-- Submit Button -->
             <div class="form-group text-center">
-                <input type="submit" value="Create" class="btn btn-success btn-lg w-50" />
+                <input type="submit" value="CREATE" class="btn btn-dark btn-lg w-50" />
             </div>
         </form>
     </div>
@@ -70,5 +70,5 @@
 
 <!-- Back Button -->
 <div class="text-center mt-4">
-    <a asp-action="Index" class="btn btn-outline-secondary btn-lg">Back to List</a>
+    <a asp-action="Index" class="btn btn-outline-dark btn-lg">BACK TO LIST</a>
 </div>

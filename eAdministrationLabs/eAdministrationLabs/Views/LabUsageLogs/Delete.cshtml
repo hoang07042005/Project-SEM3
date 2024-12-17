@@ -5,54 +5,113 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Delete</h1>
+<!-- Tiêu đề -->
+<h1 class="text-center my-5 font-weight-bold text-dark" style="font-size: 2.5rem;">DELETE LAB USAGE LOG</h1>
 
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>LabUsageLog</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Purpose)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Purpose)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.StartTime)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.StartTime)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.EndTime)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.EndTime)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CreatedAt)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CreatedAt)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Lab)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Lab.Id)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.User)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.User.Id)
-        </dd>
-    </dl>
-    
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="Id" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
-    </form>
+<h3 class="text-center mb-4 text-muted">Are you sure you want to delete this entry?</h3>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <!-- Chi tiết Lab Usage Log -->
+            <div class="card shadow-sm rounded-lg border-light">
+                <div class="card-body">
+                    <h4 class="font-weight-bold text-dark">Lab Usage Log Details</h4>
+                    <hr />
+
+                    <dl class="row">
+                        <dt class="col-sm-3 font-weight-semibold text-dark text-uppercase">
+                            @Html.DisplayNameFor(model => model.Purpose)
+                        </dt>
+                        <dd class="col-sm-9 text-muted">
+                            @Html.DisplayFor(model => model.Purpose)
+                        </dd>
+
+                        <dt class="col-sm-3 font-weight-semibold text-dark text-uppercase">
+                            @Html.DisplayNameFor(model => model.StartTime)
+                        </dt>
+                        <dd class="col-sm-9 text-muted">
+                            @Html.DisplayFor(model => model.StartTime)
+                        </dd>
+
+                        <dt class="col-sm-3 font-weight-semibold text-dark text-uppercase">
+                            @Html.DisplayNameFor(model => model.EndTime)
+                        </dt>
+                        <dd class="col-sm-9 text-muted">
+                            @Html.DisplayFor(model => model.EndTime)
+                        </dd>
+
+                        <dt class="col-sm-3 font-weight-semibold text-dark text-uppercase">
+                            @Html.DisplayNameFor(model => model.CreatedAt)
+                        </dt>
+                        <dd class="col-sm-9 text-muted">
+                            @Html.DisplayFor(model => model.CreatedAt)
+                        </dd>
+
+                        <dt class="col-sm-3 font-weight-semibold text-dark text-uppercase">
+                            @Html.DisplayNameFor(model => model.Lab)
+                        </dt>
+                        <dd class="col-sm-9 text-muted">
+                            @Html.DisplayFor(model => model.Lab.Id)
+                        </dd>
+
+                        <dt class="col-sm-3 font-weight-semibold text-dark text-uppercase">
+                            @Html.DisplayNameFor(model => model.User)
+                        </dt>
+                        <dd class="col-sm-9 text-muted">
+                            @Html.DisplayFor(model => model.User.Id)
+                        </dd>
+                    </dl>
+
+                    <!-- Button DELETE và BACK nằm cùng hàng -->
+                    <div class="form-group d-flex justify-content-between">
+                        <form asp-action="Delete" class="d-inline">
+                            <input type="hidden" asp-for="Id" />
+                            <input type="submit" value="Delete" class="btn btn-danger btn-sm" />
+                        </form>
+
+                        <a asp-action="Index" class="btn btn-outline-dark btn-sm">Back to List</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+<!-- Custom styles -->
+<style>
+    .btn {
+        font-size: 0.9rem;
+        padding: 0.4rem 1rem;
+        border-radius: 25px;
+    }
+
+    .card-body {
+        background-color: #f8f9fa;
+    }
+
+    .card {
+        border-radius: 15px;
+        border: 1px solid #ddd; /* Viền nhẹ */
+    }
+
+    .font-weight-semibold {
+        font-weight: 600;
+    }
+
+    .text-muted {
+        color: #6c757d;
+    }
+
+    .text-uppercase {
+        text-transform: uppercase;
+    }
+
+    dt {
+        font-weight: 600;
+    }
+
+    .form-group {
+        margin-top: 20px;
+    }
+</style>
