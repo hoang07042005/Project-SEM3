@@ -7,7 +7,7 @@
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-10">
-            <h2 class="text-center mb-4" style="color: #4CAF50;">Create New Request</h2>
+            <h2 class="text-center mb-4" style="color: #000000;">Create New Request</h2>
 
             <!-- Form -->
             <form asp-action="Create" method="post" enctype="multipart/form-data">
@@ -19,7 +19,7 @@
                 <div class="row">
                     <!-- First Column -->
                     <div class="col-md-6 form-group">
-                        <label asp-for="LabId" class="control-label font-weight-bold">Select Laboratory <span class="text-danger">*</span></label>
+                        <label asp-for="LabId" class="control-label font-weight-bold text-dark">Select Laboratory <span class="text-danger">*</span></label>
                         <select asp-for="LabId" class="form-control shadow-sm" id="LabId" required>
                             <option value="" disabled selected>Select a laboratory</option>
                             @if (ViewBag.Labs != null)
@@ -35,7 +35,7 @@
 
                     <!-- Equipment Selection (Optional) -->
                     <div class="col-md-6 form-group">
-                        <label asp-for="EquipmentId" class="control-label font-weight-bold">Select Equipment (Optional)</label>
+                        <label asp-for="EquipmentId" class="control-label font-weight-bold text-dark">Select Equipment (Optional)</label>
                         <select asp-for="EquipmentId" class="form-control shadow-sm" id="EquipmentId">
                             <option value="" disabled selected>Select equipment</option>
                         </select>
@@ -46,7 +46,7 @@
                 <div class="row">
                     <!-- User Selection -->
                     <div class="col-md-6 form-group">
-                        <label asp-for="UserId" class="control-label font-weight-bold">Select User <span class="text-danger">*</span></label>
+                        <label asp-for="UserId" class="control-label font-weight-bold text-dark">Select User <span class="text-danger">*</span></label>
                         <select asp-for="UserId" class="form-control shadow-sm" required>
                             @if (ViewBag.CurrentUser != null)
                             {
@@ -63,7 +63,7 @@
 
                     <!-- Status Request -->
                     <div class="col-md-6 form-group">
-                        <label asp-for="StatusRequestId" class="control-label font-weight-bold">Request Status <span class="text-danger">*</span></label>
+                        <label asp-for="StatusRequestId" class="control-label font-weight-bold text-dark">Request Status <span class="text-danger">*</span></label>
                         <select asp-for="StatusRequestId" class="form-control shadow-sm" required>
                             <option value="" disabled selected>Select request status</option>
                             @if (ViewBag.StatusRequests != null)
@@ -80,20 +80,20 @@
 
                 <!-- Hidden Field for Changed By -->
                 <div class="form-group d-none">
-                    <label class="control-label">Changed By</label>
+                    <label class="control-label text-dark">Changed By</label>
                     <input type="hidden" name="ChangedBy" value="administrator" />
                 </div>
 
                 <!-- Notes (Optional) -->
                 <div class="form-group">
-                    <label asp-for="Notes" class="control-label font-weight-bold">Additional Notes (Optional)</label>
+                    <label asp-for="Notes" class="control-label font-weight-bold text-dark">Additional Notes (Optional)</label>
                     <textarea asp-for="Notes" class="form-control shadow-sm" rows="3"></textarea>
                     <span asp-validation-for="Notes" class="text-danger"></span>
                 </div>
 
                 <!-- Image Upload -->
                 <div class="form-group row">
-                    <label asp-for="Image" class="col-sm-2 col-form-label font-weight-bold">Upload Image</label>
+                    <label asp-for="Image" class="col-sm-2 col-form-label font-weight-bold text-dark">Upload Image</label>
                     <div class="col-sm-8">
                         <input asp-for="Image" class="form-control-file shadow-sm" type="file" accept="image/*" id="ImageInput" />
                         <small class="form-text text-muted">Allowed formats: JPG, PNG, GIF. Max size: 5MB.</small>
@@ -105,7 +105,7 @@
 
                 <!-- Submit Button -->
                 <div class="form-group text-center">
-                    <button type="submit" class="btn btn-success btn-lg shadow-sm">Submit Request</button>
+                    <button type="submit" class="btn btn-dark btn-lg shadow-sm">Submit Request</button>
                 </div>
             </form>
         </div>

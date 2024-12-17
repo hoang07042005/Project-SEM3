@@ -5,51 +5,106 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Details</h1>
+<!-- Tiêu đề -->
+<h1 class="text-center my-5 font-weight-bold text-dark" style="font-size: 2.5rem;">LAB USAGE LOG DETAILS</h1>
 
-<div>
-    <h4>LabUsageLog</h4>
-    <hr />
-    <dl class="row">
-        
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Lab)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Lab.LabName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.User)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.User.FullName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Purpose)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Purpose)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.StartTime)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.StartTime)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.EndTime)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.EndTime)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.CreatedAt)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.CreatedAt)
-        </dd>
-    </dl>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <!-- Chi tiết Lab Usage Log -->
+            <div class="card shadow-sm rounded-lg border-light">
+                <div class="card-body">
+                    <h4 class="font-weight-bold text-dark">Lab Usage Log Information</h4>
+                    <hr />
+
+                    <dl class="row">
+                        <dt class="col-sm-3 font-weight-semibold text-dark text-uppercase">
+                            @Html.DisplayNameFor(model => model.Lab)
+                        </dt>
+                        <dd class="col-sm-9 text-muted">
+                            @Html.DisplayFor(model => model.Lab.LabName)
+                        </dd>
+
+                        <dt class="col-sm-3 font-weight-semibold text-dark text-uppercase">
+                            @Html.DisplayNameFor(model => model.User)
+                        </dt>
+                        <dd class="col-sm-9 text-muted">
+                            @Html.DisplayFor(model => model.User.FullName)
+                        </dd>
+
+                        <dt class="col-sm-3 font-weight-semibold text-dark text-uppercase">
+                            @Html.DisplayNameFor(model => model.Purpose)
+                        </dt>
+                        <dd class="col-sm-9 text-muted">
+                            @Html.DisplayFor(model => model.Purpose)
+                        </dd>
+
+                        <dt class="col-sm-3 font-weight-semibold text-dark text-uppercase">
+                            @Html.DisplayNameFor(model => model.StartTime)
+                        </dt>
+                        <dd class="col-sm-9 text-muted">
+                            @Html.DisplayFor(model => model.StartTime)
+                        </dd>
+
+                        <dt class="col-sm-3 font-weight-semibold text-dark text-uppercase">
+                            @Html.DisplayNameFor(model => model.EndTime)
+                        </dt>
+                        <dd class="col-sm-9 text-muted">
+                            @Html.DisplayFor(model => model.EndTime)
+                        </dd>
+
+                        <dt class="col-sm-3 font-weight-semibold text-dark text-uppercase">
+                            @Html.DisplayNameFor(model => model.CreatedAt)
+                        </dt>
+                        <dd class="col-sm-9 text-muted">
+                            @Html.DisplayFor(model => model.CreatedAt)
+                        </dd>
+                    </dl>
+
+                    <!-- Nút BACK -->
+                    <div class="form-group text-center mt-3">
+                        <a href="@Url.Action("Notifications", "Request")" class="btn btn-outline-secondary btn-sm">Back to Notifications</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-<div>
-    <a href="@Url.Action("Notifications", "Request")" class="btn btn-secondary mt-3">Quay lại</a>
-</div>
+
+<!-- Custom styles -->
+<style>
+    .btn {
+        font-size: 0.9rem;
+        padding: 0.4rem 1rem;
+        border-radius: 25px;
+    }
+
+    .card-body {
+        background-color: #f8f9fa;
+    }
+
+    .card {
+        border-radius: 15px;
+        border: 1px solid #ddd; /* Viền nhẹ */
+    }
+
+    .font-weight-semibold {
+        font-weight: 600;
+    }
+
+    .text-muted {
+        color: #6c757d;
+    }
+
+    .text-uppercase {
+        text-transform: uppercase;
+    }
+
+    dt {
+        font-weight: 600;
+    }
+
+    .form-group {
+        margin-top: 20px;
+    }
+</style>
