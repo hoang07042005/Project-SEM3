@@ -3,10 +3,18 @@
 @{
     ViewData["Title"] = "Chi tiết yêu cầu";
 }
+<link href="~/layoutlabs/css/bg_title.css" rel="stylesheet" />
+
+<div class="background-image">
+    <div class="content">
+        <h3>Request / Details</h3>
+    </div>
+</div>
+
 
 <h1>Chi tiết yêu cầu</h1>
 
-<div>
+<div class="container">
     <h3>@Model.LabName - @Model.EquipmentName</h3>
     <p><strong>Trạng thái:</strong> @Model.StatusName</p>
     <p><strong>Thời gian tạo:</strong> @Model.CreatedAt.ToString("dd/MM/yyyy HH:mm:ss")</p>

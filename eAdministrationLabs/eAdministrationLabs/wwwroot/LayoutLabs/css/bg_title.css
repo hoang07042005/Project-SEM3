@@ -1,0 +1,30 @@
+.background-image {
+    background-image: url('/LayoutLabs/images/bg_title.png');
+    background-size: cover;
+    background-position: center;
+    height: 250px;
+    position: relative;
+    color: white;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10vh;
+    margin-top: -16vh;
+}
+
+.content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    width: 100%;
+}
+
+.content h3 {
+    margin: 0;
+    font-size: 33px;
+    font-family: 'Sriracha', cursive;
+    color: white;
+}

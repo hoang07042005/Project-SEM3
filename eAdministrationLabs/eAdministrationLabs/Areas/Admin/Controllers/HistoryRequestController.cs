@@ -23,11 +23,13 @@ namespace eAdministrationLabs.Areas.Admin.Controllers
     {
         private readonly EAdministrationLabsContext _context;
         private readonly EmailService _emailService;
+        private readonly ILogger<RequestController> _logger;
 
-        public HistoryRequestController(EAdministrationLabsContext context, EmailService emailService)
+        public HistoryRequestController(EAdministrationLabsContext context, EmailService emailService, ILogger<RequestController> logger)
         {
             _context = context;
             _emailService = emailService;
+            _logger = logger;
         }
 
         // GET: Admin/HistoryRequest
@@ -36,42 +38,115 @@ namespace eAdministrationLabs.Areas.Admin.Controllers
         public async Task<IActionResult> Index()
         {
             var eAdministrationLabsContext = _context.HistoryRequests.Include(h => h.Request).Include(h => h.StatusRequest).Include(h => h.User);
-            ViewBag.StatusOptions = _context.StatusRequests.ToList();
+            //ViewBag.StatusOptions = _context.StatusRequests.ToList();
+            var technicalStaffUsers = await _context.Users
+                 .Where(u => u.UserRoles.Any(ur => ur.Role.RoleName == "technical staff"))
+                 .ToListAsync();
+
+            // Pass the list to the view
+            ViewBag.TechnicalStaffUsers = technicalStaffUsers;
             return View(await eAdministrationLabsContext.ToListAsync());
         }
 
 
 
+        //[HttpPost]
+        //public async Task<IActionResult> UpdateChangedBy(int id, int userId)
+        //{
+        //    try
+        //    {
+        //        // Kiểm tra HistoryRequest
+        //        var historyRequest = await _context.HistoryRequests
+        //            .Include(h => h.Request)
+        //            .Include(h => h.User)
+        //            .FirstOrDefaultAsync(h => h.Id == id);
+
+        //        if (historyRequest == null)
+        //            return Json(new { success = false, message = "History request not found" });
+
+        //        // Kiểm tra User mới
+        //        var newUser = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+        //        if (newUser == null)
+        //            return Json(new { success = false, message = "User not found" });
+
+        //        // Cập nhật ChangedBy
+        //        historyRequest.ChangedBy = newUser.FullName;
+
+        //        // Bắt đầu transaction
+        //        using (var transaction = await _context.Database.BeginTransactionAsync())
+        //        {
+        //            try
+        //            {
+        //                await _context.SaveChangesAsync();
+
+        //                // Tạo thông báo
+        //                var notification = new Notification
+        //                {
+        //                    UserId = historyRequest.UserId,
+        //                    Message = $"Your request (ID: {historyRequest.RequestId}) has been updated by.",
+        //                    ReadStatus = "Unread",
+        //                    CreatedAt = DateTime.UtcNow,
+        //                    RequestId = historyRequest.RequestId
+        //                };
+
+        //                await _context.Notifications.AddAsync(notification);
+        //                await _context.SaveChangesAsync();
+
+        //                await transaction.CommitAsync();
+
+        //                // Trả kết quả thành công
+        //                return Json(new { success = true, updatedChangedBy = newUser.FullName });
+        //            }
+        //            catch (Exception ex)
+        //            {
+        //                await transaction.RollbackAsync();
+        //                // Log lỗi (nếu cần thiết)
+        //                return Json(new { success = false, message = "An error occurred while updating ChangedBy.", error = ex.Message });
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        // Log lỗi (tùy framework logging)
+        //        return Json(new { success = false, message = "An unexpected error occurred.", error = ex.Message });
+        //    }
+        //}
+
+
         [HttpPost]
-        public async Task<IActionResult> UpdateStatus(int id, int statusId)
+        public async Task<IActionResult> UpdateChangedBy(int id, int userId)
         {
             try
             {
+                // Kiểm tra HistoryRequest
                 var historyRequest = await _context.HistoryRequests
                     .Include(h => h.Request)
-                    .Include(r => r.User)
-                    .FirstOrDefaultAsync(c => c.Id == id);
+                    .Include(h => h.User)
+                    .FirstOrDefaultAsync(h => h.Id == id);
 
                 if (historyRequest == null)
                     return Json(new { success = false, message = "History request not found" });
 
-                var status = await _context.StatusRequests.FirstOrDefaultAsync(s => s.Id == statusId);
-                if (status == null)
-                    return Json(new { success = false, message = "Invalid status" });
+                // Kiểm tra User mới
+                var newUser = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+                if (newUser == null)
+                    return Json(new { success = false, message = "User not found" });
 
+                // Cập nhật ChangedBy
+                historyRequest.ChangedBy = newUser.FullName;
+
+                // Bắt đầu transaction
                 using (var transaction = await _context.Database.BeginTransactionAsync())
                 {
                     try
                     {
-                        // Cập nhật trạng thái
-                        historyRequest.StatusRequestId = statusId;
                         await _context.SaveChangesAsync();
 
-                        // Tạo thông báo
+                        // Tạo thông báo cho User được cập nhật
                         var notification = new Notification
                         {
-                            UserId = historyRequest.UserId,
-                            Message = $"Your request has been updated to: {status.StatusName}",
+                            UserId = userId,
+                            Message = $"You have been assigned to update request (ID: {historyRequest.RequestId}).",
                             ReadStatus = "Unread",
                             CreatedAt = DateTime.UtcNow,
                             RequestId = historyRequest.RequestId
@@ -80,56 +155,28 @@ namespace eAdministrationLabs.Areas.Admin.Controllers
                         await _context.Notifications.AddAsync(notification);
                         await _context.SaveChangesAsync();
 
-                        // Lấy thông tin người dùng
-                        var user = historyRequest.User;
-                        if (user != null && !string.IsNullOrEmpty(user.Email))
-                        {
-                            // Gửi email dựa trên trạng thái
-                            string subject = string.Empty;
-                            string body = string.Empty;
-
-                            if (status.StatusName == "Approved" || status.StatusName == "Complete")
-                            {
-                                subject = $"Your request has been {status.StatusName}";
-                                body = $@"
-                            <p>Dear {user.FullName},</p>
-                            <p>Your request (ID: {historyRequest.RequestId}) has been updated to <strong>{status.StatusName}</strong>.</p>
-                            <p>Thank you for using our service.</p>";
-                            }
-                            else if (status.StatusName == "Reject")
-                            {
-                                subject = "Your request has been rejected";
-                                body = $@"
-                            <p>Dear {user.FullName},</p>
-                            <p>We regret to inform you that your request (ID: {historyRequest.RequestId}) has been <strong>rejected</strong>.</p>
-                            <p>If you have any questions, please contact our support team.</p>";
-                            }
-
-                            // Gửi email nếu có tiêu đề và nội dung
-                            if (!string.IsNullOrEmpty(subject) && !string.IsNullOrEmpty(body))
-                            {
-                                await _emailService.SendEmailAsync(user.Email, subject, body);
-                            }
-                        }
+                        // Gửi email thông báo
+                        await SendStatusEmail(newUser, "Assigned to Request Update", historyRequest.RequestId);
 
                         await transaction.CommitAsync();
 
-                        return Json(new { success = true, updatedStatus = status.StatusName });
+                        // Trả kết quả thành công
+                        return Json(new { success = true, updatedChangedBy = newUser.FullName });
                     }
-                    catch
+                    catch (Exception ex)
                     {
                         await transaction.RollbackAsync();
-                        return Json(new { success = false, message = "An error occurred while updating the status." });
+                        // Log lỗi (nếu cần thiết)
+                        return Json(new { success = false, message = "An error occurred while updating ChangedBy.", error = ex.Message });
                     }
                 }
             }
             catch (Exception ex)
             {
-                // Log lỗi (tùy framework logging của bạn)
-                return Json(new { success = false, message = "An unexpected error occurred." });
+                // Log lỗi (tùy framework logging)
+                return Json(new { success = false, message = "An unexpected error occurred.", error = ex.Message });
             }
         }
-
 
 
         private async Task SendStatusEmail(User user, string statusName, int requestId)
@@ -137,7 +184,16 @@ namespace eAdministrationLabs.Areas.Admin.Controllers
             string subject = string.Empty;
             string body = string.Empty;
 
-            if (statusName == "Approved" || statusName == "Complete")
+            if (statusName == "Assigned to Request Update")
+            {
+                subject = "You have been assigned to a request update";
+                body = $@"
+            <p>Dear {user.FullName},</p>
+            <p>You have been assigned to handle the update for request (ID: {requestId}).</p>
+            <p>Please check your tasks and ensure the request is processed promptly.</p>
+            <p>Thank you!</p>";
+            }
+            else if (statusName == "Approved" || statusName == "Complete")
             {
                 subject = $"Your request has been {statusName}";
                 body = $@"
@@ -159,6 +215,9 @@ namespace eAdministrationLabs.Areas.Admin.Controllers
                 await _emailService.SendEmailAsync(user.Email, subject, body);
             }
         }
+
+
+
 
 
 

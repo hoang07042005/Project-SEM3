@@ -112,11 +112,11 @@ public class AccountController : Controller
                 HttpContext.Session.SetInt32("UserID", user.Id);
                 HttpContext.Session.SetString("Roles", string.Join(",", roles));
 
-                if (roles.Contains("administrator") || roles.Contains("HOD") || roles.Contains("instructors") || roles.Contains("technicalstaff"))
+                if (roles.Contains("administrator"))
                 {
                     return RedirectToAction("Index", "HomeAdmin", new { area = "Admin" });
                 }
-                else if (roles.Contains("students"))
+                else if (roles.Contains("students") || roles.Contains("technical staff"))
                 {
                     return RedirectToAction("Index", "Home");
                 }
@@ -186,33 +186,7 @@ public class AccountController : Controller
         return View();
     }
 
-    //[HttpPost]
-    //public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
-    //{
-    //    if (ModelState.IsValid)
-    //    {
-    //        var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == model.Email);
-    //        if (user != null)
-    //        {
-    //            var token = Guid.NewGuid().ToString();
-    //            user.PasswordResetToken = token;
-    //            user.TokenExpirationTime = DateTime.UtcNow.AddHours(1);
-    //            await _context.SaveChangesAsync();
-
-    //            var resetLink = Url.Action("ResetPassword", "Account", new { token, email = user.Email }, Request.Scheme);
-    //            var emailBody = $"Click vào đây để đặt lại mật khẩu: <a href='{resetLink}'>Đặt lại mật khẩu</a>";
-    //            await _emailService.SendEmailAsync(user.Email, "Đặt lại mật khẩu", emailBody);
-
-    //            ViewBag.Message = "Email đặt lại mật khẩu đã được gửi.";
-    //            return RedirectToAction("ForgotPasswordConfirmation", "Account");
-    //        }
-
-    //        ModelState.AddModelError("", "Không tìm thấy email.");
-    //    }
-
-    //    return View(model);
-    //}
-
+    
 
     [HttpPost]
     public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
@@ -353,6 +327,8 @@ public class AccountController : Controller
 
         return View(model);
     }
+
+    
 
 }
 

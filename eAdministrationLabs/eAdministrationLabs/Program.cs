@@ -42,7 +42,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("AdminOnly", policy =>
-        policy.RequireRole("administrator", "HOD", "technicalstaff", "instructors"));
+        policy.RequireRole("administrator"));
 });
 
 var app = builder.Build();
@@ -65,7 +65,7 @@ app.UseAuthorization();  // ??m b?o middleware authorization ch?y sau
 // ??nh tuy?n các controller
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Account}/{action=Login}/{id?}");
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.MapControllerRoute(
     name: "admin",

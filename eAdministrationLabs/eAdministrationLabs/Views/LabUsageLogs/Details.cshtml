@@ -2,9 +2,19 @@
 
 @{
     ViewData["Title"] = "Details";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_LayoutLabs.cshtml";
 }
+<link href="~/layoutlabs/css/bg_title.css" rel="stylesheet" />
 
+
+
+<div class="background-image">
+    <div class="content">
+        <h3>Request / Details</h3>
+    </div>
+</div>
+
+<div class="container">
 <h1>Details</h1>
 
 <div>
@@ -52,4 +62,5 @@
 </div>
 <div>
     <a href="@Url.Action("Notifications", "Request")" class="btn btn-secondary mt-3">Quay lại</a>
+</div>
 </div>
