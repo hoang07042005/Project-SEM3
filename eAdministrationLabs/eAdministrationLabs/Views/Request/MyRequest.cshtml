@@ -5,7 +5,19 @@
     var statusFilter = ViewBag.StatusFilter as string ?? "All";
     var availableStatuses = ViewBag.AvailableStatuses as List<string> ?? new List<string>();
 }
+
+
+
+
 <link href="~/css/custom.css" rel="stylesheet" />
+<link href="~/layoutlabs/css/bg_title.css" rel="stylesheet" />
+
+<div class="background-image">
+    <div class="content">
+        <h3>Request / My Request</h3>
+    </div>
+</div>
+
 <div class="container py-4">
     <div class="d-flex">
         <!-- Sidebar Filter -->

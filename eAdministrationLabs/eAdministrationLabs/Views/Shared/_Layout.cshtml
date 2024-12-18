@@ -14,8 +14,8 @@
     <script src="https://cdn.jsdelivr.net/npm/jquery-validation-unobtrusive@3.2.0/jquery.validate.unobtrusive.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 
-@*     <script src="https://cdn.tailwindcss.com"></script>
-     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">  *@
+    @*     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">  *@
 </head>
 <body>
     <header>
@@ -32,16 +32,16 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
 
-                         @*  <li class="nav-item" style="position: relative;">
-                             <a class="nav-link text-dark" href="#" id="requestMenu" style="display: inline-block;">Request</a>
-                             <ul class="dropdown-menu" id="requestDropdown" style="display: none; position: absolute; list-style-type: none; margin: 0; padding: 0; background-color: white; border: 1px solid #ccc; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-                                 <li><a class="dropdown-item" asp-area="" asp-controller="Request" asp-action="Create" style="padding: 8px 16px; text-decoration: none; color: #333;">Submit a request</a></li>
-                                 <li><a class="dropdown-item" asp-area="" asp-controller="Request" asp-action="Index" style="padding: 8px 16px; text-decoration: none; color: #333;">View all requests</a></li>
-                                <li><a class="dropdown-item" asp-area="" asp-controller="Request" asp-action="MyRequest" style="padding: 8px 16px; text-decoration: none; color: #333;">My Request</a></li>
-                                <li><a class="dropdown-item" asp-area="" asp-controller="Request" asp-action="Assgine" style="padding: 8px 16px; text-decoration: none; color: #333;">Assgine</a></li>
+                        @*  <li class="nav-item" style="position: relative;">
+                        <a class="nav-link text-dark" href="#" id="requestMenu" style="display: inline-block;">Request</a>
+                        <ul class="dropdown-menu" id="requestDropdown" style="display: none; position: absolute; list-style-type: none; margin: 0; padding: 0; background-color: white; border: 1px solid #ccc; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+                        <li><a class="dropdown-item" asp-area="" asp-controller="Request" asp-action="Create" style="padding: 8px 16px; text-decoration: none; color: #333;">Submit a request</a></li>
+                        <li><a class="dropdown-item" asp-area="" asp-controller="Request" asp-action="Index" style="padding: 8px 16px; text-decoration: none; color: #333;">View all requests</a></li>
+                        <li><a class="dropdown-item" asp-area="" asp-controller="Request" asp-action="MyRequest" style="padding: 8px 16px; text-decoration: none; color: #333;">My Request</a></li>
+                        <li><a class="dropdown-item" asp-area="" asp-controller="Request" asp-action="Assgine" style="padding: 8px 16px; text-decoration: none; color: #333;">Assgine</a></li>
 
-                             </ul>
-                         </li> *@
+                        </ul>
+                        </li> *@
                         <li class="nav-item" style="position: relative;">
                             <a class="nav-link text-dark" href="#" id="requestMenu" style="display: inline-block;">Request</a>
                             <ul class="dropdown-menu" id="requestDropdown" style="display: none; position: absolute; list-style-type: none; margin: 0; padding: 0; background-color: white; border: 1px solid #ccc; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); z-index: 1000;">
@@ -85,7 +85,7 @@
 
 
 
-                     @await Html.PartialAsync("LoginPartial") 
+                    @await Html.PartialAsync("LoginPartial")
 
                 </div>
             </div>
@@ -133,4 +133,3 @@
         }
     });
 </script>
-

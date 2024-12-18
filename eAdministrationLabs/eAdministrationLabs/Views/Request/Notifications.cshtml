@@ -1,5 +1,19 @@
-﻿@model IEnumerable<eAdministrationLabs.Models.Notification>
+﻿@* @model IEnumerable<eAdministrationLabs.Models.Notification> *@
+@using X.PagedList;
+@using X.PagedList.Mvc.Core;
+@model X.PagedList.IPagedList<eAdministrationLabs.Models.Notification>
 
+<link href="~/layoutlabs/css/bg_title.css" rel="stylesheet" />
+
+
+<div class="background-image">
+    <div class="content">
+        <h3>Notification</h3>
+    </div>
+</div>
+
+
+<div class="container mt-4">
 <table class="table">
     <thead>
         <tr>
@@ -48,3 +62,12 @@
         }
     </tbody>
 </table>
+</div>
+
+<div class="d-flex justify-content-end" style="margin-top: 5vh; margin-right:20vh;">
+    @Html.PagedListPager(Model, page => Url.Action("Notifications", new { page = page }), new PagedListRenderOptions
+{
+    LiElementClasses = new List<string> { "page-item" },
+    PageClasses = new List<string> { "page-link" }
+})
+</div>

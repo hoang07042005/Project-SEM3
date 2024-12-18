@@ -34,7 +34,7 @@ namespace eAdministrationLabs.Controllers
         public async Task<IActionResult> Index(int? page)
         {
             
-            int pageSize = 2;
+            int pageSize = 8;
             int pageNumber = page == null || page < 0 ? 1 : page.Value;
 
             var requests = await _context.Requests
@@ -289,40 +289,44 @@ namespace eAdministrationLabs.Controllers
 
 
 
-        public async Task<IActionResult> Notifications()
+        public async Task<IActionResult> Notifications(int? page)
         {
             
-                var currentFullName = User.Identity?.Name;
-                if (string.IsNullOrEmpty(currentFullName))
-                {
-                    return RedirectToAction("login", "Account");
-                }
+            int pageSize = 10;
+            int pageNumber = page == null || page < 0 ? 1 : page.Value;
+           
 
-                var currentUser = await _context.Users
-                    .FirstOrDefaultAsync(u => u.FullName == currentFullName);
+            var currentFullName = User.Identity?.Name;
+            if (string.IsNullOrEmpty(currentFullName))
+            {
+                return RedirectToAction("login", "Account");
+            }
 
-                if (currentUser == null)
-                {
-                    return RedirectToAction("login", "Account");
-                }
+            var currentUser = await _context.Users
+                .FirstOrDefaultAsync(u => u.FullName == currentFullName);
 
-                var notifications = await _context.Notifications
-                    .Where(n => n.UserId == currentUser.Id)
-                    .OrderByDescending(n => n.CreatedAt)
-                    .ToListAsync();
+            if (currentUser == null)
+            {
+                return RedirectToAction("login", "Account");
+            }
 
-                var unreadCount = await _context.Notifications
-                    .Where(n => n.UserId == currentUser.Id && n.ReadStatus == "Unread")
-                    .CountAsync();
+            var notifications = await _context.Notifications
+                .Where(n => n.UserId == currentUser.Id)
+                .OrderByDescending(n => n.CreatedAt)
+                .ToListAsync();
 
-                if (notifications == null)
-                {
-                    notifications = new List<Notification>(); // Initialize an empty list if null
-                }
+            var unreadCount = await _context.Notifications
+                .Where(n => n.UserId == currentUser.Id && n.ReadStatus == "Unread")
+                .CountAsync();
 
-                ViewData["UnreadCount"] = unreadCount; // Pass the unread count to the view
+            if (notifications == null)
+            {
+                notifications = new List<Notification>(); // Initialize an empty list if null
+            }
 
-                return View(notifications);
+            ViewData["UnreadCount"] = unreadCount; // Pass the unread count to the view
+            PagedList<Notification> notification = new PagedList<Notification>(notifications, pageNumber, pageSize);
+            return View(notification);
             
         }
 

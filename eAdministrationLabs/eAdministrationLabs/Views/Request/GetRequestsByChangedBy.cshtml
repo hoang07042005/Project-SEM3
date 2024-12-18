@@ -1,7 +1,16 @@
 ﻿@model List<eAdministrationLabs.Models.ViewModels.RequestViewModel>
 
-<h2>Danh sách Requests được thay đổi bởi: @ViewData["ChangedBy"]</h2>
+<link href="~/layoutlabs/css/bg_title.css" rel="stylesheet" />
 
+<div class="background-image">
+    <div class="content">
+        <h3>Request / Submit a request 1</h3>
+    </div>
+</div>
+
+
+<div class="container mt-4">
+    <h2>Danh sách Requests được thay đổi bởi: @ViewData["ChangedBy"]</h2>
 <table class="table table-bordered table-striped">
     <thead>
         <tr>
@@ -72,6 +81,7 @@
         }
     </tbody>
 </table>
+</div>
 
 @section Scripts {
     <script>

@@ -5,30 +5,67 @@
     @if (Context.Session.GetString("FullName") == null)
     {
         <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
+            <a class="nav-link"
+               asp-area=""
+               asp-controller="Account"
+               asp-action="Login"
+               style="display: inline-block; padding: 8px 16px; color: white; text-decoration: none; border: 2px solid #ccc; border-radius: 4px; transition: background-color 0.3s, color 0.3s, border-color 0.3s; font-size: 17px"
+               >
+                LOG IN
+            </a>
         </li>
-        <li class="nav-item">
+
+
+       @*  <li class="nav-item">
             <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Register">Register</a>
-        </li>
+        </li> *@
     }
     else
     {
         <li class="nav-item dropdown" style="position: relative;">
-            <span class="nav-link text-dark" style="cursor: pointer;">Wellcom - @Context.Session.GetString("FullName")</span>
-            <ul class="dropdown-menu" style="position: absolute; display: none; list-style-type: none; padding: 0; margin: 0; background-color: #fff; border: 1px solid #ccc;">
+            <span class="nav-link text-white"
+                  style="cursor: pointer; outline: none; box-shadow: none; background: transparent; border: none; display: inline-flex; align-items: center; text-decoration: none; font-size: 17px;">
+                <img src="~/LayoutLabs/images/Account.png"
+                     style="width: 40px; height: 40px; object-fit: cover; outline: none; box-shadow: none; border: none; background: transparent; margin-right: 20px;"
+                     alt="" />
+                @Context.Session.GetString("FullName")
+            </span>
+
+            <!-- Dropdown Menu -->
+            <ul class="dropdown-menu"
+                style="position: absolute; display: none; list-style-type: none; padding: 0; margin: 0; width: calc(100% + 10px); background-color: #fff; border: 1px solid #ccc; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); z-index: 1000;">
+
+                <!-- Mũi tên tam giác -->
+                <li style="position: relative;">
+                    <span style="
+                        content: '';
+                        position: absolute;
+                        top: -10px;
+                        left: 20px;
+                        width: 0;
+                        height: 0;
+                        border-left: 10px solid transparent;
+                        border-right: 10px solid transparent;
+                        border-bottom: 10px solid #fff;">
+                    </span>
+                </li>
+
+                <!-- Dropdown Menu Items -->
                 <li class="nav-item">
-                    <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="ChangePassword">Change Password</a>
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="ChangePassword"
+                       style="padding: 8px 16px; text-decoration: none; color: #333; font-size: 14px; white-space: nowrap;">Change Password</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Logout">Logout</a>
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Logout"
+                       style="padding: 8px 16px; text-decoration: none; color: #333; font-size: 14px;">Logout</a>
                 </li>
             </ul>
         </li>
+
     }
 </ul>
 
 <script>
-    // JavaScript để hiển thị và ẩn phần menu logout khi hover
     document.querySelectorAll('.nav-item.dropdown').forEach(function (dropdown) {
         dropdown.addEventListener('mouseover', function () {
             this.querySelector('.dropdown-menu').style.display = 'block';

@@ -7,6 +7,19 @@
     ViewData["Title"] = "Request List";
 }
 
+
+<link href="~/layoutlabs/css/bg_title.css" rel="stylesheet" />
+
+
+
+<div class="background-image">
+    <div class="content">
+        <h3>Request / View all requests</h3>
+    </div>
+</div>
+
+
+
 <div class="container mt-4">
     <h2>Request List</h2>
 
@@ -70,7 +83,7 @@
 </div>
 
 
-<div style="margin-top: 5vh;">
+<div class="d-flex justify-content-end" style="margin-top: 5vh; margin-right:20vh;">
     @Html.PagedListPager(Model, page => Url.Action("Index", new { page = page }), new PagedListRenderOptions
 {
     LiElementClasses = new List<string> { "page-item" },
