@@ -12,7 +12,7 @@ using eAdministrationLabs.Models;
 namespace eAdministrationLabs.Migrations
 {
     [DbContext(typeof(EAdministrationLabsContext))]
-    [Migration("20241214120621_CreateData")]
+    [Migration("20241216011625_CreateData")]
     partial class CreateData
     {
         /// <inheritdoc />
