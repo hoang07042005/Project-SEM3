@@ -25,6 +25,8 @@ public partial class User
 
     public virtual ICollection<HistoryRequest> HistoryRequests { get; set; } = new List<HistoryRequest>();
 
+    public virtual ICollection<Feedback> Feedbacks { get; set; } = new List<Feedback>();
+
     public virtual ICollection<LabUsageLog> LabUsageLogs { get; set; } = new List<LabUsageLog>();
 
     public virtual ICollection<Notification> Notifications { get; set; } = new List<Notification>();

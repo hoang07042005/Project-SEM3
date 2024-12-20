@@ -32,7 +32,7 @@ namespace eAdministrationLabs.Areas.Admin.Controllers
         [Route("index")]
         public async Task<IActionResult> Index(int? page)
         {
-            int pageSize = 8;
+            int pageSize = 6;
             int pageNumber = page == null || page < 0 ? 1 : page.Value;
             var equipment = await _context.Equipments.ToListAsync();
 

@@ -14191,8 +14191,9 @@ dl {
       .sidebar .nav .nav-item.active {
         background: #ffffff; }
         .sidebar .nav .nav-item.active > .nav-link .menu-title {
-          color: #b66dff;
-          font-family: "ubuntu-medium", sans-serif; }
+            color: #232222;
+            font-family: "ubuntu-medium", sans-serif;
+        }
         .sidebar .nav .nav-item.active > .nav-link i {
           color: #b66dff; }
       .sidebar .nav .nav-item:hover {

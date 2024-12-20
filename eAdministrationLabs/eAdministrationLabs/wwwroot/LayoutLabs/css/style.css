@@ -370,13 +370,13 @@ ul.email li i {
 /** banner_main **/
 
 #top_section {
-     background-image: url('../images/banner.jpg');
-     background-size: cover;
-     background-repeat: no-repeat;
-     padding-top: 120px;
-     position: relative;
-     height: 100vh;
-     background-position: center;
+    background-image: url('../images/z6141690464263_ce8c10f2aec6491e1b98b45943ba92f9.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    padding-top: 120px;
+    position: relative;
+    height: 100vh;
+    background-position: center;
 }
 
 #myCarousel .carousel-indicators {

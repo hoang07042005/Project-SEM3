@@ -9,6 +9,7 @@ using eAdministrationLabs.Models;
 using Microsoft.AspNetCore.Authorization;
 using eAdministrationLabs.Dtos.Create;
 using eAdministrationLabs.Dtos.Edit;
+using X.PagedList;
 
 namespace eAdministrationLabs.Areas.Admin.Controllers
 {
@@ -30,11 +31,34 @@ namespace eAdministrationLabs.Areas.Admin.Controllers
         // GET: Admin/EquiLab
         [Route("")]
         [Route("index")]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? page)
         {
-            var eAdministrationLabsContext = _context.EquiLabs.Include(e => e.Equipment).Include(e => e.Lab);
-            return View(await eAdministrationLabsContext.ToListAsync());
+            try
+            {
+                int pageSize = 6;
+                int pageNumber = page == null || page < 0 ? 1 : page.Value;
+
+                var eAdministrationLabsContext = await _context.EquiLabs
+                    .Include(e => e.Equipment)
+                    .Include(e => e.Lab)
+                    .ToListAsync();
+
+                if (eAdministrationLabsContext == null || !eAdministrationLabsContext.Any())
+                {
+                    return NotFound(); // Handle case where no data is found
+                }
+
+                PagedList<EquiLab> equiLabs = new PagedList<EquiLab>(eAdministrationLabsContext, pageNumber, pageSize);
+                return View(equiLabs);
+            }
+            catch (Exception ex)
+            {
+                // Log the error details for troubleshooting
+                Console.Error.WriteLine($"An error occurred: {ex.Message}");
+                return StatusCode(500, "Internal server error");
+            }
         }
+
 
         // GET: Admin/EquiLab/Details/5
         [Route("Details")]

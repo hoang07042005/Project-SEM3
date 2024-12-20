@@ -21,6 +21,7 @@
     <link rel="stylesheet" href="~/LayoutLabs/css/responsive.css">
     <!-- awesome fontfamily -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <!--[if lt IE 9]>
        <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -39,7 +40,7 @@
     <!-- header -->
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3" style="background-color: #222222;">
-            <div class="container-fluid" style="margin-left:10vh;>
+            <div class="container-fluid" style="margin-left:10vh;">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
                     <img src="~/LayoutLabs/images/logo1-Photoroom.png" alt="eAdministrationLabs Logo" style="height: 100px;" />
                 </a>
@@ -89,21 +90,27 @@
                                     <a class="dropdown-item" asp-area="" asp-controller="Request" asp-action="MyRequest"
                                        style="padding: 8px 16px; text-decoration: none; color: #333; font-size: 17px;">My Request</a>
                                 </li>
-
-                                @if (User.IsInRole("technical staff"))
+                                @if (User.IsInRole("technicalstaff"))
                                 {
                                     <li>
                                         <a class="dropdown-item" asp-area="" asp-controller="Request" asp-action="GetRequestsByChangedBy"
-                                           style="padding: 8px 16px; text-decoration: none; color: #333; font-size: 17px;">Assgine</a>
+                                           style="font-size: 17px; color: #f2a75e;">
+                                            <i class="bi bi-people" style="margin-right: 8px; font-size:1em;"></i>
+                                           ASSGINE</a>
                                     </li>
                                 }
+                                
                             </ul>
+                           
                         </li>
+                        
 
 
                         <li class="nav-item">
                             <a class="nav-link text-white" asp-area="" asp-controller="LabUsageLogs" asp-action="Index" style=" font-size: 17px;">CLASSROOM</a>
                         </li>
+
+                        
                     </ul>
 
                 
@@ -159,7 +166,9 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-3">
-                        <a class="logo_footer" href="index.html"><img src="~/LayoutLabs/images/logo1-Photoroom.png" alt="#" /></a>
+                        <a class="logo_footer" asp-area="" asp-controller="Home" asp-action="Index">
+                            <img src="~/LayoutLabs/images/logo1-Photoroom.png" alt="#" />
+                        </a>
                     </div>
                     <div class="col-md-3 col-sm-6">
                         <div class="Informa helpful">
@@ -229,9 +238,9 @@
     <script src="~/LayoutLabs/js/custom.js"></script>
 
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+   @*  <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script> *@
     @await RenderSectionAsync("Scripts", required: false)
 
 </body>

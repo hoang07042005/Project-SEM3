@@ -28,13 +28,37 @@ namespace eAdministrationLabs.Areas.Admin.Controllers
         }
 
         // GET: Admin/Request
+        //// GET: Admin/Request
+        //// GET: Admin/Request
+        //[Route("")]
+        //[Route("index")]
+        //public async Task<IActionResult> Index()
+        //{
+        //    var pendingRequests = await _context.Requests
+        //        .Include(r => r.Equipment)
+        //        .Include(r => r.Image)
+        //        .Include(r => r.Lab)
+        //        .Where(r => r.HistoryRequests
+        //            .OrderByDescending(h => h.ChangedAt)
+        //            .FirstOrDefault().StatusRequest.StatusName == "Pending")
+        //        .OrderByDescending(r => r.CreatedAt)  // Order by CreatedAt descending
+        //        .ToListAsync();
+
+        //    return View(pendingRequests);
+        //}
+
         [Route("")]
         [Route("index")]
         public async Task<IActionResult> Index()
         {
-            var eAdministrationLabsContext = _context.Requests.Include(r => r.Equipment).Include(r => r.Image).Include(r => r.Lab);
-            return View(await eAdministrationLabsContext.ToListAsync());
+            var eAdministrationLabsContext = await _context.Requests.Include(r => r.Equipment).Include(r => r.Image).Include(r => r.Lab).Where(r => r.HistoryRequests
+                  .OrderByDescending(h => h.ChangedAt)
+                .FirstOrDefault().StatusRequest.StatusName == "Pending")
+                .OrderByDescending(r => r.CreatedAt).ToListAsync();
+            return View(eAdministrationLabsContext);
         }
+
+
 
         // GET: Admin/Request/Details/5
         [Route("Details")]

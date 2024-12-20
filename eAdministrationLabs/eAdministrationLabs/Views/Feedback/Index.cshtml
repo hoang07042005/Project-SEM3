@@ -1,0 +1,64 @@
+﻿@model eAdministrationLabs.Models.Feedback
+
+<div class="container mt-4">
+    <h2>Provide Your Feedback</h2>
+
+    <form id="feedbackForm">
+        <input type="hidden" asp-for="RequestId" />
+
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+        <div class="form-group">
+            <label asp-for="Rating">Rating (1-5):</label>
+            <input asp-for="Rating" class="form-control" type="number" min="1" max="5" required />
+            <span asp-validation-for="Rating" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Satisfaction">Satisfaction (1-5):</label>
+            <input asp-for="Satisfaction" class="form-control" type="number" min="1" max="5" required />
+            <span asp-validation-for="Satisfaction" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Quality">Quality (1-5):</label>
+            <input asp-for="Quality" class="form-control" type="number" min="1" max="5" required />
+            <span asp-validation-for="Quality" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Comment">Comment:</label>
+            <textarea asp-for="Comment" class="form-control" rows="4" maxlength="500"></textarea>
+            <span asp-validation-for="Comment" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit Feedback</button>
+    </form>
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#feedbackForm").submit(function (e) {
+                e.preventDefault(); // Prevent default form submission
+
+                var formData = $(this).serialize(); // Serialize form data
+
+                $.ajax({
+                    url: '@Url.Action("Submit", "Feedback")',
+                    type: 'POST',
+                    data: formData,
+                    success: function (result) {
+                        alert("Feedback submitted successfully");
+                    },
+                    error: function () {
+                        alert("Error");
+                    }
+                });
+            });
+        });
+    </script>
+}

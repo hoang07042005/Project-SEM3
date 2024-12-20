@@ -33,17 +33,18 @@
                     <th scope="row">@request.Id</th>
                     <td>@request.LabName</td>
                     <td>@request.EquipmentName</td>
+
                     <td>
-                        <select class="form-control status-select" data-id="@request.Id" style="color: #000000;">
+                            <select class="form-control status-select" data-id="@request.Id" data-current-status="@request.StatusName" style="color: #000000;">
                             @foreach (var status in ViewBag.StatusOptions)
                             {
                                 // Check if the status is not "Reject"
-                                if (status.StatusName != "Reject")
-                                {
-                                    <option value="@status.Id" style="color: #000000;">
+                                
+                                    <option value="@status.Id" selected="@(status.StatusName == request.StatusName)" style="color: #000000;">
                                         @status.StatusName
                                     </option>
-                                }
+                                    
+                                
                             }
                         </select>
                     </td>
@@ -107,5 +108,33 @@
                 });
             });
         });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const selects = document.querySelectorAll('.status-select');
+
+            selects.forEach(select => {
+                const currentStatus = select.getAttribute('data-current-status');
+
+                // Define status transitions
+                const allowedTransitions = {
+                    "Pending": ["Approved", "Reject"],
+                    "Approved": ["In Progress"],
+                    "In Progress": ["Complete"]
+                };
+
+                // Get the allowed statuses for the current status
+                const allowedStatuses = allowedTransitions[currentStatus] || [];
+
+                // Filter the options in the select dropdown
+                Array.from(select.options).forEach(option => {
+                    if (!allowedStatuses.includes(option.text)) {
+                        option.style.display = 'none'; // Hide options not allowed
+                    }
+                });
+            });
+        });
+
     </script>
 }

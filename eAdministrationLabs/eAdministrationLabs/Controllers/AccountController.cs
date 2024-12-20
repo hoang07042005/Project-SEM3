@@ -116,7 +116,7 @@ public class AccountController : Controller
                 {
                     return RedirectToAction("Index", "HomeAdmin", new { area = "Admin" });
                 }
-                else if (roles.Contains("students") || roles.Contains("technical staff"))
+                else if (roles.Contains("students") || roles.Contains("technicalstaff"))
                 {
                     return RedirectToAction("Index", "Home");
                 }
@@ -196,10 +196,10 @@ public class AccountController : Controller
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == model.Email);
             if (user != null)
             {
-                var token = Guid.NewGuid().ToString();
-                user.PasswordResetToken = token;
-                user.TokenExpirationTime = DateTime.UtcNow.AddHours(1);
-                await _context.SaveChangesAsync();
+                    var token = Guid.NewGuid().ToString();
+                    user.PasswordResetToken = token;
+                    user.TokenExpirationTime = DateTime.UtcNow.AddHours(1);
+                    await _context.SaveChangesAsync();
 
                 var resetLink = Url.Action("ResetPassword", "Account", new { token, email = user.Email }, Request.Scheme);
                 var emailBody = $@"

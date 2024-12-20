@@ -19,6 +19,8 @@ public partial class EAdministrationLabsContext : DbContext
 
     public virtual DbSet<Equipment> Equipments { get; set; }
 
+    public virtual DbSet<Feedback> Feedbacks { get; set; }
+
     public virtual DbSet<HistoryRequest> HistoryRequests { get; set; }
 
     public virtual DbSet<Lab> Labs { get; set; }
@@ -83,6 +85,63 @@ public partial class EAdministrationLabsContext : DbContext
                 .HasColumnType("datetime");
             entity.Property(e => e.Type).HasMaxLength(50);
         });
+
+
+        modelBuilder.Entity<Feedback>(entity =>
+        {
+            entity.HasKey(e => e.Id)
+                  .HasName("PK__Feedback__3447459958A3481B");
+
+            entity.Property(e => e.Id)
+                  .HasColumnName("FeedBackID");
+
+            entity.Property(e => e.RequestId)
+                  .HasColumnName("RequestID")
+                  .IsRequired();
+
+            entity.Property(e => e.UserId)
+                  .HasColumnName("UserID")
+                  .IsRequired();
+
+            entity.Property(e => e.Rating)
+                  .HasColumnName("Rating")
+                  .IsRequired();
+
+            entity.Property(e => e.Comment)
+                  .HasColumnName("Comment")
+                  .HasMaxLength(1000);
+
+            entity.Property(e => e.Satisfaction)
+                  .HasColumnName("Satisfaction")
+                  .IsRequired();
+
+            entity.Property(e => e.Quality)
+                  .HasColumnName("Quality")
+                  .IsRequired();
+
+            entity.Property(e => e.CreatedAt)
+                  .HasColumnName("CreatedAt")
+                  .HasDefaultValueSql("GETDATE()");
+
+            entity.Property(e => e.UpdatedAt)
+                  .HasColumnName("UpdatedAt")
+                  .ValueGeneratedOnAddOrUpdate()
+                  .HasDefaultValueSql("GETDATE()");
+
+            entity.HasOne(e => e.HistoryRequest)
+                  .WithMany(hr => hr.Feedbacks)
+                  .HasForeignKey(e => e.RequestId)
+                  .OnDelete(DeleteBehavior.NoAction);
+
+
+            entity.HasOne(e => e.User)
+                  .WithMany(u => u.Feedbacks)
+                  .HasForeignKey(e => e.UserId)
+                  .OnDelete(DeleteBehavior.NoAction); // Hoặc .OnUpdate(DeleteBehavior.NoAction) nếu cần
+
+        });
+
+
 
         modelBuilder.Entity<HistoryRequest>(entity =>
         {

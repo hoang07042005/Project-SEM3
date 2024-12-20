@@ -19,6 +19,8 @@ public partial class HistoryRequest
 
     public string? Notes { get; set; }
 
+    public virtual ICollection<Feedback> Feedbacks { get; set; } = new List<Feedback>();
+
     public virtual Request Request { get; set; } = null!;
 
     public virtual StatusRequest StatusRequest { get; set; } = null!;

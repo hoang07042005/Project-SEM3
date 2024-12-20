@@ -10,6 +10,10 @@ using Microsoft.AspNetCore.Authorization;
 using eAdministrationLabs.Dtos.Create;
 using eAdministrationLabs.Dtos.Edit;
 using eAdministrationLabs.Services;
+using Microsoft.Build.Framework;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Diagnostics;
+using System.Numerics;
 
 
 namespace eAdministrationLabs.Areas.Admin.Controllers
@@ -32,85 +36,43 @@ namespace eAdministrationLabs.Areas.Admin.Controllers
             _logger = logger;
         }
 
-        // GET: Admin/HistoryRequest
+
+
+
         [Route("")]
         [Route("index")]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string changedByFilter, int? statusFilter)
         {
-            var eAdministrationLabsContext = _context.HistoryRequests.Include(h => h.Request).Include(h => h.StatusRequest).Include(h => h.User);
-            //ViewBag.StatusOptions = _context.StatusRequests.ToList();
-            var technicalStaffUsers = await _context.Users
-                 .Where(u => u.UserRoles.Any(ur => ur.Role.RoleName == "technical staff"))
-                 .ToListAsync();
+            IQueryable<HistoryRequest> eAdministrationLabsContext = _context.HistoryRequests
+                .Include(h => h.Request)
+                .Include(h => h.StatusRequest)
+                .Include(h => h.User);
 
-            // Pass the list to the view
+            // Filter by "Changed By"
+            if (!string.IsNullOrEmpty(changedByFilter))
+            {
+                eAdministrationLabsContext = eAdministrationLabsContext.Where(h => h.ChangedBy.Contains(changedByFilter.Trim()));
+            }
+
+            // Filter by status
+            if (statusFilter.HasValue)
+            {
+                eAdministrationLabsContext = eAdministrationLabsContext.Where(h => h.StatusRequestId == statusFilter.Value);
+            }
+
+            var statusOptions = await _context.StatusRequests.ToListAsync();
+            var technicalStaffUsers = await _context.Users
+                .Where(u => u.UserRoles.Any(ur => ur.Role.RoleName == "administrator" || ur.Role.RoleName == "technicalstaff"))
+                .ToListAsync();
+
+            // Pass filter values to the ViewBag
+            ViewBag.ChangedByFilter = changedByFilter;
+            ViewBag.StatusFilter = statusFilter;
             ViewBag.TechnicalStaffUsers = technicalStaffUsers;
+            ViewBag.StatusOptions = statusOptions;
+
             return View(await eAdministrationLabsContext.ToListAsync());
         }
-
-
-
-        //[HttpPost]
-        //public async Task<IActionResult> UpdateChangedBy(int id, int userId)
-        //{
-        //    try
-        //    {
-        //        // Kiểm tra HistoryRequest
-        //        var historyRequest = await _context.HistoryRequests
-        //            .Include(h => h.Request)
-        //            .Include(h => h.User)
-        //            .FirstOrDefaultAsync(h => h.Id == id);
-
-        //        if (historyRequest == null)
-        //            return Json(new { success = false, message = "History request not found" });
-
-        //        // Kiểm tra User mới
-        //        var newUser = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
-        //        if (newUser == null)
-        //            return Json(new { success = false, message = "User not found" });
-
-        //        // Cập nhật ChangedBy
-        //        historyRequest.ChangedBy = newUser.FullName;
-
-        //        // Bắt đầu transaction
-        //        using (var transaction = await _context.Database.BeginTransactionAsync())
-        //        {
-        //            try
-        //            {
-        //                await _context.SaveChangesAsync();
-
-        //                // Tạo thông báo
-        //                var notification = new Notification
-        //                {
-        //                    UserId = historyRequest.UserId,
-        //                    Message = $"Your request (ID: {historyRequest.RequestId}) has been updated by.",
-        //                    ReadStatus = "Unread",
-        //                    CreatedAt = DateTime.UtcNow,
-        //                    RequestId = historyRequest.RequestId
-        //                };
-
-        //                await _context.Notifications.AddAsync(notification);
-        //                await _context.SaveChangesAsync();
-
-        //                await transaction.CommitAsync();
-
-        //                // Trả kết quả thành công
-        //                return Json(new { success = true, updatedChangedBy = newUser.FullName });
-        //            }
-        //            catch (Exception ex)
-        //            {
-        //                await transaction.RollbackAsync();
-        //                // Log lỗi (nếu cần thiết)
-        //                return Json(new { success = false, message = "An error occurred while updating ChangedBy.", error = ex.Message });
-        //            }
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        // Log lỗi (tùy framework logging)
-        //        return Json(new { success = false, message = "An unexpected error occurred.", error = ex.Message });
-        //    }
-        //}
 
 
         [HttpPost]
@@ -184,37 +146,100 @@ namespace eAdministrationLabs.Areas.Admin.Controllers
             string subject = string.Empty;
             string body = string.Empty;
 
+            // Hàm tạo phần header chung cho email (có thể mở rộng nếu cần)
+            string GetEmailBodyHeader(string status)
+            {
+                return $@"
+        <html>
+        <head>
+            <style>
+                body {{
+                    font-family: Arial, sans-serif;
+                    margin: 0;
+                    padding: 0;
+                    background-color: #f4f4f4;
+                }}
+                .container {{
+                    width: 100%;
+                    max-width: 600px;
+                    margin: 0 auto;
+                    padding: 20px;
+                    background-color: #ffffff;
+                    border-radius: 8px;
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                }}
+                .header {{
+                    font-size: 18px;
+                    font-weight: bold;
+                    color: #333333;
+                }}
+                .content {{
+                    font-size: 16px;
+                    color: #555555;
+                }}
+                .footer {{
+                    font-size: 14px;
+                    color: #999999;
+                    text-align: center;
+                    margin-top: 20px;
+                }}
+                .strong {{
+                    font-weight: bold;
+                }}
+                a {{
+                    color: #0066cc;
+                    text-decoration: none;
+                }}
+            </style>
+        </head>
+        <body>
+            <div class='container'>
+                <div class='header'>
+                    <p>Dear {user.FullName},</p>
+                </div>
+                <div class='content'>
+        ";
+            }
+
+            // Hàm kết thúc email và phần footer chung
+            string GetEmailBodyFooter()
+            {
+                return $@"
+                </div>
+                <div class='footer'>
+                    <p>If you have any questions, feel free to contact our support team.</p>
+                    <p>Thank you for using our service.</p>
+                </div>
+            </div>
+        </body>
+        </html>";
+            }
+
+            // Dựa trên statusName, tạo nội dung email và subject
             if (statusName == "Assigned to Request Update")
             {
                 subject = "You have been assigned to a request update";
-                body = $@"
-            <p>Dear {user.FullName},</p>
-            <p>You have been assigned to handle the update for request (ID: {requestId}).</p>
-            <p>Please check your tasks and ensure the request is processed promptly.</p>
-            <p>Thank you!</p>";
+                body = $"{GetEmailBodyHeader(statusName)}<p>You have been assigned to handle the update for request (ID: {requestId}).</p>< p > Please check your tasks and ensure the request is processed promptly.</ p >{ GetEmailBodyFooter()}";
+
             }
-            else if (statusName == "Approved" || statusName == "Complete")
+            else if (statusName == "Approved" || statusName == "In Progress" || statusName == "Complete")
             {
                 subject = $"Your request has been {statusName}";
-                body = $@"
-            <p>Dear {user.FullName},</p>
-            <p>Your request (ID: {requestId}) has been updated to <strong>{statusName}</strong>.</p>
-            <p>Thank you for using our service.</p>";
+                body = $"{GetEmailBodyHeader(statusName)}<p>Your request (ID: {requestId}) has been updated to <span class='strong'>{statusName}</span>.</p>< p > Thank you for using our service.</ p >{ GetEmailBodyFooter()}";
             }
             else if (statusName == "Reject")
             {
                 subject = "Your request has been rejected";
-                body = $@"
-            <p>Dear {user.FullName},</p>
-            <p>We regret to inform you that your request (ID: {requestId}) has been <strong>rejected</strong>.</p>
-            <p>If you have any questions, please contact our support team.</p>";
+                body = $"{GetEmailBodyHeader(statusName)}<p>We regret to inform you that your request (ID: {requestId}) has been <span class='strong'>rejected</span>.</p>< p > If you have any questions, please contact our support team.</ p >{ GetEmailBodyFooter()}";
             }
 
+            // Gửi email nếu subject và body đã được xác định
             if (!string.IsNullOrEmpty(subject) && !string.IsNullOrEmpty(body))
             {
                 await _emailService.SendEmailAsync(user.Email, subject, body);
             }
         }
+
 
 
 

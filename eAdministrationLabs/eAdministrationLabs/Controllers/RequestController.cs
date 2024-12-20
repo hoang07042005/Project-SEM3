@@ -100,13 +100,10 @@ namespace eAdministrationLabs.Controllers
 
             // Truyền dữ liệu bộ lọc trạng thái đến View
             ViewBag.StatusFilter = statusFilter;
-            ViewBag.AvailableStatuses = new List<string> { "All", "Complete", "Pending", "Approved", "Reject" };
+            ViewBag.AvailableStatuses = new List<string> { "All", "Pending", "Approved", "In Progress", "Complete", "Reject" };
 
             return View(myRequests);
         }
-
-
-
 
 
 
@@ -441,6 +438,8 @@ namespace eAdministrationLabs.Controllers
             }
         }
 
+
+
         [HttpPost]
         public async Task<IActionResult> UpdateStatus(int id, int statusId)
         {
@@ -487,21 +486,182 @@ namespace eAdministrationLabs.Controllers
                             string subject = string.Empty;
                             string body = string.Empty;
 
-                            if (status.StatusName == "Approved" || status.StatusName == "Complete")
+                            if (status.StatusName == "Approved" || status.StatusName == "In Progress")
                             {
                                 subject = $"Your request has been {status.StatusName}";
                                 body = $@"
-                            <p>Dear {user.FullName},</p>
-                            <p>Your request (ID: {historyRequest.RequestId}) has been updated to <strong>{status.StatusName}</strong>.</p>
-                            <p>Thank you for using our service.</p>";
+                                        <html>
+                                            <head>
+                                                <style>
+                                                    body {{
+                                                        font-family: Arial, sans-serif;
+                                                        line-height: 1.6;
+                                                    }}
+                                                    .email-container {{
+                                                        max-width: 600px;
+                                                        margin: 0 auto;
+                                                        padding: 20px;
+                                                        background-color: #f4f4f4;
+                                                    }}
+                                                    .email-header {{
+                                                        text-align: center;
+                                                        padding-bottom: 10px;
+                                                    }}
+                                                    .email-body {{
+                                                        background-color: #fff;
+                                                        padding: 20px;
+                                                        border-radius: 5px;
+                                                        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                                                    }}
+                                                    .email-footer {{
+                                                        text-align: center;
+                                                        padding-top: 10px;
+                                                        font-size: 12px;
+                                                        color: #777;
+                                                    }}
+                                                </style>
+                                            </head>
+                                            <body>
+                                                <div class='email-container'>
+                                                    <div class='email-header'>
+                                                        <h2>Request Status Update</h2>
+                                                    </div>
+                                                    <div class='email-body'>
+                                                        <p>Dear {user.FullName},</p>
+                                                        <p>We are writing to inform you that your request (ID: {historyRequest.RequestId}) has been updated to <strong>{status.StatusName}</strong>.</p>
+                                                        <p>Thank you for using our service. If you have any questions or need further assistance, please do not hesitate to reach out to us.</p>
+                                                    </div>
+                                                    <div class='email-footer'>
+                                                        <p>Best regards,<br/>The Support Team</p>
+                                                    </div>
+                                                </div>
+                                            </body>
+                                        </html>";
+                            }
+                            if (status.StatusName == "Complete")
+                            {
+                                subject = $"Your request has been {status.StatusName}";
+                                body = $@"
+                                        <html>
+                                            <head>
+                                                <style>
+                                                    body {{
+                                                        font-family: Arial, sans-serif;
+                                                        line-height: 1.6;
+                                                    }}
+                                                    .email-container {{
+                                                        max-width: 600px;
+                                                        margin: 0 auto;
+                                                        padding: 20px;
+                                                        background-color: #f4f4f4;
+                                                    }}
+                                                    .email-header {{
+                                                        text-align: center;
+                                                        padding-bottom: 10px;
+                                                    }}
+                                                    .email-body {{
+                                                        background-color: #fff;
+                                                        padding: 20px;
+                                                        border-radius: 5px;
+                                                        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                                                    }}
+                                                    .email-footer {{
+                                                        text-align: center;
+                                                        padding-top: 10px;
+                                                        font-size: 12px;
+                                                        color: #777;
+                                                    }}
+                                                    .feedback-form {{
+                                                        margin-top: 20px;
+                                                    }}
+                                                    .feedback-form input, .feedback-form select, .feedback-form textarea {{
+                                                        width: 100%;
+                                                        padding: 10px;
+                                                        margin: 10px 0;
+                                                        border: 1px solid #ddd;
+                                                        border-radius: 4px;
+                                                    }}
+                                                    .feedback-form button {{
+                                                        padding: 10px 20px;
+                                                        background-color: #007BFF;
+                                                        color: white;
+                                                        border: none;
+                                                        border-radius: 4px;
+                                                        cursor: pointer;
+                                                    }}
+                                                </style>
+                                            </head>
+                                            <body>
+                                                <div class='email-container'>
+                                                    <div class='email-header'>
+                                                        <h2>Request Status Update</h2>
+                                                    </div>
+                                                    <div class='email-body'>
+                                                        <p>Dear {user.FullName},</p>
+                                                        <p>We are writing to inform you that your request (ID: {historyRequest.RequestId}) has been updated to <strong>{status.StatusName}</strong>.</p>
+                                                        <p>Please take a moment to provide your feedback:</p>
+                                                        <p>Please take a moment to provide your feedback:</p>
+                                                      <p><a href='https://localhost:7085/Feedback/Index?RequestId={historyRequest.RequestId}'>Click here to provide your feedback</a></p>
+                                                        <p>Thank you for using our service. If you have any questions or need further assistance, please do not hesitate to reach out to us.</p>
+                                                    </div>
+                                                    <div class='email-footer'>
+                                                        <p>Best regards,<br/>The Support Team</p>
+                                                    </div>
+                                                </div>
+                                            </body>
+                                        </html>";
                             }
                             else if (status.StatusName == "Reject")
                             {
                                 subject = "Your request has been rejected";
                                 body = $@"
-                            <p>Dear {user.FullName},</p>
-                            <p>We regret to inform you that your request (ID: {historyRequest.RequestId}) has been <strong>rejected</strong>.</p>
-                            <p>If you have any questions, please contact our support team.</p>";
+                                <html>
+                                    <head>
+                                        <style>
+                                            body {{
+                                                font-family: Arial, sans-serif;
+                                                line-height: 1.6;
+                                            }}
+                                            .email-container {{
+                                                max-width: 600px;
+                                                margin: 0 auto;
+                                                padding: 20px;
+                                                background-color: #f4f4f4;
+                                            }}
+                                            .email-header {{
+                                                text-align: center;
+                                                padding-bottom: 10px;
+                                            }}
+                                            .email-body {{
+                                                background-color: #fff;
+                                                padding: 20px;
+                                                border-radius: 5px;
+                                                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                                            }}
+                                            .email-footer {{
+                                                text-align: center;
+                                                padding-top: 10px;
+                                                font-size: 12px;
+                                                color: #777;
+                                            }}
+                                        </style>
+                                    </head>
+                                    <body>
+                                        <div class='email-container'>
+                                            <div class='email-header'>
+                                                <h2>Request Status Update</h2>
+                                            </div>
+                                            <div class='email-body'>
+                                                <p>Dear {user.FullName},</p>
+                                                <p>We regret to inform you that your request (ID: {historyRequest.RequestId}) has been <strong>rejected</strong>.</p>
+                                                <p>If you have any questions or would like to discuss the details of the rejection, please do not hesitate to contact our support team.</p>
+                                            </div>
+                                            <div class='email-footer'>
+                                                <p>Best regards,<br/>The Support Team</p>
+                                            </div>
+                                        </div>
+                                    </body>
+                                </html>";
                             }
 
                             // Gửi email nếu có tiêu đề và nội dung
@@ -528,7 +688,6 @@ namespace eAdministrationLabs.Controllers
                 return Json(new { success = false, message = "An unexpected error occurred." });
             }
         }
-
 
 
     }

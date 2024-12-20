@@ -38,6 +38,7 @@
                         {
                             "Pending" => "Your request is pending.",
                             "Approved" => "Your request is approved.",
+                            "In Progress" => "Your request is in progress.",
                             "Complete" => "Your request is complete.",
                             "Reject" => "Your request is denied.",
                             _ => status
@@ -83,17 +84,23 @@
                                     <td class="py-2 px-4">@request.LabName</td>
                                     <td class="py-2 px-4">@request.EquipmentName</td>
                                     <td class="py-2 px-4">
-                                        @if (request.StatusName == "Complete")
-                                        {
-                                            <span class="badge bg-success">@request.StatusName</span>
-                                        }
-                                        else if (request.StatusName == "Pending")
+                                        @if
+                                       (request.StatusName == "Pending")
                                         {
                                             <span class="badge bg-warning text-dark">@request.StatusName</span>
                                         }
+                                        
                                         else if (request.StatusName == "Approved")
                                         {
                                             <span class="badge bg-primary">@request.StatusName</span>
+                                        }
+                                        else if (request.StatusName == "In Progress")
+                                        {
+                                            <span class="badge badge-in-progress">@request.StatusName</span>
+                                        }
+                                        else if (request.StatusName == "Complete")
+                                        {
+                                        <span class="badge bg-success">@request.StatusName</span>
                                         }
                                         else if (request.StatusName == "Reject")
                                         {
@@ -180,3 +187,4 @@
 </script>
 
 
+ 

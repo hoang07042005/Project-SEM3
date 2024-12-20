@@ -12,8 +12,8 @@ using eAdministrationLabs.Models;
 namespace eAdministrationLabs.Migrations
 {
     [DbContext(typeof(EAdministrationLabsContext))]
-    [Migration("20241214120621_CreateData")]
-    partial class CreateData
+    [Migration("20241219094619_CreateFeedback")]
+    partial class CreateFeedback
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -85,6 +85,62 @@ namespace eAdministrationLabs.Migrations
                         .HasName("PK__Equipmen__3447459958A3481B");
 
                     b.ToTable("Equipments");
+                });
+
+            modelBuilder.Entity("eAdministrationLabs.Models.Feedback", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("FeedBackID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Comment")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)")
+                        .HasColumnName("Comment");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasColumnName("CreatedAt")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.Property<int>("Quality")
+                        .HasColumnType("int")
+                        .HasColumnName("Quality");
+
+                    b.Property<int>("Rating")
+                        .HasColumnType("int")
+                        .HasColumnName("Rating");
+
+                    b.Property<int>("RequestId")
+                        .HasColumnType("int")
+                        .HasColumnName("RequestID");
+
+                    b.Property<int>("Satisfaction")
+                        .HasColumnType("int")
+                        .HasColumnName("Satisfaction");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("datetime2")
+                        .HasColumnName("UpdatedAt")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int")
+                        .HasColumnName("UserID");
+
+                    b.HasKey("Id")
+                        .HasName("PK__Feedback__3447459958A3481B");
+
+                    b.HasIndex("RequestId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Feedbacks");
                 });
 
             modelBuilder.Entity("eAdministrationLabs.Models.HistoryRequest", b =>
@@ -545,6 +601,25 @@ namespace eAdministrationLabs.Migrations
                     b.Navigation("Lab");
                 });
 
+            modelBuilder.Entity("eAdministrationLabs.Models.Feedback", b =>
+                {
+                    b.HasOne("eAdministrationLabs.Models.HistoryRequest", "HistoryRequest")
+                        .WithMany("Feedbacks")
+                        .HasForeignKey("RequestId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("eAdministrationLabs.Models.User", "User")
+                        .WithMany("Feedbacks")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("HistoryRequest");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("eAdministrationLabs.Models.HistoryRequest", b =>
                 {
                     b.HasOne("eAdministrationLabs.Models.Request", "Request")
@@ -704,6 +779,11 @@ namespace eAdministrationLabs.Migrations
                     b.Navigation("Requests");
                 });
 
+            modelBuilder.Entity("eAdministrationLabs.Models.HistoryRequest", b =>
+                {
+                    b.Navigation("Feedbacks");
+                });
+
             modelBuilder.Entity("eAdministrationLabs.Models.Lab", b =>
                 {
                     b.Navigation("EquiLabs");
@@ -743,6 +823,8 @@ namespace eAdministrationLabs.Migrations
             modelBuilder.Entity("eAdministrationLabs.Models.User", b =>
                 {
                     b.Navigation("EquiLabs");
+
+                    b.Navigation("Feedbacks");
 
                     b.Navigation("HistoryRequests");
 
