@@ -6,56 +6,115 @@
 }
 <link href="~/layoutlabs/css/bg_title.css" rel="stylesheet" />
 
-
-
 <div class="background-image">
     <div class="content">
         <h3>Request / Create</h3>
     </div>
 </div>
 
+<style>
+    /* Nền xám nhạt */
+    body {
+        background-color: #eaeaea;
+        font-family: 'Arial', sans-serif;
+    }
 
-<div class="container">
-<h1>Create</h1>
+    /* Tiêu đề */
+    h1 {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #000; /* Màu đen */
+    }
 
-<h4>LabUsageLog</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="CreateLabUsageLogDto.LabId" class="control-label"></label>
-                <select asp-for="CreateLabUsageLogDto.LabId" class="form-control" asp-items="Model.Labs"></select>
+    /* Thẻ card */
+    .card {
+        border: none;
+        border-radius: 10px;
+    }
+
+    /* Nhãn và input */
+    label {
+        font-weight: bold;
+        font-size: 0.9rem;
+    }
+
+    .form-control {
+        border-width: 2px;
+        font-size: 0.9rem;
+    }
+
+    /* Nút bấm */
+    .btn-dark {
+        background-color: #000; /* Màu đen */
+        border-color: #000;
+        color: #fff;
+    }
+
+        .btn-dark:hover {
+            background-color: #333; /* Đen nhạt hơn khi hover */
+            border-color: #333;
+        }
+
+    /* Liên kết "Back to List" */
+    a {
+        color: #000;
+        font-weight: bold;
+    }
+
+        a:hover {
+            text-decoration: underline;
+        }
+</style>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm" style="background-color: #f7f7f7;">
+                <div class="card-body">
+                    <form asp-action="Create">
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                        <div class="row">
+                            <!-- Cột bên trái -->
+                            <div class="col-md-6">
+                                <div class="form-group mb-4">
+                                    <label asp-for="CreateLabUsageLogDto.LabId" class="control-label text-black">Lab</label>
+                                    <select asp-for="CreateLabUsageLogDto.LabId" class="form-control border-dark bg-light text-black" asp-items="Model.Labs"></select>
+                                </div>
+                                <div class="form-group mb-4">
+                                    <label asp-for="CreateLabUsageLogDto.UserId" class="control-label text-black">User</label>
+                                    <select asp-for="CreateLabUsageLogDto.UserId" class="form-control border-dark bg-light text-black" asp-items="Model.Users"></select>
+                                </div>
+                                <div class="form-group mb-4">
+                                    <label asp-for="CreateLabUsageLogDto.Purpose" class="control-label text-black">Purpose</label>
+                                    <input asp-for="CreateLabUsageLogDto.Purpose" class="form-control border-dark bg-light text-black" placeholder="Enter purpose" />
+                                    <span asp-validation-for="CreateLabUsageLogDto.Purpose" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <!-- Cột bên phải -->
+                            <div class="col-md-6">
+                                <div class="form-group mb-4">
+                                    <label asp-for="CreateLabUsageLogDto.StartTime" class="control-label text-black">Start Time</label>
+                                    <input asp-for="CreateLabUsageLogDto.StartTime" class="form-control border-dark bg-light text-black" placeholder="dd/mm/yyyy --:-- --" />
+                                    <span asp-validation-for="CreateLabUsageLogDto.StartTime" class="text-danger"></span>
+                                </div>
+                                <div class="form-group mb-4">
+                                    <label asp-for="CreateLabUsageLogDto.EndTime" class="control-label text-black">End Time</label>
+                                    <input asp-for="CreateLabUsageLogDto.EndTime" class="form-control border-dark bg-light text-black" placeholder="dd/mm/yyyy --:-- --" />
+                                    <span asp-validation-for="CreateLabUsageLogDto.EndTime" class="text-danger"></span>
+                                </div>
+                                <div class="form-group d-flex justify-content-end">
+                                    <button type="submit" class="btn btn-dark px-4">Create</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="CreateLabUsageLogDto.UserId" class="control-label"></label>
-                <select asp-for="CreateLabUsageLogDto.UserId" class="form-control" asp-items="Model.Users"></select>
+            <div class="text-center mt-3">
+                <a asp-action="Index" class="text-dark text-decoration-none">← Back to List</a>
             </div>
-            <div class="form-group">
-                <label asp-for="CreateLabUsageLogDto.Purpose" class="control-label"></label>
-                <input asp-for="CreateLabUsageLogDto.Purpose" class="form-control" />
-                <span asp-validation-for="CreateLabUsageLogDto.Purpose" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CreateLabUsageLogDto.StartTime" class="control-label"></label>
-                <input asp-for="CreateLabUsageLogDto.StartTime" class="form-control" />
-                <span asp-validation-for="CreateLabUsageLogDto.StartTime" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CreateLabUsageLogDto.EndTime" class="control-label"></label>
-                <input asp-for="CreateLabUsageLogDto.EndTime" class="form-control" />
-                <span asp-validation-for="CreateLabUsageLogDto.EndTime" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 </div>

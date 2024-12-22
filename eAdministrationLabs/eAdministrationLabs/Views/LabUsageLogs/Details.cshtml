@@ -6,61 +6,62 @@
 }
 <link href="~/layoutlabs/css/bg_title.css" rel="stylesheet" />
 
-
-
 <div class="background-image">
     <div class="content">
         <h3>Request / Details</h3>
     </div>
 </div>
 
-<div class="container">
-<h1>Details</h1>
-
-<div>
-    <h4>LabUsageLog</h4>
-    <hr />
-    <dl class="row">
-        
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Lab)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Lab.LabName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.User)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.User.FullName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Purpose)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Purpose)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.StartTime)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.StartTime)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.EndTime)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.EndTime)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.CreatedAt)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.CreatedAt)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a href="@Url.Action("Notifications", "Request")" class="btn btn-secondary mt-3">Quay lại</a>
-</div>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm" style="background-color: #f7f7f7;">
+                <div class="card-body">
+                    
+                    <hr />
+                    <dl class="row">
+                        <dt class="col-sm-3">
+                            @Html.DisplayNameFor(model => model.Lab)
+                        </dt>
+                        <dd class="col-sm-9">
+                            @Html.DisplayFor(model => model.Lab.LabName)
+                        </dd>
+                        <dt class="col-sm-3">
+                            @Html.DisplayNameFor(model => model.User)
+                        </dt>
+                        <dd class="col-sm-9">
+                            @Html.DisplayFor(model => model.User.FullName)
+                        </dd>
+                        <dt class="col-sm-3">
+                            @Html.DisplayNameFor(model => model.Purpose)
+                        </dt>
+                        <dd class="col-sm-9">
+                            @Html.DisplayFor(model => model.Purpose)
+                        </dd>
+                        <dt class="col-sm-3">
+                            @Html.DisplayNameFor(model => model.StartTime)
+                        </dt>
+                        <dd class="col-sm-9">
+                            @Html.DisplayFor(model => model.StartTime)
+                        </dd>
+                        <dt class="col-sm-3">
+                            @Html.DisplayNameFor(model => model.EndTime)
+                        </dt>
+                        <dd class="col-sm-9">
+                            @Html.DisplayFor(model => model.EndTime)
+                        </dd>
+                        <dt class="col-sm-3">
+                            @Html.DisplayNameFor(model => model.CreatedAt)
+                        </dt>
+                        <dd class="col-sm-9">
+                            @Html.DisplayFor(model => model.CreatedAt)
+                        </dd>
+                    </dl>
+                    <div class="d-flex justify-content-between mt-4">
+                        <a href="@Url.Action("Notifications", "Request")" class="btn btn-secondary px-4">Back</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

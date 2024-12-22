@@ -8,62 +8,72 @@
 <link href="~/layoutlabs/css/bg_title.css" rel="stylesheet" />
 
 
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            
+            <div class="card shadow-sm" style="background-color: #f7f7f7;">
+                <div class="card-body">
+                    <form asp-action="Edit">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input type="hidden" asp-for="Id" />
 
-<div class="background-image">
-    <div class="content">
-        <h3>Request / Edit</h3>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="LabId" class="control-label text-black">Lab</label>
+                                    <select asp-for="LabId" class="form-control border-dark bg-light text-black" asp-items="ViewBag.LabId"></select>
+                                    <span asp-validation-for="LabId" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label asp-for="Purpose" class="control-label text-black">Purpose</label>
+                                    <input asp-for="Purpose" class="form-control border-dark bg-light text-black" />
+                                    <span asp-validation-for="Purpose" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label asp-for="StartTime" class="control-label text-black">Start Time</label>
+                                    <input asp-for="StartTime" class="form-control border-dark bg-light text-black" />
+                                    <span asp-validation-for="StartTime" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="UserId" class="control-label text-black">User</label>
+                                    <select asp-for="UserId" class="form-control border-dark bg-light text-black" asp-items="ViewBag.UserId"></select>
+                                    <span asp-validation-for="UserId" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label asp-for="EndTime" class="control-label text-black">End Time</label>
+                                    <input asp-for="EndTime" class="form-control border-dark bg-light text-black" />
+                                    <span asp-validation-for="EndTime" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label asp-for="CreatedAt" class="control-label text-black">Created At</label>
+                                    <input asp-for="CreatedAt" class="form-control border-dark bg-light text-black" />
+                                    <span asp-validation-for="CreatedAt" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="save-btn">
+                            <button type="submit" class="btn btn-dark">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center mt-3">
+        <a href="@Url.Action("Index")" class="back-btn">
+            <i class="fas fa-arrow-left"></i> Back to List
+        </a>
     </div>
 </div>
 
-<div class="container">
-<h1>Edit</h1>
-
-<h4>LabUsageLog</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="LabId" class="control-label"></label>
-                <select asp-for="LabId" class="form-control" asp-items="ViewBag.LabId"></select>
-                <span asp-validation-for="LabId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UserId" class="control-label"></label>
-                <select asp-for="UserId" class="form-control" asp-items="ViewBag.UserId"></select>
-                <span asp-validation-for="UserId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Purpose" class="control-label"></label>
-                <input asp-for="Purpose" class="form-control" />
-                <span asp-validation-for="Purpose" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="StartTime" class="control-label"></label>
-                <input asp-for="StartTime" class="form-control" />
-                <span asp-validation-for="StartTime" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="EndTime" class="control-label"></label>
-                <input asp-for="EndTime" class="form-control" />
-                <span asp-validation-for="EndTime" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CreatedAt" class="control-label"></label>
-                <input asp-for="CreatedAt" class="form-control" />
-                <span asp-validation-for="CreatedAt" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
-</div>
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>

@@ -219,7 +219,7 @@ namespace eAdministrationLabs.Controllers
                     {
                         RequestId = request.Id,
                         UserId = model.UserId,
-                        StatusRequestId = model.StatusRequestId,
+                        StatusRequestId = 1,
                         ChangedBy = "administrator",
                         ChangedAt = DateTime.Now,
                         Notes = model.Notes

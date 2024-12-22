@@ -273,19 +273,32 @@ namespace eAdministrationLabs.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            // Tìm LabUsageLog theo ID
             var labUsageLog = await _context.LabUsageLogs.FindAsync(id);
+
             if (labUsageLog != null)
             {
+                // Tìm các thông báo (Notifications) liên quan đến LabUsageLog này
+                var relatedNotifications = _context.Notifications
+                    .Where(n => n.LabUsageLogId == labUsageLog.Id);
+
+                // Xóa các thông báo liên quan
+                _context.Notifications.RemoveRange(relatedNotifications);
+
+                // Xóa LabUsageLog
                 _context.LabUsageLogs.Remove(labUsageLog);
+
+                // Lưu thay đổi
+                await _context.SaveChangesAsync();
             }
 
-            await _context.SaveChangesAsync();
+            // Điều hướng về Index sau khi xóa thành công
             return RedirectToAction(nameof(Index));
         }
-
         private bool LabUsageLogExists(int id)
         {
             return _context.LabUsageLogs.Any(e => e.Id == id);
         }
     }
+
 }
