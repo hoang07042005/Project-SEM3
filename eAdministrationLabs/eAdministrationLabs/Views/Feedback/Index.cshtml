@@ -1,51 +1,103 @@
 ﻿@model eAdministrationLabs.Models.Feedback
 
-<div class="container mt-4">
-    <h2>Provide Your Feedback</h2>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8">
+            <div class="card border-0 shadow-sm" style="border: 1px solid #ddd; border-radius: 15px;">
+                <div class="card-header bg-primary text-white text-center py-4" style="background-color: #ccc; border-radius: 15px 15px 0 0;">
+                    <h3 class="mb-0">Provide Your Feedback</h3>
+                </div>
+                <div class="card-body p-4">
+                    <form id="feedbackForm">
+                        <input type="hidden" asp-for="RequestId" />
 
-    <form id="feedbackForm">
-        <input type="hidden" asp-for="RequestId" />
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
-        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                        <!-- Rating Section -->
+                        <div class="form-group mb-4">
+                            <label class="form-label font-weight-bold">Rating:</label>
+                            <div id="ratingIcons" class="rating-icons d-flex justify-content-between align-items-center">
+                                <i class="fa-regular fa-star" data-value="1"></i>
+                                <i class="fa-regular fa-star" data-value="2"></i>
+                                <i class="fa-regular fa-star" data-value="3"></i>
+                                <i class="fa-regular fa-star" data-value="4"></i>
+                                <i class="fa-regular fa-star" data-value="5"></i>
+                            </div>
+                            <input asp-for="Rating" type="hidden" />
+                            <span asp-validation-for="Rating" class="text-danger small"></span>
+                        </div>
 
-        <div class="form-group">
-            <label asp-for="Rating">Rating (1-5):</label>
-            <input asp-for="Rating" class="form-control" type="number" min="1" max="5" required />
-            <span asp-validation-for="Rating" class="text-danger"></span>
+                        <!-- Satisfaction Section -->
+                        <div class="form-group mb-4">
+                            <label class="form-label font-weight-bold">Satisfaction:</label>
+                            <div id="satisfactionIcons" class="rating-icons d-flex justify-content-between align-items-center">
+                                <i class="fa-regular fa-face-smile" data-value="1"></i>
+                                <i class="fa-regular fa-face-smile" data-value="2"></i>
+                                <i class="fa-regular fa-face-smile" data-value="3"></i>
+                                <i class="fa-regular fa-face-smile" data-value="4"></i>
+                                <i class="fa-regular fa-face-smile" data-value="5"></i>
+                            </div>
+                            <input asp-for="Satisfaction" type="hidden" />
+                            <span asp-validation-for="Satisfaction" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Quality Section -->
+                        <div class="form-group mb-4">
+                            <label class="form-label font-weight-bold">Quality:</label>
+                            <div id="qualityIcons" class="rating-icons d-flex justify-content-between align-items-center">
+                                <i class="fa-regular fa-thumbs-up" data-value="1"></i>
+                                <i class="fa-regular fa-thumbs-up" data-value="2"></i>
+                                <i class="fa-regular fa-thumbs-up" data-value="3"></i>
+                                <i class="fa-regular fa-thumbs-up" data-value="4"></i>
+                                <i class="fa-regular fa-thumbs-up" data-value="5"></i>
+                            </div>
+                            <input asp-for="Quality" type="hidden" />
+                            <span asp-validation-for="Quality" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Comment Section -->
+                        <div class="form-group mb-4">
+                            <label asp-for="Comment" class="form-label font-weight-bold">Comment:</label>
+                            <textarea asp-for="Comment" class="form-control rounded-3 shadow-sm" rows="4" maxlength="500"></textarea>
+                            <span asp-validation-for="Comment" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-secondary btn-lg px-5 shadow-sm" style="background-color: #333; border-radius: 10px;">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-
-        <div class="form-group">
-            <label asp-for="Satisfaction">Satisfaction (1-5):</label>
-            <input asp-for="Satisfaction" class="form-control" type="number" min="1" max="5" required />
-            <span asp-validation-for="Satisfaction" class="text-danger"></span>
-        </div>
-
-        <div class="form-group">
-            <label asp-for="Quality">Quality (1-5):</label>
-            <input asp-for="Quality" class="form-control" type="number" min="1" max="5" required />
-            <span asp-validation-for="Quality" class="text-danger"></span>
-        </div>
-
-        <div class="form-group">
-            <label asp-for="Comment">Comment:</label>
-            <textarea asp-for="Comment" class="form-control" rows="4" maxlength="500"></textarea>
-            <span asp-validation-for="Comment" class="text-danger"></span>
-        </div>
-
-        <button type="submit" class="btn btn-primary">Submit Feedback</button>
-    </form>
-
+    </div>
 </div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function () {
-            $("#feedbackForm").submit(function (e) {
-                e.preventDefault(); // Prevent default form submission
+            function handleRatingSelection(iconContainer, hiddenInput) {
+                $(`#${iconContainer} i`).click(function () {
+                    const value = $(this).data("value");
+                    $(`#${iconContainer} i`).removeClass("selected");
+                    $(this).addClass("selected");
+                    $(this).prevAll().addClass("selected");
+                    $(`#${hiddenInput}`).val(value);
+                });
+            }
 
-                var formData = $(this).serialize(); // Serialize form data
+            // Handle icon selection for Rating, Satisfaction, and Quality
+            handleRatingSelection("ratingIcons", "Rating");
+            handleRatingSelection("satisfactionIcons", "Satisfaction");
+            handleRatingSelection("qualityIcons", "Quality");
+
+            $("#feedbackForm").submit(function (e) {
+                e.preventDefault();
+
+                var formData = $(this).serialize();
 
                 $.ajax({
                     url: '@Url.Action("Submit", "Feedback")',
@@ -53,12 +105,65 @@
                     data: formData,
                     success: function (result) {
                         alert("Feedback submitted successfully");
+                        $("#feedbackForm")[0].reset();
+                        $(".rating-icons i").removeClass("selected");
                     },
                     error: function () {
-                        alert("Error");
+                        alert("Error submitting feedback");
                     }
                 });
             });
         });
     </script>
 }
+
+<style>
+    .rating-icons {
+        gap: 15px;
+        font-size: 1.8rem;
+        color: #yellow;
+        cursor: pointer;
+        transition: color 0.3s ease;
+    }
+
+        .rating-icons i.selected {
+            color: #f0a500;
+        }
+
+        .rating-icons i:hover,
+        .rating-icons i:hover ~ i {
+            color: #f0a500;
+        }
+
+    .form-label {
+        font-size: 1rem;
+        color: #333;
+    }
+
+    .form-control {
+        border: 1px solid #ddd;
+        font-size: 0.95rem;
+    }
+
+        .form-control:focus {
+            border-color: #f0a500;
+            box-shadow: 0 0 4px rgba(240, 165, 0, 0.5);
+        }
+
+    .btn-secondary {
+        background-color: #ccc;
+        border: none;
+    }
+
+        .btn-secondary:hover {
+            background-color: #333;
+        }
+
+    .card {
+        border-radius: 15px;
+    }
+
+    .card-header {
+        border-radius: 15px 15px 0 0;
+    }
+</style>
