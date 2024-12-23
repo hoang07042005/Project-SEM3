@@ -6,74 +6,77 @@
 }
 
 <link href="~/layoutlabs/css/bg_title.css" rel="stylesheet" />
+<div class="background-image">
+    <div class="content">
+        <h3>Labs / Edit Labs</h3>
+    </div>
+</div>
+<style>
+    .container {
+        max-width: 1600px;
+        width: 100%;
+        overflow-x: hidden; /* Ẩn thừa nếu có */
+        margin: 0 auto; /* Đảm bảo căn giữa */
+        padding: 0;
 
-
+    }
+</style>
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-lg-8">
-            
             <div class="card shadow-sm" style="background-color: #f7f7f7;">
                 <div class="card-body">
                     <form asp-action="Edit">
-                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
                         <input type="hidden" asp-for="Id" />
 
                         <div class="row">
+                            <!-- Left Column -->
                             <div class="col-md-6">
-                                <div class="form-group">
+                                <div class="form-group mb-4">
                                     <label asp-for="LabId" class="control-label text-black">Lab</label>
                                     <select asp-for="LabId" class="form-control border-dark bg-light text-black" asp-items="ViewBag.LabId"></select>
                                     <span asp-validation-for="LabId" class="text-danger"></span>
                                 </div>
-
-                                <div class="form-group">
+                                <div class="form-group mb-4">
                                     <label asp-for="Purpose" class="control-label text-black">Purpose</label>
-                                    <input asp-for="Purpose" class="form-control border-dark bg-light text-black" />
+                                    <input asp-for="Purpose" class="form-control border-dark bg-light text-black" placeholder="Enter purpose" />
                                     <span asp-validation-for="Purpose" class="text-danger"></span>
                                 </div>
-
-                                <div class="form-group">
+                                <div class="form-group mb-4">
                                     <label asp-for="StartTime" class="control-label text-black">Start Time</label>
-                                    <input asp-for="StartTime" class="form-control border-dark bg-light text-black" />
+                                    <input asp-for="StartTime" class="form-control border-dark bg-light text-black" placeholder="dd/mm/yyyy --:-- --" />
                                     <span asp-validation-for="StartTime" class="text-danger"></span>
                                 </div>
                             </div>
 
+                            <!-- Right Column -->
                             <div class="col-md-6">
-                                <div class="form-group">
+                                <div class="form-group mb-4">
                                     <label asp-for="UserId" class="control-label text-black">User</label>
                                     <select asp-for="UserId" class="form-control border-dark bg-light text-black" asp-items="ViewBag.UserId"></select>
                                     <span asp-validation-for="UserId" class="text-danger"></span>
                                 </div>
-
-                                <div class="form-group">
+                                <div class="form-group mb-4">
                                     <label asp-for="EndTime" class="control-label text-black">End Time</label>
-                                    <input asp-for="EndTime" class="form-control border-dark bg-light text-black" />
+                                    <input asp-for="EndTime" class="form-control border-dark bg-light text-black" placeholder="dd/mm/yyyy --:-- --" />
                                     <span asp-validation-for="EndTime" class="text-danger"></span>
                                 </div>
-
-                                <div class="form-group">
+                                <div class="form-group mb-4">
                                     <label asp-for="CreatedAt" class="control-label text-black">Created At</label>
-                                    <input asp-for="CreatedAt" class="form-control border-dark bg-light text-black" />
+                                    <input asp-for="CreatedAt" class="form-control border-dark bg-light text-black" disabled />
                                     <span asp-validation-for="CreatedAt" class="text-danger"></span>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="save-btn">
-                            <button type="submit" class="btn btn-dark">Save</button>
+                        <div class="d-flex justify-content-between mt-4">
+                            <a asp-action="Index" class="btn btn-outline-dark">← Back to List</a>
+                            <button type="submit" class="btn btn-dark px-4">Save Changes</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-
-    <div class="text-center mt-3">
-        <a href="@Url.Action("Index")" class="back-btn">
-            <i class="fas fa-arrow-left"></i> Back to List
-        </a>
-    </div>
 </div>
-
-<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>

@@ -1,107 +1,171 @@
 ﻿@model IEnumerable<eAdministrationLabs.Models.LabUsageLog>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Lab Usage Log";
     Layout = "~/Views/Shared/_LayoutLabs.cshtml";
 }
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
 <link href="~/layoutlabs/css/bg_title.css" rel="stylesheet" />
+
 <style>
-    /* Thay đổi kích thước container cho cân đối */
+    /* Đảm bảo không có khoảng trắng thừa khi loại bỏ display: block */
+    .table-responsive {
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        -ms-overflow-style: -ms-autohiding-scrollbar;
+        margin: 0; /* Loại bỏ khoảng cách thừa */
+        padding: 0; /* Loại bỏ padding nếu có */
+    }
+
+    /* Giới hạn container ở max-width 1600px */
     .container {
-        max-width: 1200px; /* Tạo độ rộng tối đa */
-        margin: 0 auto;
+        max-width: 1600px;
+        width: 100%;
+        overflow-x: hidden; /* Ẩn thừa nếu có */
+        margin: 0 auto; /* Đảm bảo căn giữa */
+        padding: 0;
     }
 
-    /* Tạo không gian giữa các cột trong table */
-    .table th, .table td {
-        padding: 15px;
-        text-align: center;
+    .d-flex.justify-content-between {
+        padding-bottom: 20px;
     }
 
-    /* Sử dụng d-flex để căn chỉnh các icon nằm cùng 1 hàng */
+    /* Đảm bảo bảng chiếm hết chiều rộng */
+    .table {
+        width: 100%;
+        table-layout: auto; /* Để các cột tự động điều chỉnh kích thước */
+        border-collapse: collapse; /* Loại bỏ khoảng cách giữa các cell */
+    }
+
+        /* Loại bỏ khoảng cách thừa giữa các cột của bảng */
+        .table th, .table td {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #ddd;
+            word-wrap: break-word; /* Đảm bảo nội dung dài sẽ không tràn ra ngoài */
+        }
+
+    /* Nếu bảng vẫn tràn, thì thêm quy tắc này */
+    .table-container {
+        overflow-x: auto;
+    }
+
+    /* Thêm một số chỉnh sửa nếu cần cho giao diện */
+    .table tr:hover {
+        background-color: #f1f1f1;
+    }
+
+    .table td {
+        vertical-align: middle; /* Căn giữa theo chiều dọc */
+    }
+
+    .table .action-icons {
+        display: flex;
+        justify-content: center; /* Căn giữa các icon theo chiều ngang */
+        gap: 10px; /* Khoảng cách giữa các icon */
+    }
+
     .table a {
         color: #000;
         text-decoration: none;
     }
 
-        /* Điều chỉnh khoảng cách giữa các icon */
-        .table a i {
-            font-size: 1.2rem; /* Điều chỉnh kích thước icon */
-        }
-
-        /* Thêm hiệu ứng khi hover các icon */
-        .table a:hover i {
-            color: #007bff; /* Màu khi hover */
-        }
-
         .table a:hover {
             text-decoration: underline;
         }
+
+        .table a i {
+            font-size: 1.2rem;
+        }
+
+        .table a:hover i {
+            color: #007bff;
+        }
 </style>
+
 <div class="background-image">
     <div class="content">
-        <h3>Request / Index</h3>
+        <h3>Labs / Index</h3>
     </div>
 </div>
 
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-lg-10">
-            <div class="card shadow-sm" style="background-color: #f7f7f7;">
+            <div class="card shadow-sm">
                 <div class="card-body">
-                    
-                    <p>
-                        <a asp-action="Create" class="btn btn-dark">Create New</a>
-                    </p>
-                    <table class="table table-responsive">
-                        <thead>
-                            <tr>
-                                <th>@Html.DisplayNameFor(model => model.Lab)</th>
-                                <th>@Html.DisplayNameFor(model => model.User)</th>
-                                <th>@Html.DisplayNameFor(model => model.Purpose)</th>
-                                <th>@Html.DisplayNameFor(model => model.StartTime)</th>
-                                <th>@Html.DisplayNameFor(model => model.EndTime)</th>
-                                <th>@Html.DisplayNameFor(model => model.CreatedAt)</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var item in Model)
-                            {
+                    <div class="d-flex justify-content-between">
+                        <!-- Create New Button -->
+                        <p>
+                            <a asp-action="Create" class="btn btn-dark">Add Room</a>
+                        </p>
+
+                        <!-- Search Input -->
+                        <input type="text" id="searchInput" class="form-control" placeholder="Search Logs..." style="max-width: 300px;">
+                    </div>
+
+                    <!-- Lab Usage Log Table -->
+                    <div class="table-container">
+                        <table class="table">
+                            <thead>
                                 <tr>
-                                    <td>@Html.DisplayFor(modelItem => item.Lab.LabName)</td>
-                                    <td>@Html.DisplayFor(modelItem => item.User.FullName)</td>
-                                    <td>@Html.DisplayFor(modelItem => item.Purpose)</td>
-                                    <td>@Html.DisplayFor(modelItem => item.StartTime)</td>
-                                    <td>@Html.DisplayFor(modelItem => item.EndTime)</td>
-                                    <td>@Html.DisplayFor(modelItem => item.CreatedAt)</td>
-                                    <td>
-                                        <!-- Sử dụng d-flex để các icon nằm cùng 1 hàng -->
-                                        <div class="d-flex justify-content-start">
-                                            <a asp-action="Edit" asp-route-id="@item.Id" class="text-dark mx-2">
-                                                <i class="fas fa-edit"></i>
-                                            </a>
-                                            <a asp-action="Details" asp-route-id="@item.Id" class="text-dark mx-2">
-                                                <i class="fas fa-info-circle"></i>
-                                            </a>
-                                            <a asp-action="Delete" asp-route-id="@item.Id" class="text-dark mx-2">
-                                                <i class="fas fa-trash-alt"></i>
-                                            </a>
-                                        </div>
-                                    </td>
+                                    <th>@Html.DisplayNameFor(model => model.Lab)</th>
+                                    <th>@Html.DisplayNameFor(model => model.User)</th>
+                                    <th>@Html.DisplayNameFor(model => model.Purpose)</th>
+                                    <th>@Html.DisplayNameFor(model => model.StartTime)</th>
+                                    <th>@Html.DisplayNameFor(model => model.EndTime)</th>
+                                    <th>@Html.DisplayNameFor(model => model.CreatedAt)</th>
+                                    <th>Actions</th>
                                 </tr>
-                            }
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@Html.DisplayFor(modelItem => item.Lab.LabName)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.User.FullName)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.Purpose)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.StartTime)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.EndTime)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.CreatedAt)</td>
+                                        <td>
+                                            <div class="action-icons">
+                                                <a asp-action="Edit" asp-route-id="@item.Id" class="text-dark mx-2">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                                <a asp-action="Details" asp-route-id="@item.Id" class="text-dark mx-2">
+                                                    <i class="fas fa-info-circle"></i>
+                                                </a>
+                                                <a asp-action="Delete" asp-route-id="@item.Id" class="text-dark mx-2">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </a>
+                                            </div>
+                                        </td>
+
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                     @* phan trang *@
                 </div>
-            </div>
-            <div class="text-center mt-3">
-                <a asp-action="Index" class="text-dark text-decoration-none">← Back to List</a>
             </div>
         </div>
     </div>
-
 </div>
 
+<script>
+    // Search functionality for filtering the table rows based on input
+    document.getElementById('searchInput').addEventListener('input', function () {
+        var filter = this.value.toLowerCase();
+        var rows = document.querySelectorAll('.table tbody tr');
+
+        rows.forEach(function (row) {
+            var text = row.textContent.toLowerCase();
+            row.style.display = text.includes(filter) ? '' : 'none';
+        });
+    });
+</script>

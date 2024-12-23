@@ -8,6 +8,8 @@
 
 <link href="~/css/custom.css" rel="stylesheet" />
 <link href="~/layoutlabs/css/bg_title.css" rel="stylesheet" />
+<!-- Link CSS Select2 -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
 
 <div class="background-image">
     <div class="content">
@@ -18,26 +20,19 @@
 <div class="container py-4">
     <div class="d-flex">
         <!-- Sidebar Filter -->
-        <div class="col-md-3 me-3 mb-4">
+        <div class="col-md-3 me-3 mb-4 p-0" style="max-width: 250px; margin-left: 0;">
             <form method="get" asp-action="MyRequest" asp-controller="Request">
-                <label for="statusFilter" class="form-label">Requirements by status:</label>
+                <label for="statusFilter" class="form-label" style="font-size: 16px; color: #495057;">Requirements by status:</label>
                 <select id="statusFilter" name="statusFilter" class="form-select" onchange="this.form.submit()">
-                    <!-- Show 'All' when no filter is selected -->
-                    @if (string.IsNullOrEmpty(Context.Request.Query["statusFilter"]))
-                    {
-                        <option value="" selected>All</option>
-                    }
-
-                    <!-- Display each status with descriptive text -->
                     @foreach (var status in availableStatuses)
                     {
                         string displayText = status switch
                         {
-                            "Pending" => "Pending.",
-                            "Approved" => "Approved.",
-                            "In Progress" => "Progress.",
-                            "Complete" => "Complete.",
-                            "Reject" => "Reject.",
+                            "Pending" => "Pending",
+                            "Approved" => "Approved",
+                            "In Progress" => "In Progress",
+                            "Complete" => "Complete",
+                            "Reject" => "Reject",
                             _ => status
                         };
 
@@ -49,8 +44,8 @@
             </form>
         </div>
 
-        <!-- Requests List -->
-        <div class="flex-grow-1 bg-white text-dark p-3" style="border-radius: 10px; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);">
+        <!-- My Requests -->
+        <div class="flex-grow-1 bg-white text-dark p-3" style="border-radius: 10px; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); margin-left: 20px;">
             <div style="margin-top:20px; margin-left:20px; margin-bottom:10px;">
                 <h2 class="text-lg font-semibold mb-4">My Requests</h2>
                 <p class="text-gray-600 mb-4">Requests / My Requests</p>
@@ -80,7 +75,7 @@
                                     <td class="py-2 px-4">
                                         @if (request.StatusName == "Pending")
                                         {
-                                            <span class="badge bg-warning text-dark">@request.StatusName</span>
+                                            <span class="badge bg-danger text-white">@request.StatusName</span>  <!-- Chỉnh màu chữ Pending thành đỏ -->
                                         }
                                         else if (request.StatusName == "Approved")
                                         {
@@ -132,7 +127,17 @@
     </div>
 </div>
 
+<!-- Modal Image Viewer Script -->
 <script type="text/javascript">
+    $(document).ready(function () {
+        // Khởi tạo Select2
+        $('#statusFilter').select2({
+            width: '100%',  // Đảm bảo Select2 chiếm toàn bộ chiều rộng
+            placeholder: "Select a status",  // Thêm placeholder nếu cần
+            allowClear: true // Cho phép xóa lựa chọn
+        });
+    });
+
     function showImage(imgElement) {
         var src = imgElement.src;
         var modal = document.createElement('div');
@@ -174,3 +179,5 @@
         document.body.appendChild(modal);
     }
 </script>
+
+
