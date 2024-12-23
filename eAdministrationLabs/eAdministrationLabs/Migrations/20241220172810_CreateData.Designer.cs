@@ -12,8 +12,8 @@ using eAdministrationLabs.Models;
 namespace eAdministrationLabs.Migrations
 {
     [DbContext(typeof(EAdministrationLabsContext))]
-    [Migration("20241219094619_CreateFeedback")]
-    partial class CreateFeedback
+    [Migration("20241220172810_CreateData")]
+    partial class CreateData
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

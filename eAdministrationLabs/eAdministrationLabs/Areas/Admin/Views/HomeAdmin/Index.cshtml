@@ -1,11 +1,39 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "Index";
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
 
+<h1 class="mb-4">Admin Dashboard</h1>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card text-white bg-primary mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Total User</h5>
+                <p class="card-text display-4">@ViewData["TotalUsers"]</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-warning mb-3">
+            <div class="card-body">
+                <h5 class="card-title">
+                    Total Requests
+                </h5>
+                <p class="card-text display-4">@ViewData["TotalRequests"]</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-success mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Total Request completed</h5>
+                <p class="card-text display-4">@ViewData["CompletedRequests"]</p>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 
 
-<h1 class="mb-4">Index</h1>
