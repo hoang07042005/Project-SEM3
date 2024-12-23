@@ -340,6 +340,36 @@ namespace eAdministrationLabs.Migrations
                         onDelete: ReferentialAction.SetNull);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Feedbacks",
+                columns: table => new
+                {
+                    FeedBackID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    RequestID = table.Column<int>(type: "int", nullable: false),
+                    UserID = table.Column<int>(type: "int", nullable: false),
+                    Rating = table.Column<int>(type: "int", nullable: false),
+                    Comment = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
+                    Satisfaction = table.Column<int>(type: "int", nullable: false),
+                    Quality = table.Column<int>(type: "int", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()"),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK__Feedback__3447459958A3481B", x => x.FeedBackID);
+                    table.ForeignKey(
+                        name: "FK_Feedbacks_HistoryRequests_RequestID",
+                        column: x => x.RequestID,
+                        principalTable: "HistoryRequests",
+                        principalColumn: "HistoryID");
+                    table.ForeignKey(
+                        name: "FK_Feedbacks_Users_UserID",
+                        column: x => x.UserID,
+                        principalTable: "Users",
+                        principalColumn: "UserID");
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_EquiLabs_EquipmentID",
                 table: "EquiLabs",
@@ -354,6 +384,16 @@ namespace eAdministrationLabs.Migrations
                 name: "IX_EquiLabs_UserId",
                 table: "EquiLabs",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Feedbacks_RequestID",
+                table: "Feedbacks",
+                column: "RequestID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Feedbacks_UserID",
+                table: "Feedbacks",
+                column: "UserID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_HistoryRequests_RequestID",
@@ -444,7 +484,7 @@ namespace eAdministrationLabs.Migrations
                 name: "EquiLabs");
 
             migrationBuilder.DropTable(
-                name: "HistoryRequests");
+                name: "Feedbacks");
 
             migrationBuilder.DropTable(
                 name: "Notifications");
@@ -456,16 +496,19 @@ namespace eAdministrationLabs.Migrations
                 name: "UserRoles");
 
             migrationBuilder.DropTable(
-                name: "StatusRequests");
+                name: "HistoryRequests");
 
             migrationBuilder.DropTable(
                 name: "LabUsageLogs");
 
             migrationBuilder.DropTable(
+                name: "Roles");
+
+            migrationBuilder.DropTable(
                 name: "Requests");
 
             migrationBuilder.DropTable(
-                name: "Roles");
+                name: "StatusRequests");
 
             migrationBuilder.DropTable(
                 name: "Users");

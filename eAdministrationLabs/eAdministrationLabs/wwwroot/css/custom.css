@@ -39,7 +39,7 @@ select {
 }
 
     select:focus {
-        border-color: #007bff;
+        border-color: #2e3031;
         outline: none;
         background: white;
     }
@@ -53,7 +53,7 @@ table {
 }
 
 thead th {
-    background-color: #007bff;
+
     color: white;
     text-align: left;
     padding: 10px 15px;
@@ -94,7 +94,7 @@ span {
         color: #333;
     }
 
-    span[style*="background-color: #007bff"] {
+    span[style*="background-color: #2e3031"] {
         color: #fff;
     }
 
@@ -110,5 +110,5 @@ button {
 }
 
     button:hover {
-        background-color: #007bff;
+        background-color: #2e3031;
     }

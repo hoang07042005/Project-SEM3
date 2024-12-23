@@ -12,24 +12,165 @@
 </div>
 
 
-<h1>Chi tiết yêu cầu</h1>
 
-<div class="container">
-    <h3>@Model.LabName - @Model.EquipmentName</h3>
-    <p><strong>Trạng thái:</strong> @Model.StatusName</p>
-    <p><strong>Thời gian tạo:</strong> @Model.CreatedAt.ToString("dd/MM/yyyy HH:mm:ss")</p>
-    <p><strong>Được thay đổi bởi:</strong> @Model.ChangedBy</p>
-    <p><strong>Ghi chú:</strong> @Model.Notes</p>
-
-    @if (!string.IsNullOrEmpty(Model.ImageBase64))
-    {
-        <img src="data:image/jpeg;base64,@Model.ImageBase64" alt="Request Image" style="max-height: 100px; max-width: 100px;" />
-    }
-    else
-    {
-        <p>Không có ảnh</p>
+<style>
+    /* Nền và kiểu chữ */
+    body {
+        background-color: #f4f6f9;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: #333;
     }
 
+    /* Thẻ card */
+    .card {
+        border: none;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        background-color: #ffffff;
+    }
+
+    /* Nội dung trong card */
+    .card-body {
+        padding: 25px;
+    }
+
+    /* Tiêu đề trong card */
+    .card h3 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 20px;
+    }
+
+    /* Khối chứa thông tin */
+    .info-block {
+        display: flex;
+        flex-wrap: wrap;
+        margin-bottom: 20px;
+    }
+
+        .info-block div {
+            flex: 1;
+            min-width: 200px;
+            padding: 10px 15px;
+            margin: 5px;
+            background-color: #e9ecef;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+            .info-block div strong {
+                display: block;
+                font-size: 1rem;
+                color: #2c3e50;
+                margin-bottom: 5px;
+            }
+
+    /* Nút bấm */
+    .btn-primary {
+        background-color: #2c3e50;
+        border-color: #2c3e50;
+        color: #fff;
+        padding: 10px 20px;
+        font-size: 1rem;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+    }
+
+        .btn-primary:hover {
+            background-color: #fff;
+            border-color: #2c3e50;
+            color: #2c3e50;
+        }
+
+    /* Liên kết */
+    a {
+        color: #2c3e50;
+        font-weight: 600;
+        text-decoration: none;
+        font-size: 1rem;
+    }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+    /* Preview hình ảnh */
+    #imagePreview {
+        margin-top: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #previewImage {
+        max-width: 100%;
+        height: auto;
+        cursor: pointer; /* Thêm con trỏ tay khi hover */
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+</style>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h3>@Model.LabName - @Model.EquipmentName</h3>
+                    <div class="info-block">
+                        <div>
+                            <strong>Status</strong>
+                            <p>@Model.StatusName</p>
+                        </div>
+                        <div>
+                            <strong>Created At</strong>
+                            <p>@Model.CreatedAt.ToString("dd/MM/yyyy HH:mm:ss")</p>
+                        </div>
+                        <div>
+                            <strong>Changed By</strong>
+                            <p>@Model.ChangedBy</p>
+                        </div>
+                        <div>
+                            <strong>Notes</strong>
+                            <p>@Model.Notes</p>
+                        </div>
+                    </div>
+
+                    @if (!string.IsNullOrEmpty(Model.ImageBase64))
+                    {
+                        <div id="imagePreview">
+                            <!-- Ảnh nhấp vào để mở Modal -->
+                            <img id="previewImage" src="data:image/jpeg;base64,@Model.ImageBase64" alt="Request Image" data-bs-toggle="modal" data-bs-target="#imageModal" />
+                        </div>
+                    }
+                    else
+                    {
+                        <p>No Image</p>
+                    }
+                </div>
+            </div>
+            <div class="text-center mt-3">
+                <a href="@Url.Action("Notifications", "Request")" class="d-block text-center" style="font-weight: bold;">← Back To List</a>
+            </div>
+        </div>
+    </div>
 </div>
 
-<a href="@Url.Action("Notifications", "Request")" class="btn btn-secondary mt-3">Quay lại</a>
+<!-- Modal Hiển Thị Ảnh Lớn -->
+<div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="imageModalLabel">Request Image</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <img src="data:image/jpeg;base64,@Model.ImageBase64" alt="Request Image" class="img-fluid" />
+            </div>
+        </div>
+    </div>
+</div>
+
+

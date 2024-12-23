@@ -56,8 +56,14 @@ namespace eAdministrationLabs.Controllers
             return View(requestViewModel);
         }
 
-        public async Task<IActionResult> MyRequest(string statusFilter = "All")
+
+
+        public async Task<IActionResult> MyRequest(int? page, string statusFilter = "All")
         {
+
+            int pageSize = 3;
+            int pageNumber = page == null || page < 0 ? 1 : page.Value;
+
             // Lấy thông tin tài khoản đang đăng nhập
             var currentFullName = User.Identity?.Name;
 
@@ -101,8 +107,9 @@ namespace eAdministrationLabs.Controllers
             // Truyền dữ liệu bộ lọc trạng thái đến View
             ViewBag.StatusFilter = statusFilter;
             ViewBag.AvailableStatuses = new List<string> { "All", "Pending", "Approved", "In Progress", "Complete", "Reject" };
+            PagedList<RequestViewModel> requestViewModels = new PagedList<RequestViewModel>(myRequests, pageNumber, pageSize);
 
-            return View(myRequests);
+            return View(requestViewModels);
         }
 
 
@@ -219,7 +226,7 @@ namespace eAdministrationLabs.Controllers
                     {
                         RequestId = request.Id,
                         UserId = model.UserId,
-                        StatusRequestId = model.StatusRequestId,
+                        StatusRequestId = 1,
                         ChangedBy = "administrator",
                         ChangedAt = DateTime.Now,
                         Notes = model.Notes
@@ -289,7 +296,7 @@ namespace eAdministrationLabs.Controllers
         public async Task<IActionResult> Notifications(int? page)
         {
             
-            int pageSize = 10;
+            int pageSize = 6;
             int pageNumber = page == null || page < 0 ? 1 : page.Value;
            
 
@@ -388,6 +395,7 @@ namespace eAdministrationLabs.Controllers
 
             return View(requestViewModel);
         }
+
 
         [Authorize] // Đảm bảo action chỉ truy cập được bởi người dùng đã đăng nhập
         public async Task<IActionResult> GetRequestsByChangedBy()

@@ -6,7 +6,50 @@
 }
 
 <link href="~/layoutlabs/css/bg_title.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<style>
+    body {
+        background-color: #f8f9fa;
+        font-family: Arial, sans-serif;
+    }
 
+    .container {
+        margin-top: 50px;
+    }
+
+    .form-group label {
+        font-weight: bold;
+    }
+
+    .form-control, .btn {
+        border-radius: 5px;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+    }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+    .text-danger {
+        font-size: 0.875em;
+    }
+
+    #imagePreviewContainer {
+        margin-top: 10px;
+        display: none;
+    }
+
+    #imagePreview {
+        width: auto;
+        height: auto;
+        border: 1px solid #ccc;
+        padding: 5px;
+        max-width: 100%;
+    }
+</style>
 
 
 <div class="background-image">
@@ -18,8 +61,6 @@
 <div class="container">
     <div class="row">
         <div class="col-md-8 offset-md-2">
-
-
             <!-- Form -->
             <form asp-action="Create" method="post" enctype="multipart/form-data">
                 @Html.AntiForgeryToken()
@@ -52,63 +93,63 @@
                 </div>
 
                 <!-- User -->
-                <div class="form-group">
-                    <label asp-for="UserId" class="control-label">Select User</label>
-                    <select asp-for="UserId" class="form-control">
-                        @if (ViewBag.CurrentUser != null)
-                        {
-                            var currentUser = (SelectListItem)ViewBag.CurrentUser;
-                            <option value="@currentUser.Value" selected>@currentUser.Text</option>
-                        }
-                        else
-                        {
-                            <option value="" disabled selected>No user found</option>
-                        }
-                    </select>
-                    <span asp-validation-for="UserId" class="text-danger"></span>
-                </div>
-
-
-                <!-- Status Request -->
-                <div class="form-group">
-                    <label asp-for="StatusRequestId" class="control-label">Select Status</label>
-                    <select asp-for="StatusRequestId" class="form-control">
-                        <option value="" disabled selected>Select a status</option>
-                        @if (ViewBag.StatusRequests != null)
-                        {
-                            foreach (var status in ViewBag.StatusRequests as IEnumerable<SelectListItem>)
+                <div id="form-section">
+                    <div class="form-group">
+                        <label asp-for="UserId" class="control-label">Select User</label>
+                        <select asp-for="UserId" class="form-control">
+                            @if (ViewBag.CurrentUser != null)
                             {
-                                <option value="@status.Value">@status.Text</option>
+                                var currentUser = (SelectListItem)ViewBag.CurrentUser;
+                                <option value="@currentUser.Value" selected>@currentUser.Text</option>
                             }
-                        }
-                    </select>
-                    <span asp-validation-for="StatusRequestId" class="text-danger"></span>
+                            else
+                            {
+                                <option value="" disabled selected>No user found</option>
+                            }
+                        </select>
+                        <span asp-validation-for="UserId" class="text-danger"></span>
+                    </div>
+
+                   
+                    <!-- Status Request -->
+                    <div class="form-group">
+                        <label class="control-label">Status Request</label>
+                        <input type="hidden" name="StatusRequestId" value=1 />
+                    </div>
+
+                    <!-- Hidden Inputs -->
+                    <div class="form-group">
+                        <label class="control-label">Changed By</label>
+                        <input type="hidden" name="ChangedBy" value="administrator" />
+                    </div>
                 </div>
 
-                <!-- Changed By -->
-                <div class="form-group">
-                    <label class="control-label">Changed By</label>
-                    <input type="hidden" name="ChangedBy" value="administrator" />
-                </div>
 
-                <!-- Notes -->
                 <div class="form-group">
                     <label asp-for="Notes" class="control-label">Notes (Optional)</label>
                     <textarea asp-for="Notes" class="form-control"></textarea>
                     <span asp-validation-for="Notes" class="text-danger"></span>
                 </div>
 
-                <!-- Image -->
-                <div class="form-group">
-                    <label asp-for="Image" class="control-label">Upload Image</label>
-                    <input asp-for="Image" class="form-control" type="file" accept="image/*" />
-                    <small class="form-text text-muted">Allowed formats: JPG, PNG, GIF. Max size: 5MB.</small>
-                    <span asp-validation-for="Image" class="text-danger"></span>
-                </div>
+                
 
+                <div style="display: flex; align-items: flex-start;">
+                    <!-- Image -->
+                    <div class="form-group" style="margin-right: 20px;">
+                        <label asp-for="Image" class="control-label">Upload Image</label>
+                        <input asp-for="Image" class="form-control-file" type="file" accept="image/*" id="imageInput" />
+                        <small class="form-text text-muted">Allowed formats: JPG, PNG, GIF. Max size: 5MB.</small>
+                        <span asp-validation-for="Image" class="text-danger"></span>
+                    </div>
+
+                    <!-- Image Preview -->
+                    <div id="imagePreviewContainer">
+                        <img id="imagePreview" src="#" alt="Preview" class="img-thumbnail" />
+                    </div>
+                </div>
                 <!-- Submit Button -->
-                <div class="form-group">
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                <div class="form-group" style="text-align: right; margin-top:5vh;">
+                    <button type="submit" class="btn btn-dark">Submit</button>
                 </div>
             </form>
         </div>
@@ -140,5 +181,43 @@
                 }
             });
         });
+    </script>
+    <script>
+        document.getElementById('form-section').style.display = 'none';
+
+        document.getElementById("imageInput").addEventListener("change", function () {
+            var input = this;
+            var previewContainer = document.getElementById("imagePreviewContainer");
+            var previewImage = document.getElementById("imagePreview");
+
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    var img = new Image();
+                    img.onload = function () {
+                        var canvas = document.createElement("canvas");
+                        var ctx = canvas.getContext("2d");
+
+                        // Resize to 1/3 of the original
+                        canvas.width = img.width / 3;
+                        canvas.height = img.height / 3;
+
+                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+                        // Convert resized image to data URL
+                        previewImage.src = canvas.toDataURL();
+                        previewContainer.style.display = "block";
+                    };
+                    img.src = e.target.result;
+                };
+
+
+                reader.readAsDataURL(input.files[0]); // Read the file as a data URL
+            } else {
+                previewContainer.style.display = "none"; // Hide the preview if no file is selected
+            }
+        });
+
     </script>
 }

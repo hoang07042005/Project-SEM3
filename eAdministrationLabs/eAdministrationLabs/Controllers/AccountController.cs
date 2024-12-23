@@ -27,6 +27,8 @@ public class AccountController : Controller
         return View();
     }
 
+
+
     [HttpPost]
     public async Task<IActionResult> Register(RegisterViewModel model)
     {
@@ -67,9 +69,70 @@ public class AccountController : Controller
         return View(model);
     }
 
+
+
     [HttpGet]
     public IActionResult Login() => View();
 
+
+
+    //[HttpPost]
+    //public async Task<IActionResult> Login(LoginViewModel model)
+    //{
+    //    if (ModelState.IsValid)
+    //    {
+    //        // Kiểm tra người dùng có trong cơ sở dữ liệu không
+    //        var user = await _context.Users
+    //            .Include(u => u.UserRoles)
+    //            .ThenInclude(ur => ur.Role)
+    //            .FirstOrDefaultAsync(u => u.Email == model.Email);
+    //        if (user != null && BCrypt.Net.BCrypt.Verify(model.Password, user.Password))
+    //        {
+    //            // Tạo Claims cho người dùng
+    //            var claims = new List<Claim>
+    //                {
+    //                    new Claim(ClaimTypes.Name, user.FullName),
+    //                    new Claim(ClaimTypes.Email, user.Email),
+    //                };
+
+    //            // Lấy danh sách các role của người dùng
+    //            var roles = user.UserRoles.Select(ur => ur.Role.RoleName).ToList();
+
+    //            // Thêm Claims cho các role
+    //            foreach (var role in roles)
+    //            {
+    //                claims.Add(new Claim(ClaimTypes.Role, role));
+    //            }
+
+    //            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+    //            var authProperties = new AuthenticationProperties
+    //            {
+    //                IsPersistent = true, // Duy trì session đăng nhập
+    //            };
+
+    //            // Đăng nhập người dùng và lưu vào cookie
+    //            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
+    //            HttpContext.Session.SetString("FullName", user.FullName);
+    //            HttpContext.Session.SetInt32("UserID", user.Id);
+    //            HttpContext.Session.SetString("Roles", string.Join(",", roles));
+
+    //            if (roles.Contains("administrator"))
+    //            {
+    //                return RedirectToAction("Index", "HomeAdmin", new { area = "Admin" });
+    //            }
+    //            else if (roles.Contains("students") || roles.Contains("technicalstaff"))
+    //            {
+    //                return RedirectToAction("Index", "Home");
+    //            }
+
+    //        }
+
+    //        // Nếu đăng nhập thất bại
+    //        ModelState.AddModelError("", "Invalid login attempt.");
+    //    }
+
+    //    return View(model);
+    //}
 
 
     [HttpPost]
@@ -77,40 +140,46 @@ public class AccountController : Controller
     {
         if (ModelState.IsValid)
         {
-            // Kiểm tra người dùng có trong cơ sở dữ liệu không
             var user = await _context.Users
                 .Include(u => u.UserRoles)
                 .ThenInclude(ur => ur.Role)
                 .FirstOrDefaultAsync(u => u.Email == model.Email);
+
             if (user != null && BCrypt.Net.BCrypt.Verify(model.Password, user.Password))
             {
                 // Tạo Claims cho người dùng
                 var claims = new List<Claim>
-                    {
-                        new Claim(ClaimTypes.Name, user.FullName),
-                        new Claim(ClaimTypes.Email, user.Email),
-                    };
+                {
+                    new Claim(ClaimTypes.Name, user.FullName),
+                    new Claim(ClaimTypes.Email, user.Email),
+                };
 
-                // Lấy danh sách các role của người dùng
                 var roles = user.UserRoles.Select(ur => ur.Role.RoleName).ToList();
-
-                // Thêm Claims cho các role
                 foreach (var role in roles)
                 {
                     claims.Add(new Claim(ClaimTypes.Role, role));
                 }
 
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+                // Thiết lập thời gian tồn tại cookie là session cookie (chỉ tồn tại trong phiên)
                 var authProperties = new AuthenticationProperties
                 {
-                    IsPersistent = true, // Duy trì session đăng nhập
+                    IsPersistent = false, // Không lưu cookie khi đóng trình duyệt
                 };
 
-                // Đăng nhập người dùng và lưu vào cookie
+                // Lưu vào cookie và session
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
                 HttpContext.Session.SetString("FullName", user.FullName);
                 HttpContext.Session.SetInt32("UserID", user.Id);
                 HttpContext.Session.SetString("Roles", string.Join(",", roles));
+
+                // Tạo cookie riêng biệt cho phiên làm việc của trình duyệt bình thường
+                Response.Cookies.Append("NormalSessionID", Guid.NewGuid().ToString(), new CookieOptions
+                {
+                    Expires = DateTime.UtcNow.AddMinutes(30), // Ví dụ cookie tồn tại trong 30 phút
+                    HttpOnly = true,  // Bảo mật cookie
+                });
 
                 if (roles.Contains("administrator"))
                 {
@@ -120,17 +189,32 @@ public class AccountController : Controller
                 {
                     return RedirectToAction("Index", "Home");
                 }
-
             }
 
-            // Nếu đăng nhập thất bại
             ModelState.AddModelError("", "Invalid login attempt.");
         }
 
         return View(model);
     }
 
-    
+
+    public IActionResult SomePage()
+    {
+        // Kiểm tra nếu không có cookie NormalSessionID, yêu cầu đăng nhập lại
+        var normalSessionCookie = Request.Cookies["NormalSessionID"];
+        if (normalSessionCookie == null)
+        {
+            // Nếu không có cookie, chuyển hướng đến trang đăng nhập
+            return RedirectToAction("Login");
+        }
+
+        // Nếu cookie tồn tại, thực hiện các thao tác bình thường
+        return View();
+    }
+
+
+
+
     public async Task<IActionResult> Logout()
     {
         HttpContext.Session.Clear();
@@ -139,11 +223,14 @@ public class AccountController : Controller
     }
 
 
+
     [HttpGet]
     public IActionResult ChangePassword()
     {
         return View();
     }
+
+
 
     [HttpPost]
     public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
@@ -174,9 +261,6 @@ public class AccountController : Controller
 
         return View(model);
     }
-
-
-
 
 
 
@@ -293,6 +377,7 @@ public class AccountController : Controller
     }
 
 
+
     [HttpGet]
     public IActionResult ResetPassword(string token, string email)
     {
@@ -304,6 +389,8 @@ public class AccountController : Controller
         var model = new ResetPasswordViewModel { Token = token, Email = email };
         return View(model);
     }
+
+
 
     [HttpPost]
     public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
