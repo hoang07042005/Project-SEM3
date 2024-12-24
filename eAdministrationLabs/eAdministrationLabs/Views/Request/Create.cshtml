@@ -6,8 +6,6 @@
 
 <link href="~/layoutlabs/css/bg_title.css" rel="stylesheet" />
 
-
-
 <div class="background-image">
     <div class="content">
         <h3>Request / Submit a request</h3>
@@ -17,109 +15,100 @@
 <div class="container">
     <div class="row">
         <div class="col-md-8 offset-md-2">
+            <!-- Add border to the entire form -->
+            <div class="border-container" style="border: 2px solid #ccc; padding: 20px; border-radius: 10px;">
+                <!-- Form -->
+                <form asp-action="Create" method="post" enctype="multipart/form-data">
+                    @Html.AntiForgeryToken()
 
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-            <!-- Form -->
-            <form asp-action="Create" method="post" enctype="multipart/form-data">
-                @Html.AntiForgeryToken()
+                    <!-- Lab and Equipment in the same row -->
+                    <div class="form-row">
+                        <!-- Lab -->
+                        <div class="form-group col-md-6">
+                            <label asp-for="LabId" class="control-label">Select Laboratory</label>
+                            <select asp-for="LabId" class="form-control" id="LabId">
+                                <option value="" disabled selected>Select a lab</option>
+                                @if (ViewBag.Labs != null)
+                                {
+                                    foreach (var lab in ViewBag.Labs as IEnumerable<SelectListItem>)
+                                    {
+                                        <option value="@lab.Value">@lab.Text</option>
+                                    }
+                                }
+                            </select>
+                            <span asp-validation-for="LabId" class="text-danger"></span>
+                        </div>
 
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
-                <!-- Lab -->
-                <div class="form-group">
-                    <label asp-for="LabId" class="control-label">Select Laboratory</label>
-                    <select asp-for="LabId" class="form-control" id="LabId">
-                        <option value="" disabled selected>Select a lab</option>
-                        @if (ViewBag.Labs != null)
-                        {
-                            foreach (var lab in ViewBag.Labs as IEnumerable<SelectListItem>)
-                            {
-                                <option value="@lab.Value">@lab.Text</option>
-                            }
-                        }
-                    </select>
-                    <span asp-validation-for="LabId" class="text-danger"></span>
-                </div>
-
-                <!-- Equipment -->
-                <div class="form-group">
-                    <label asp-for="EquipmentId" class="control-label">Select Equipment (Optional)</label>
-                    <select asp-for="EquipmentId" class="form-control" id="EquipmentId">
-                        <option value="" disabled selected>Select equipment</option>
-                    </select>
-                    <span asp-validation-for="EquipmentId" class="text-danger"></span>
-                </div>
-
-                <!-- User -->
-
-
-                @* <div id="form-section">
-                không cần làm giao diện trong thẻ này *@
-
-                <div id="form-section">
-                    <div class="form-group">
-                        <label asp-for="UserId" class="control-label">Select User</label>
-                        <select asp-for="UserId" class="form-control">
-                            @if (ViewBag.CurrentUser != null)
-                            {
-                                var currentUser = (SelectListItem)ViewBag.CurrentUser;
-                                <option value="@currentUser.Value" selected>@currentUser.Text</option>
-                            }
-                            else
-                            {
-                                <option value="" disabled selected>No user found</option>
-                            }
-                        </select>
-                        <span asp-validation-for="UserId" class="text-danger"></span>
+                        <!-- Equipment -->
+                        <div class="form-group col-md-6">
+                            <label asp-for="EquipmentId" class="control-label">Select Equipment (Optional)</label>
+                            <select asp-for="EquipmentId" class="form-control" id="EquipmentId">
+                                <option value="" disabled selected>Select equipment</option>
+                            </select>
+                            <span asp-validation-for="EquipmentId" class="text-danger"></span>
+                        </div>
                     </div>
 
+                    <!-- Hidden form sections -->
+                    <div id="form-section" style="display: none;">
+                        <!-- User -->
+                        <div class="form-group">
+                            <label asp-for="UserId" class="control-label">Select User</label>
+                            <select asp-for="UserId" class="form-control">
+                                @if (ViewBag.CurrentUser != null)
+                                {
+                                    var currentUser = (SelectListItem)ViewBag.CurrentUser;
+                                    <option value="@currentUser.Value" selected>@currentUser.Text</option>
+                                }
+                                else
+                                {
+                                    <option value="" disabled selected>No user found</option>
+                                }
+                            </select>
+                            <span asp-validation-for="UserId" class="text-danger"></span>
+                        </div>
 
-                    <!-- Status Request -->
-                    <div class="form-group">
-                        <label class="control-label">Status Request</label>
-                        <input type="hidden" name="StatusRequestId" value=1 />
+                        <!-- Status Request -->
+                        <div class="form-group">
+                            <label class="control-label">Status Request</label>
+                            <input type="hidden" name="StatusRequestId" value="1" />
+                        </div>
+
+                        <!-- Changed By -->
+                        <div class="form-group">
+                            <label class="control-label">Changed By</label>
+                            <input type="hidden" name="ChangedBy" value="administrator" />
+                        </div>
                     </div>
 
-                    <!-- Hidden Inputs -->
+                    <!-- Notes -->
                     <div class="form-group">
-                        <label class="control-label">Changed By</label>
-                        <input type="hidden" name="ChangedBy" value="administrator" />
+                        <label asp-for="Notes" class="control-label">Notes (Optional)</label>
+                        <textarea asp-for="Notes" class="form-control"></textarea>
+                        <span asp-validation-for="Notes" class="text-danger"></span>
                     </div>
-                </div>
 
+                    <div id="imagePreviewContainer" style="margin-top: 10px; display: none;">
+                        <img id="imagePreview" src="#" alt="Preview" style="width: auto; height: auto; border: 1px solid #ccc; padding: 5px;" />
+                    </div>
 
-                
+                    <!-- Image -->
+                    <div class="form-group">
+                        <label asp-for="Image" class="control-label">Upload Image</label>
+                        <input asp-for="Image" class="form-control" type="file" accept="image/*" id="imageInput" />
+                        <small class="form-text text-muted">Allowed formats: JPG, PNG, GIF. Max size: 5MB.</small>
+                        <span asp-validation-for="Image" class="text-danger"></span>
+                    </div>
 
-
-
-
-
-                <!-- Notes -->
-                <div class="form-group">
-                    <label asp-for="Notes" class="control-label">Notes (Optional)</label>
-                    <textarea asp-for="Notes" class="form-control"></textarea>
-                    <span asp-validation-for="Notes" class="text-danger"></span>
-                </div>
-
-                <div id="imagePreviewContainer" style="margin-top: 10px; display: none;">
-                    <img id="imagePreview" src="#" alt="Preview" style="width: auto; height: auto; border: 1px solid #ccc; padding: 5px;" />
-                </div>
-
-                <!-- Image -->
-                <div class="form-group">
-                    <label asp-for="Image" class="control-label">Upload Image</label>
-                    <input asp-for="Image" class="form-control" type="file" accept="image/*" id="imageInput" />
-                    <small class="form-text text-muted">Allowed formats: JPG, PNG, GIF. Max size: 5MB.</small>
-                    <span asp-validation-for="Image" class="text-danger"></span>
-                </div>
-
-                <!-- Submit Button -->
-                <div class="form-group">
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                </div>
-            </form>
+                    <!-- Submit Button -->
+                    <div class="form-group text-right">
+                        <button type="submit" class="btn btn-secondary">Submit</button>
+                    </div>
+                </form>
+            </div>
         </div>
-
     </div>
 </div>
 
@@ -148,9 +137,6 @@
                 }
             });
         });
-    </script>
-    <script>
-        document.getElementById('form-section').style.display = 'none';
 
         document.getElementById("imageInput").addEventListener("change", function () {
             var input = this;
@@ -179,12 +165,10 @@
                     img.src = e.target.result;
                 };
 
-
                 reader.readAsDataURL(input.files[0]); // Read the file as a data URL
             } else {
                 previewContainer.style.display = "none"; // Hide the preview if no file is selected
             }
         });
-
     </script>
 }

@@ -7,9 +7,24 @@
         <h3>Request / Submit a request</h3>
     </div>
 </div>
+<style>
 
+    /* Đảm bảo tất cả hình ảnh có kích thước giống nhau và không bị méo */
+    .image-preview img {
+        max-width: 100px; /* Kích thước tối đa theo chiều ngang */
+        max-height: 100px; /* Kích thước tối đa theo chiều dọc */
+        width: auto;
+        height: auto;
+        object-fit: cover; /* Đảm bảo hình ảnh giữ tỉ lệ và không bị méo */
+    }
+    .container{
+        max-width:1600px;
+    }
+
+
+</style>
 <div class="container mt-4">
-    <h2>List of Requests changed by: @ViewData["ChangedBy"]</h2>
+    <h2 style="text-align:center"  >Request Processing By: @ViewData["ChangedBy"]</h>
 
     <table class="table table-bordered table-striped">
         <thead>

@@ -16,6 +16,29 @@
         <h3>Request / My Request</h3>
     </div>
 </div>
+<style>
+.container{
+    max-width : 1500px;
+}
+
+   
+    /* Chỉnh sửa màu sắc nền và chữ khi hover trên toàn bộ dropdown */
+    #statusFilter {
+        position: relative;
+    }
+
+    #statusFilter option {
+        background-color: #ffffff; /* Nền mặc định là trắng */
+        color: #495057; /* Màu chữ mặc định */
+    }
+
+        #statusFilter option:hover {
+            background-color: #6c757d; /* Nền xám khi hover */
+            color: #ffffff; /* Màu chữ trắng khi hover */
+        }
+
+
+</style>
 
 <div class="container py-4">
     <div class="d-flex">
@@ -45,7 +68,8 @@
         </div>
 
         <!-- My Requests -->
-        <div class="flex-grow-1 bg-white text-dark p-3" style="border-radius: 10px; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); margin-left: 20px;">
+        <!-- My Requests -->
+        <div class="flex-grow-1 bg-white text-dark p-3" style="border-radius: 10px; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); margin-left: 20px; width: 75%;">
             <div style="margin-top:20px; margin-left:20px; margin-bottom:10px;">
                 <h2 class="text-lg font-semibold mb-4">My Requests</h2>
                 <p class="text-gray-600 mb-4">Requests / My Requests</p>
@@ -75,27 +99,27 @@
                                     <td class="py-2 px-4">
                                         @if (request.StatusName == "Pending")
                                         {
-                                            <span class="badge bg-danger text-white">@request.StatusName</span>  <!-- Chỉnh màu chữ Pending thành đỏ -->
+                                            <span class="badge bg-danger text-white">@request.StatusName</span>  <!-- Pending -> Màu đỏ -->
                                         }
                                         else if (request.StatusName == "Approved")
                                         {
-                                            <span class="badge bg-primary">@request.StatusName</span>
+                                            <span class="badge bg-success text-white">@request.StatusName</span>  <!-- Approved -> Màu xanh lá -->
                                         }
                                         else if (request.StatusName == "In Progress")
                                         {
-                                            <span class="badge bg-info text-white">@request.StatusName</span>
+                                            <span class="badge bg-warning text-dark">@request.StatusName</span>  <!-- In Progress -> Màu vàng -->
                                         }
                                         else if (request.StatusName == "Complete")
                                         {
-                                            <span class="badge bg-success">@request.StatusName</span>
+                                            <span class="badge bg-primary text-white">@request.StatusName</span>  <!-- Complete -> Màu xanh dương -->
                                         }
                                         else if (request.StatusName == "Reject")
                                         {
-                                            <span class="badge bg-danger">@request.StatusName</span>
+                                            <span class="badge bg-secondary text-white">@request.StatusName</span>  <!-- Reject -> Màu xám -->
                                         }
                                         else
                                         {
-                                            <span class="badge bg-secondary">@request.StatusName</span>
+                                            <span class="badge bg-light text-dark">@request.StatusName</span>  <!-- Các trạng thái khác -> Màu sáng -->
                                         }
                                     </td>
 
@@ -114,6 +138,7 @@
                                 </tr>
                             }
                         </tbody>
+
                     </table>
                 }
                 else
@@ -124,6 +149,7 @@
                 }
             </div>
         </div>
+
     </div>
 </div>
 
