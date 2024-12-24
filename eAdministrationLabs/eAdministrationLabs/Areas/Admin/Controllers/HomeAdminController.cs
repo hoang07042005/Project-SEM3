@@ -23,22 +23,36 @@ namespace eAdministrationLabs.Areas.Admin.Controllers
 
         [Route("")]
         [Route("index")]
+        //public IActionResult Index()
+        //{
+        //    int totalUsers = _context.Users.Count();
+        //    int totalRequests = _context.Requests.Count();
+        //    int completedRequests = _context.HistoryRequests
+        //        .Count(hr => hr.StatusRequest.StatusName == "Complete");
+        //    ViewData["TotalUsers"] = totalUsers;
+        //    ViewData["TotalRequests"] = totalRequests;
+        //    ViewData["CompletedRequests"] = completedRequests;
+
+        //    return View();
+        //}
         public IActionResult Index()
         {
-            // Lấy tổng số User
+           
             int totalUsers = _context.Users.Count();
 
            
             int totalRequests = _context.Requests.Count();
 
-          
+            
             int completedRequests = _context.HistoryRequests
                 .Count(hr => hr.StatusRequest.StatusName == "Complete");
+            int totalClasses = _context.Labs.Count();
 
             
             ViewData["TotalUsers"] = totalUsers;
             ViewData["TotalRequests"] = totalRequests;
             ViewData["CompletedRequests"] = completedRequests;
+            ViewData["TotalClasses"] = totalClasses; 
 
             return View();
         }
