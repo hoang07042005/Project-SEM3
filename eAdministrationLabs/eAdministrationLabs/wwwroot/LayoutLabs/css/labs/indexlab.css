@@ -1,0 +1,80 @@
+﻿/* Đảm bảo không có khoảng trắng thừa khi loại bỏ display: block */
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+    margin: 0; /* Loại bỏ khoảng cách thừa */
+    padding: 0; /* Loại bỏ padding nếu có */
+}
+
+/* Giới hạn container ở max-width 1600px */
+.container {
+    max-width: 1600px;
+    width: 100%;
+    overflow-x: hidden; /* Ẩn thừa nếu có */
+    margin: 0 auto; /* Đảm bảo căn giữa */
+    padding: 0;
+}
+
+.d-flex.justify-content-between {
+    padding-bottom: 20px;
+}
+
+/* Đảm bảo bảng chiếm hết chiều rộng */
+.table {
+    width: 100%;
+    table-layout: auto; /* Để các cột tự động điều chỉnh kích thước */
+    border-collapse: collapse; /* Loại bỏ khoảng cách giữa các cell */
+}
+
+    /* Loại bỏ khoảng cách thừa giữa các cột của bảng */
+    .table th, .table td {
+        padding: 12px;
+        text-align: center;
+        border: 1px solid #ddd;
+        word-wrap: break-word; /* Đảm bảo nội dung dài sẽ không tràn ra ngoài */
+    }
+
+/* Nếu bảng vẫn tràn, thì thêm quy tắc này */
+.table-container {
+    overflow-x: auto;
+}
+
+/* Thêm một số chỉnh sửa nếu cần cho giao diện */
+.table tr:hover {
+    background-color: #f1f1f1;
+}
+
+.table td {
+    vertical-align: middle; /* Căn giữa theo chiều dọc */
+}
+
+.table .action-icons {
+    display: flex;
+    justify-content: center; /* Căn giữa các icon theo chiều ngang */
+    gap: 10px; /* Khoảng cách giữa các icon */
+}
+
+.table a {
+    color: #000;
+    text-decoration: none;
+}
+
+    .table a:hover {
+        text-decoration: underline;
+    }
+
+    .table a i {
+        font-size: 1.2rem;
+    }
+
+    .table a:hover i {
+        color: #007bff;
+    }
+.card-body {
+    background-color: darkgrey;
+}
+body.main-layout {
+    background-color: currentColor;
+}

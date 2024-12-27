@@ -1,0 +1,52 @@
+﻿.custom-link-container {
+    margin-top: 20px;
+}
+
+.custom-title {
+    font-style: italic;
+    font-size: 20px;
+    font-weight: bold;
+    color: #ffffff;
+}
+
+.background-image .content {
+    text-align: center;
+    padding: 20px 0;
+}
+
+.detail-item {
+    padding: 15px;
+    background-color: #fff;
+    border-radius:30px;
+}
+
+    .detail-item h6 {
+        margin-bottom: 5px;
+        color: #343a40;
+    }
+
+    .detail-item p {
+        margin: 0;
+        color: #6c757d;
+    }
+
+.custom-link {
+    font-size: 16px;
+    font-weight: bold;
+    color: #000; /* Màu chữ đen */
+    text-decoration: none; /* Loại bỏ gạch chân */
+}
+
+    .custom-link:hover {
+        text-decoration: underline; /* Gạch chân khi hover */
+        color: #555; /* Màu xám nhạt khi hover */
+    }
+.card-body {
+    background-color: darkgray;
+}
+body.main-layout {
+    background-color: currentcolor;
+}
+.card.shadow-sm {
+    border: 0;
+}

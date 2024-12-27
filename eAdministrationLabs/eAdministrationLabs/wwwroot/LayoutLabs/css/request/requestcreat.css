@@ -1,0 +1,10 @@
+﻿.border-container {
+    background-color: darkgrey;
+}
+body.main-layout {
+    background-color: currentColor;
+}
+.container {
+    max-width: 1500px !important;
+}
+

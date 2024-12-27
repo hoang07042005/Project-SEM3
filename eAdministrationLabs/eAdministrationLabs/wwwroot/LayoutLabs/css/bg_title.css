@@ -1,5 +1,6 @@
 .background-image {
-    background-image: url('/LayoutLabs/images/bg_title.png');
+    
+    background-image: url('../images/banerall.png');
     background-size: cover;
     background-position: center;
     height: 250px;
@@ -22,9 +23,10 @@
     width: 100%;
 }
 
-.content h3 {
-    margin: 0;
-    font-size: 33px;
-    font-family: 'Sriracha', cursive;
-    color: white;
-}
+    .content h3 {
+        margin: 0;
+        font-size: 33px;
+        font-family: 'Sriracha', cursive;
+        color: white;
+
+    }

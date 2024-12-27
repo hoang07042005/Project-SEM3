@@ -1,0 +1,103 @@
+﻿.container {
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0;
+    padding: 0;
+    table-layout: auto;
+}
+
+    .table th, .table td {
+        padding: 12px;
+        text-align: center;
+        border: 1px solid #ddd;
+        word-wrap: break-word;
+    }
+
+    .table th {
+        background-color: #f4f4f4;
+        font-weight: bold;
+    }
+
+    .table tr:hover {
+        background-color: #f9f9f9;
+    }
+
+    .table td {
+        vertical-align: middle;
+    }
+
+    .table img {
+        cursor: pointer;
+        height: 50px; /* Chiều cao cố định */
+        width: 50px; /* Chiều rộng cố định */
+        object-fit: cover; /* Giữ tỉ lệ và cắt ảnh nếu cần */
+        border-radius: 5px; /* Bo góc ảnh */
+        transition: transform 0.3s;
+    }
+
+        .table img:hover {
+            transform: scale(1.1); /* Phóng to khi hover */
+        }
+
+
+.d-flex.justify-content-between {
+    padding-bottom: 20px;
+}
+
+.action-icons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+    .action-icons a {
+        color: #000;
+        text-decoration: none;
+    }
+
+        .action-icons a:hover {
+            text-decoration: underline;
+        }
+
+    .action-icons i {
+        font-size: 1.2rem;
+    }
+
+    .action-icons a:hover i {
+        color: #007bff;
+    }
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+    .pagination .page-item .page-link {
+        color: #343a40;
+        padding: 5px 10px;
+        margin: 0 5px;
+        text-decoration: none;
+    }
+
+    .pagination .page-item.active .page-link {
+        background-color: #343a40;
+        color: white;
+    }
+body.main-layout {
+    background-color: currentColor;
+}
+.card-body {
+    background-color: darkgrey;
+}

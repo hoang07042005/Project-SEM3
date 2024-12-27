@@ -1,0 +1,47 @@
+﻿
+.custom-link-container {
+    margin-top: 20px;
+}
+
+.custom-title {
+    font-style: italic;
+    font-size: 20px;
+    font-weight: bold;
+    color: #ffffff;
+}
+
+.background-image .content {
+    text-align: center;
+    padding: 20px 0;
+}
+
+.detail-item {
+    padding: 15px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+    .detail-item h6 {
+        margin-bottom: 5px;
+        color: #343a40;
+    }
+
+    .detail-item p {
+        margin: 0;
+        color: #6c757d;
+    }
+
+.custom-link {
+    font-size: 16px;
+    font-weight: bold;
+    color: #000; /* Black text */
+    text-decoration: none; /* Remove underline */
+}
+
+    .custom-link:hover {
+        text-decoration: underline; /* Underline on hover */
+        color: #555; /* Light gray text */
+    }
+
+

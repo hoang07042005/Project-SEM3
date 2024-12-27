@@ -1,28 +1,13 @@
 ﻿@model List<eAdministrationLabs.Models.ViewModels.RequestViewModel>
 
 <link href="~/layoutlabs/css/bg_title.css" rel="stylesheet" />
-
+<link href="~/layoutlabs/css/request/asigmen.css" rel="stylesheet" />
 <div class="background-image">
     <div class="content">
         <h3>Request / Submit a request</h3>
     </div>
 </div>
-<style>
-
-    /* Đảm bảo tất cả hình ảnh có kích thước giống nhau và không bị méo */
-    .image-preview img {
-        max-width: 100px; /* Kích thước tối đa theo chiều ngang */
-        max-height: 100px; /* Kích thước tối đa theo chiều dọc */
-        width: auto;
-        height: auto;
-        object-fit: cover; /* Đảm bảo hình ảnh giữ tỉ lệ và không bị méo */
-    }
-    .container{
-        max-width:1600px;
-    }
-
-
-</style>
+ 
 <div class="container mt-4">
     <h2 style="text-align:center"  >Request Processing By: @ViewData["ChangedBy"]</h>
 
