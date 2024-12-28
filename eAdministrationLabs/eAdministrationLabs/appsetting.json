@@ -1,0 +1,17 @@
+﻿{
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=ADMIN\\SQLEXPRESS;Database=eAdministrationLabs;Trusted_Connection=True;trustServerCertificate=true"
+  },
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "EmailSettings": {
+    "SMTPServer": "smtp.mailtrap.io",
+    "Port": 2525,
+    "Username": "297904703ba4f7",
+    "Password": "cb53403c73970f"
+  }
+}
