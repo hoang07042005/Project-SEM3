@@ -11,11 +11,8 @@ public partial class EquiLab
 
     public int LabId { get; set; }
 
-
-
     public virtual Equipment Equipment { get; set; } = null!;
 
     public virtual Lab Lab { get; set; } = null!;
-
 
 }

@@ -5,137 +5,140 @@
       Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<h1>Index</h1>
+
 
 <p class="text-end">
     <a asp-action="Create" class="btn btn-success">Create New</a>
 </p>
 
-<form method="get" asp-action="Index">
-    <div class="row mb-3">
-        <div class="col-md-4">
-            <label for="changedByFilter" class="form-label">Changed By</label>
-            <input type="text" class="form-control text-center" style=" border: 1px solid #cdcdcd;" id="changedByFilter" name="changedByFilter" value="@ViewBag.ChangedByFilter" placeholder="Search by Changed By">
-        </div>
-        <div class="col-md-4">
-            <label for="statusFilter" class="form-label">Status</label>
-            <select class="form-select" id="statusFilter" name="statusFilter">
-                <option value="" class="text-center">-- All --</option>
-                @foreach (var status in ViewBag.StatusOptions)
-                {
-                    <option value="@status.Id">@status.StatusName</option>
-                }
-            </select>
-        </div>
-        <div class="col-md-4 d-flex align-items-end" >
-            <button type="submit" class="btn btn-primary">Filter</button>
-        </div>
-    </div>
-</form>
-
-
-
-
-<table class="table" style="margin-top:10vh; border: 1px solid #e5e5e5;">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.ChangedBy)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ChangedAt)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Notes)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Request)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.StatusRequest)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.User)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                <select class="form-control user-select-technical-staff" id="changedByDropdown-@item.Id" data-id="@item.Id">
-                    @foreach (var staff in ViewBag.TechnicalStaffUsers)
+    <form method="get" asp-action="Index">
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <label for="changedByFilter" class="form-label">Changed By</label>
+                <input type="text" class="form-control text-center" style=" border: 1px solid #cdcdcd;" id="changedByFilter" name="changedByFilter" value="@ViewBag.ChangedByFilter" placeholder="Search by Changed By">
+            </div>
+            <div class="col-md-4">
+                <label for="statusFilter" class="form-label">Status</label>
+                <select class="form-select" id="statusFilter" name="statusFilter" onchange="this.form.submit()">
+                    <option value="" class="text-center" selected="@(ViewBag.StatusFilter == null ? "selected" : null)">-- All --</option>
+                    @foreach (var status in ViewBag.StatusOptions)
                     {
-                        <option value="@staff.Id" selected="@(staff.FullName == item.ChangedBy)">
-                            @staff.FullName
+                    <option value="@status.Id" selected="@(ViewBag.StatusFilter == status.Id ? "selected" : null)" style="text-align: center;">
+                            @status.StatusName
                         </option>
                     }
                 </select>
+            </div>
 
-            </td>
+            <div class="col-md-4 d-flex align-items-end" >
+                <button type="submit" class="btn btn-primary">Filter</button>
+            </div>
+        </div>
+    </form>
 
-            <td>
-                @Html.DisplayFor(modelItem => item.ChangedAt)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Notes)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Request.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.StatusRequest.StatusName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.User.FullName)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary btn-sm">
-                        <i class="fas fa-edit" style="font-size:1em;"></i>
-                </a> |
-                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">
-                        <i class="fas fa-info-circle" style="font-size:1em;"></i>
-                </a> |
-                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">
-                    <i class="fas fa-trash-alt" style="font-size:1em;"></i>
-                </a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
 
-@section Scripts {
-    <script>
-        $(document).ready(function () {
-            $(".user-select-technical-staff").change(function () {
-                var id = $(this).data("id");
-                var userId = $(`#changedByDropdown-${id}`).val();
 
-                console.log("Sending data:", { id, userId });
 
-                $.ajax({
-                    url: '@Url.Action("UpdateChangedBy")',
-                    type: 'POST',
-                    data: {
-                        id: id,
-                        userId: userId
-                    },
-                    success: function (result) {
-                        if (result.success) {
-                            alert("Update successful.");
-                        } else {
-                            alert(result.message || "Update failed.");
+    <table class="table" style="margin-top:10vh; border: 1px solid #e5e5e5;">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.ChangedBy)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ChangedAt)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Notes)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Request)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.StatusRequest)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.User)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+    @foreach (var item in Model) {
+            <tr >
+                <td>
+                    <select class="form-control user-select-technical-staff" id="changedByDropdown-@item.Id" data-id="@item.Id">
+                        @foreach (var staff in ViewBag.TechnicalStaffUsers)
+                        {
+                            <option value="@staff.Id" selected="@(staff.FullName == item.ChangedBy)">
+                                @staff.FullName
+                            </option>
                         }
-                    },
-                    error: function () {
-                        alert("There was an error updating.");
-                    }
+                    </select>
+
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.ChangedAt)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Notes)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Request.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StatusRequest.StatusName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.User.FullName)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary btn-sm">
+                            <i class="fas fa-edit" style="font-size:1em;"></i>
+                    </a> |
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">
+                            <i class="fas fa-info-circle" style="font-size:1em;"></i>
+                    </a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">
+                        <i class="fas fa-trash-alt" style="font-size:1em;"></i>
+                    </a>
+                </td>
+            </tr>
+    }
+        </tbody>
+    </table>
+
+    @section Scripts {
+        <script>
+            $(document).ready(function () {
+                $(".user-select-technical-staff").change(function () {
+                    var id = $(this).data("id");
+                    var userId = $(`#changedByDropdown-${id}`).val();
+
+                    console.log("Sending data:", { id, userId });
+
+                    $.ajax({
+                        url: '@Url.Action("UpdateChangedBy")',
+                        type: 'POST',
+                        data: {
+                            id: id,
+                            userId: userId
+                        },
+                        success: function (result) {
+                            if (result.success) {
+                                alert("Update successful.");
+                            } else {
+                                alert(result.message || "Update failed.");
+                            }
+                        },
+                        error: function () {
+                            alert("There was an error updating.");
+                        }
+                    });
                 });
             });
-        });
 
-    </script>
-} 
+        </script>
+    } 
  

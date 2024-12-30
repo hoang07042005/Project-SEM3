@@ -1,4 +1,4 @@
-﻿@model IEnumerable<eAdministrationLabs.Models.LabUsageLog>
+﻿@* @model IEnumerable<eAdministrationLabs.Models.LabUsageLog>
 
 @{
     ViewData["Title"] = "Index";
@@ -62,9 +62,10 @@
                                 <th>@Html.DisplayNameFor(model => model.Lab)</th>
                                 <th>@Html.DisplayNameFor(model => model.User)</th>
                                 <th>@Html.DisplayNameFor(model => model.Purpose)</th>
+                                <th>@Html.DisplayNameFor(model => model.StatusLog)</th> 
                                 <th>@Html.DisplayNameFor(model => model.StartTime)</th>
                                 <th>@Html.DisplayNameFor(model => model.EndTime)</th>
-                                <th>@Html.DisplayNameFor(model => model.CreatedAt)</th>
+
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -75,9 +76,10 @@
                                     <td>@Html.DisplayFor(modelItem => item.Lab.LabName)</td>
                                     <td>@Html.DisplayFor(modelItem => item.User.FullName)</td>
                                     <td>@Html.DisplayFor(modelItem => item.Purpose)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.StatusLog.StatusName)</td>
                                     <td>@Html.DisplayFor(modelItem => item.StartTime)</td>
                                     <td>@Html.DisplayFor(modelItem => item.EndTime)</td>
-                                    <td>@Html.DisplayFor(modelItem => item.CreatedAt)</td>
+
                                     <td>
                                         <!-- Sử dụng d-flex để các icon nằm cùng 1 hàng -->
                                         <div class="d-flex justify-content-start">
@@ -98,10 +100,107 @@
                     </table>
                 </div>
             </div>
-          @*   <div class="text-center mt-3">
-                <a asp-action="Index" class="text-dark text-decoration-none">← Back to List</a>
-            </div> *@
+
         </div>
     </div>
 
 </div>
+ *@
+
+ @model IEnumerable<eAdministrationLabs.Models.LabUsageLog>
+
+@{
+    ViewData["Title"] = "Lab Usage Log";
+    Layout = "~/Views/Shared/_LayoutLabs.cshtml";
+}
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
+<link href="~/layoutlabs/css/bg_title.css" rel="stylesheet" />
+<link href="~/layoutlabs/css/labs/indexlab.css" rel="stylesheet" />
+
+<div class="background-image">
+    <div class="content">
+        <h3>Labs / Index</h3>
+    </div>
+</div>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <!-- Create New Button -->
+                        <p>
+                            <a asp-action="Create" class="btn btn-dark">Add Room</a>
+                        </p>
+
+                        <!-- Search Input -->
+                        <input type="text" id="searchInput" class="form-control" placeholder="Search Logs..." style="max-width: 300px;">
+                    </div>
+
+                    <!-- Lab Usage Log Table -->
+                    <div class="table-container">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>@Html.DisplayNameFor(model => model.Lab)</th>
+                                    <th>@Html.DisplayNameFor(model => model.User)</th>
+                                    <th>@Html.DisplayNameFor(model => model.StatusLog)</th>
+                                    <th>@Html.DisplayNameFor(model => model.Purpose)</th>
+                                    <th>@Html.DisplayNameFor(model => model.StartTime)</th>
+                                    <th>@Html.DisplayNameFor(model => model.EndTime)</th>
+                                    <th>@Html.DisplayNameFor(model => model.CreatedAt)</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@Html.DisplayFor(modelItem => item.Lab.LabName)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.User.FullName)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.StatusLog.StatusName)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.Purpose)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.StartTime)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.EndTime)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.CreatedAt)</td>
+                                        <td>
+                                            <div class="action-icons">
+                                                <a asp-action="Edit" asp-route-id="@item.Id" class="text-dark mx-2">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                                <a asp-action="Details" asp-route-id="@item.Id" class="text-dark mx-2">
+                                                    <i class="fas fa-info-circle"></i>
+                                                </a>
+                                                <a asp-action="Delete" asp-route-id="@item.Id" class="text-dark mx-2">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </a>
+                                            </div>
+                                        </td>
+
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                    @* phan trang *@
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Search functionality for filtering the table rows based on input
+    document.getElementById('searchInput').addEventListener('input', function () {
+        var filter = this.value.toLowerCase();
+        var rows = document.querySelectorAll('.table tbody tr');
+
+        rows.forEach(function (row) {
+            var text = row.textContent.toLowerCase();
+            row.style.display = text.includes(filter) ? '' : 'none';
+        });
+    });
+</script>

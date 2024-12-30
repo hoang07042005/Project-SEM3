@@ -1,5 +1,6 @@
-﻿@model eAdministrationLabs.Models.Feedback
+﻿@model eAdministrationLabs.Models.ViewModels.FeedbackViewModel
 
+<link href="~/layoutlabs/css/feedback/feedback.css" rel="stylesheet" />
 <link href="~/layoutlabs/css/bg_title.css" rel="stylesheet" />
 
 <div class="background-image">
@@ -8,13 +9,32 @@
     </div>
 </div>
 
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-lg-6 col-md-8">
-            <div class="card border-0 shadow-sm" style="border: 1px solid #ddd; border-radius: 15px;">
+<div class="container">
+    <div class="row justify-content-center d-flex">
+        <div class="col-lg-12 col-md-12 d-flex">
+            <!-- Content inside mt-5 -->
+            <div class="flex-grow-2" style="margin-right:5vh;">
+
+                <div class="completions" style="max-width:600px;">
+                    @foreach (var completion in Model.RequestCompletions)
+                    {
+                        <div class="completion-item">
+                            <p><strong>Completion Time:</strong> @completion.CompletionTime</p>
+                            <p><strong>Completed By:</strong> @completion.CompletedBy</p>
+                            <div>
+                                <strong>Image:</strong>
+                                <img src="data:image;base64,@completion.ImageBase64" alt="Completion Image" />
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <!-- The Card -->
+            <div class="card border-0 shadow-sm" style="width: 60%;">
                 <div class="card-body p-4">
-                    <form id="feedbackForm">
-                        <input type="hidden" asp-for="RequestId" />
+                    <form id="feedbackForm" >
+                        <input type="hidden" asp-for="Feedback.RequestId" />
 
                         <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
@@ -28,8 +48,8 @@
                                 <i class="fa-regular fa-star" data-value="4"></i>
                                 <i class="fa-regular fa-star" data-value="5"></i>
                             </div>
-                            <input asp-for="Rating" type="hidden" />
-                            <span asp-validation-for="Rating" class="text-danger small"></span>
+                            <input asp-for="Feedback.Rating" type="hidden" />
+                            <span asp-validation-for="Feedback.Rating" class="text-danger small"></span>
                         </div>
 
                         <!-- Satisfaction Section -->
@@ -42,8 +62,8 @@
                                 <i class="fa-regular fa-face-smile" data-value="4"></i>
                                 <i class="fa-regular fa-face-smile" data-value="5"></i>
                             </div>
-                            <input asp-for="Satisfaction" type="hidden" />
-                            <span asp-validation-for="Satisfaction" class="text-danger small"></span>
+                            <input asp-for="Feedback.Satisfaction" type="hidden" />
+                            <span asp-validation-for="Feedback.Satisfaction" class="text-danger small"></span>
                         </div>
 
                         <!-- Quality Section -->
@@ -56,15 +76,15 @@
                                 <i class="fa-regular fa-thumbs-up" data-value="4"></i>
                                 <i class="fa-regular fa-thumbs-up" data-value="5"></i>
                             </div>
-                            <input asp-for="Quality" type="hidden" />
-                            <span asp-validation-for="Quality" class="text-danger small"></span>
+                            <input asp-for="Feedback.Quality" type="hidden" />
+                            <span asp-validation-for="Feedback.Quality" class="text-danger small"></span>
                         </div>
 
                         <!-- Comment Section -->
                         <div class="form-group mb-4">
-                            <label asp-for="Comment" class="form-label font-weight-bold">Comment:</label>
-                            <textarea asp-for="Comment" class="form-control rounded-3 shadow-sm" rows="4" maxlength="500"></textarea>
-                            <span asp-validation-for="Comment" class="text-danger small"></span>
+                            <label asp-for="Feedback.Comment" class="form-label font-weight-bold">Comment:</label>
+                            <textarea asp-for="Feedback.Comment" class="form-control rounded-3 shadow-sm" rows="4" maxlength="500"></textarea>
+                            <span asp-validation-for="Feedback.Comment" class="text-danger small"></span>
                         </div>
 
                         <!-- Submit Button -->
@@ -77,6 +97,7 @@
         </div>
     </div>
 </div>
+
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
@@ -95,9 +116,9 @@
             }
 
             // Handle icon selection for Rating, Satisfaction, and Quality
-            handleRatingSelection("ratingIcons", "Rating");
-            handleRatingSelection("satisfactionIcons", "Satisfaction");
-            handleRatingSelection("qualityIcons", "Quality");
+            handleRatingSelection("ratingIcons", "Feedback_Rating");
+            handleRatingSelection("satisfactionIcons", "Feedback_Satisfaction");
+            handleRatingSelection("qualityIcons", "Feedback_Quality");
 
             $("#feedbackForm").submit(function (e) {
                 e.preventDefault();

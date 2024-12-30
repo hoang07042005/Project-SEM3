@@ -12,8 +12,8 @@ using eAdministrationLabs.Models;
 namespace eAdministrationLabs.Migrations
 {
     [DbContext(typeof(EAdministrationLabsContext))]
-    [Migration("20241222044610_CreateData")]
-    partial class CreateData
+    [Migration("20241229074422_DeleteSoftwares")]
+    partial class DeleteSoftwares
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -261,6 +261,10 @@ namespace eAdministrationLabs.Migrations
                     b.Property<DateTime>("StartTime")
                         .HasColumnType("datetime");
 
+                    b.Property<int>("StatusLogId")
+                        .HasColumnType("int")
+                        .HasColumnName("StatusLogID");
+
                     b.Property<int>("UserId")
                         .HasColumnType("int")
                         .HasColumnName("UserID");
@@ -269,6 +273,8 @@ namespace eAdministrationLabs.Migrations
                         .HasName("PK__LabUsage__5E5499A8EB6A0186");
 
                     b.HasIndex("LabId");
+
+                    b.HasIndex("StatusLogId");
 
                     b.HasIndex("UserId");
 
@@ -361,6 +367,43 @@ namespace eAdministrationLabs.Migrations
                     b.ToTable("Requests");
                 });
 
+            modelBuilder.Entity("eAdministrationLabs.Models.RequestCompletion", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("CompletionID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CompletedBy")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("CompletedBy");
+
+                    b.Property<DateTime>("CompletionTime")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("CompletionTime");
+
+                    b.Property<int>("HistoryRequestId")
+                        .HasColumnType("int")
+                        .HasColumnName("HistoryRequestID");
+
+                    b.Property<string>("ImageBase64")
+                        .IsRequired()
+                        .HasMaxLength(2147483647)
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ImageBase64");
+
+                    b.HasKey("Id")
+                        .HasName("PK__RequestCompletion__33A8519A00162311");
+
+                    b.HasIndex("HistoryRequestId");
+
+                    b.ToTable("RequestCompletions");
+                });
+
             modelBuilder.Entity("eAdministrationLabs.Models.RequestImage", b =>
                 {
                     b.Property<int>("Id")
@@ -405,53 +448,6 @@ namespace eAdministrationLabs.Migrations
                     b.ToTable("Roles");
                 });
 
-            modelBuilder.Entity("eAdministrationLabs.Models.Software", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("SoftwareID");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime?>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime")
-                        .HasDefaultValueSql("(getdate())");
-
-                    b.Property<int>("LabId")
-                        .HasColumnType("int")
-                        .HasColumnName("LabID");
-
-                    b.Property<string>("License")
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)")
-                        .HasDefaultValue("Free");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime")
-                        .HasDefaultValueSql("(getdate())");
-
-                    b.Property<string>("Version")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("Id")
-                        .HasName("PK__Software__25EDB8DCBF9069AC");
-
-                    b.HasIndex("LabId");
-
-                    b.ToTable("Softwares");
-                });
-
             modelBuilder.Entity("eAdministrationLabs.Models.StatusLab", b =>
                 {
                     b.Property<int>("Id")
@@ -470,6 +466,26 @@ namespace eAdministrationLabs.Migrations
                         .HasName("PK__StatusLa__072A22DFB420707C");
 
                     b.ToTable("StatusLabs");
+                });
+
+            modelBuilder.Entity("eAdministrationLabs.Models.StatusLog", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("StatusLogID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("StatusName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id")
+                        .HasName("PK__StatusLog__5E1E5E8CE4764C2F");
+
+                    b.ToTable("StatusLogs");
                 });
 
             modelBuilder.Entity("eAdministrationLabs.Models.StatusRequest", b =>
@@ -671,6 +687,13 @@ namespace eAdministrationLabs.Migrations
                         .IsRequired()
                         .HasConstraintName("FK__LabUsageL__LabID__5812160E");
 
+                    b.HasOne("eAdministrationLabs.Models.StatusLog", "StatusLog")
+                        .WithMany("LabUsageLogs")
+                        .HasForeignKey("StatusLogId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK__LabUsageL__StatusLogID__59FA5E80");
+
                     b.HasOne("eAdministrationLabs.Models.User", "User")
                         .WithMany("LabUsageLogs")
                         .HasForeignKey("UserId")
@@ -679,6 +702,8 @@ namespace eAdministrationLabs.Migrations
                         .HasConstraintName("FK__LabUsageL__UserI__59063A47");
 
                     b.Navigation("Lab");
+
+                    b.Navigation("StatusLog");
 
                     b.Navigation("User");
                 });
@@ -739,16 +764,15 @@ namespace eAdministrationLabs.Migrations
                     b.Navigation("Lab");
                 });
 
-            modelBuilder.Entity("eAdministrationLabs.Models.Software", b =>
+            modelBuilder.Entity("eAdministrationLabs.Models.RequestCompletion", b =>
                 {
-                    b.HasOne("eAdministrationLabs.Models.Lab", "Lab")
-                        .WithMany("Softwares")
-                        .HasForeignKey("LabId")
+                    b.HasOne("eAdministrationLabs.Models.HistoryRequest", "HistoryRequest")
+                        .WithMany("RequestCompletions")
+                        .HasForeignKey("HistoryRequestId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("FK__Softwares__LabID__5441852A");
+                        .IsRequired();
 
-                    b.Navigation("Lab");
+                    b.Navigation("HistoryRequest");
                 });
 
             modelBuilder.Entity("eAdministrationLabs.Models.UserRole", b =>
@@ -782,6 +806,8 @@ namespace eAdministrationLabs.Migrations
             modelBuilder.Entity("eAdministrationLabs.Models.HistoryRequest", b =>
                 {
                     b.Navigation("Feedbacks");
+
+                    b.Navigation("RequestCompletions");
                 });
 
             modelBuilder.Entity("eAdministrationLabs.Models.Lab", b =>
@@ -791,8 +817,6 @@ namespace eAdministrationLabs.Migrations
                     b.Navigation("LabUsageLogs");
 
                     b.Navigation("Requests");
-
-                    b.Navigation("Softwares");
                 });
 
             modelBuilder.Entity("eAdministrationLabs.Models.Request", b =>
@@ -813,6 +837,11 @@ namespace eAdministrationLabs.Migrations
             modelBuilder.Entity("eAdministrationLabs.Models.StatusLab", b =>
                 {
                     b.Navigation("Labs");
+                });
+
+            modelBuilder.Entity("eAdministrationLabs.Models.StatusLog", b =>
+                {
+                    b.Navigation("LabUsageLogs");
                 });
 
             modelBuilder.Entity("eAdministrationLabs.Models.StatusRequest", b =>

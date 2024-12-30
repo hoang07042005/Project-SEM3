@@ -83,6 +83,8 @@ namespace eAdministrationLabs.Areas.Admin.Controllers
             ViewBag.Roles = _context.Roles.ToList();
             return View();
         }
+
+
         [Route("Register")]
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel model)

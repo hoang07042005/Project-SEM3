@@ -31,13 +31,15 @@ public partial class EAdministrationLabsContext : DbContext
 
     public virtual DbSet<Request> Requests { get; set; }
 
+    public DbSet<RequestCompletion> RequestCompletions { get; set; }
+
     public virtual DbSet<RequestImage> RequestImages { get; set; }
 
     public virtual DbSet<Role> Roles { get; set; }
 
-    public virtual DbSet<Software> Softwares { get; set; }
-
     public virtual DbSet<StatusLab> StatusLabs { get; set; }
+
+    public virtual DbSet<StatusLog> StatusLogs { get; set; }
 
     public virtual DbSet<StatusRequest> StatusRequests { get; set; }
 
@@ -85,7 +87,6 @@ public partial class EAdministrationLabsContext : DbContext
                 .HasColumnType("datetime");
             entity.Property(e => e.Type).HasMaxLength(50);
         });
-
 
         modelBuilder.Entity<Feedback>(entity =>
         {
@@ -140,8 +141,6 @@ public partial class EAdministrationLabsContext : DbContext
                   .OnDelete(DeleteBehavior.NoAction); // Hoặc .OnUpdate(DeleteBehavior.NoAction) nếu cần
 
         });
-
-
 
         modelBuilder.Entity<HistoryRequest>(entity =>
         {
@@ -199,7 +198,7 @@ public partial class EAdministrationLabsContext : DbContext
             entity.Property(e => e.LabId).HasColumnName("LabID");
             entity.Property(e => e.StartTime).HasColumnType("datetime");
             entity.Property(e => e.UserId).HasColumnName("UserID");
-
+            entity.Property(e => e.StatusLogId).HasColumnName("StatusLogID");
             entity.HasOne(d => d.Lab).WithMany(p => p.LabUsageLogs)
                 .HasForeignKey(d => d.LabId)
                 .HasConstraintName("FK__LabUsageL__LabID__5812160E");
@@ -207,6 +206,10 @@ public partial class EAdministrationLabsContext : DbContext
             entity.HasOne(d => d.User).WithMany(p => p.LabUsageLogs)
                 .HasForeignKey(d => d.UserId)
                 .HasConstraintName("FK__LabUsageL__UserI__59063A47");
+
+            entity.HasOne(d => d.StatusLog).WithMany(p => p.LabUsageLogs)
+                .HasForeignKey(d => d.StatusLogId)
+                .HasConstraintName("FK__LabUsageL__StatusLogID__59FA5E80");
         });
 
         modelBuilder.Entity<Notification>(entity =>
@@ -268,6 +271,34 @@ public partial class EAdministrationLabsContext : DbContext
                 .HasConstraintName("FK__Requests__LabID__619B8048");
         });
 
+        modelBuilder.Entity<RequestCompletion>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__RequestCompletion__33A8519A00162311");
+
+            entity.Property(e => e.Id).HasColumnName("CompletionID");
+
+            entity.Property(e => e.HistoryRequestId)
+                .HasColumnName("HistoryRequestID");
+
+            entity.Property(e => e.CompletedBy)
+                .HasColumnName("CompletedBy")
+                .HasMaxLength(100)
+                .IsRequired();
+
+            entity.Property(e => e.CompletionTime)
+                .HasColumnName("CompletionTime")
+                .IsRequired();
+
+            entity.Property(e => e.ImageBase64)
+                .HasColumnName("ImageBase64")
+                .HasMaxLength(int.MaxValue);
+
+            entity.HasOne(d => d.HistoryRequest)
+               .WithMany(p => p.RequestCompletions)
+               .HasForeignKey(d => d.HistoryRequestId)
+               .OnDelete(DeleteBehavior.Cascade);
+        });
+
         modelBuilder.Entity<RequestImage>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__RequestI__7516F4EC4DE8D026");
@@ -286,34 +317,20 @@ public partial class EAdministrationLabsContext : DbContext
             entity.Property(e => e.RoleName).HasMaxLength(50);
         });
 
-        modelBuilder.Entity<Software>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PK__Software__25EDB8DCBF9069AC");
-
-            entity.Property(e => e.Id).HasColumnName("SoftwareID");
-            entity.Property(e => e.CreatedAt)
-                .HasDefaultValueSql("(getdate())")
-                .HasColumnType("datetime");
-            entity.Property(e => e.LabId).HasColumnName("LabID");
-            entity.Property(e => e.License)
-                .HasMaxLength(50)
-                .HasDefaultValue("Free");
-            entity.Property(e => e.Name).HasMaxLength(100);
-            entity.Property(e => e.UpdatedAt)
-                .HasDefaultValueSql("(getdate())")
-                .HasColumnType("datetime");
-            entity.Property(e => e.Version).HasMaxLength(50);
-
-            entity.HasOne(d => d.Lab).WithMany(p => p.Softwares)
-                .HasForeignKey(d => d.LabId)
-                .HasConstraintName("FK__Softwares__LabID__5441852A");
-        });
 
         modelBuilder.Entity<StatusLab>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__StatusLa__072A22DFB420707C");
 
             entity.Property(e => e.Id).HasColumnName("StatusLabID");
+            entity.Property(e => e.StatusName).HasMaxLength(100);
+        });
+
+        modelBuilder.Entity<StatusLog>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__StatusLog__5E1E5E8CE4764C2F");
+
+            entity.Property(e => e.Id).HasColumnName("StatusLogID");
             entity.Property(e => e.StatusName).HasMaxLength(100);
         });
 

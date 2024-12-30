@@ -1,0 +1,144 @@
+﻿@model eAdministrationLabs.Models.ViewModels.CompletionViewModel
+
+@{
+    ViewData["Title"] = "Complete Request";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<form asp-action="CreateCompletion" method="post" enctype="multipart/form-data">
+    <input asp-for="HistoryRequestId" type="hidden" />
+
+    <div class="form-group">
+        <label asp-for="LabName"></label>
+        <input asp-for="LabName" class="form-control" readonly />
+    </div>
+    <div class="form-group">
+        <label asp-for="NameEquipment"></label>
+        <input asp-for="NameEquipment" class="form-control" readonly />
+    </div>
+    <div class="form-group">
+        <label for="CompletionTime">Completion Time</label>
+        <input type="text" class="form-control" id="CompletionTime" readonly />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="CompletedBy"></label>
+        <input asp-for="CompletedBy" class="form-control" value="@User.Identity.Name" />
+    </div>
+    <div class="form-group">
+        <label asp-for="ImageFile"></label>
+        <input asp-for="ImageFile" type="file" class="form-control-file" id="imageInput" accept="image/*" />
+    </div>
+    <div class="form-group">
+        <img id="imagePreview" src="#" alt="Preview" style="max-width: 300px; display: none;" />
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+<script>
+    // Lấy thời gian hiện tại của máy
+    function setCompletionTime() {
+        const now = new Date(); // Thời gian hiện tại
+        const formattedTime = now.toLocaleTimeString('en-US', {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: false // Hiển thị dạng 24 giờ
+        });
+        // Gán thời gian vào ô input
+        document.getElementById("CompletionTime").value = formattedTime;
+    }
+
+    // Gọi hàm để đặt giá trị khi tải trang
+    window.onload = setCompletionTime;
+</script>
+
+<script>
+    document.getElementById('imageInput').addEventListener('change', function (event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const preview = document.getElementById('imagePreview');
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+</script>
+
+<style>
+    form {
+        max-width: 600px;
+        margin: 20px auto;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        background-color: #fff;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        font-family: 'Roboto', sans-serif;
+    }
+
+    h1 {
+        text-align: center;
+        color: #333;
+        font-size: 28px;
+        margin-bottom: 20px;
+        font-family: 'Roboto', sans-serif;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="file"],
+        .form-group input[type="hidden"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+            .form-group input[type="text"]:focus,
+            .form-group input[type="file"]:focus {
+                border-color: #007bff;
+                box-shadow: 0 0 8px rgba(0, 123, 255, 0.2);
+            }
+
+        .form-group input[readonly] {
+            background-color: #e9ecef;
+            cursor: not-allowed;
+        }
+
+    button[type="submit"] {
+        display: block;
+        width: 100%;
+        padding: 14px;
+        background-color: #007bff;
+        border: none;
+        border-radius: 5px;
+        color: white;
+        font-size: 18px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.3s, box-shadow 0.3s;
+    }
+
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+            box-shadow: 0 6px 12px rgba(0, 91, 187, 0.3);
+        }
+</style>

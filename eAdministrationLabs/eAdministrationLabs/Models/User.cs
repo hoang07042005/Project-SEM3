@@ -21,8 +21,6 @@ public partial class User
 
     public DateTime? TokenExpirationTime { get; set; }
 
-    public virtual ICollection<EquiLab> EquiLabs { get; set; } = new List<EquiLab>();
-
     public virtual ICollection<HistoryRequest> HistoryRequests { get; set; } = new List<HistoryRequest>();
 
     public virtual ICollection<Feedback> Feedbacks { get; set; } = new List<Feedback>();

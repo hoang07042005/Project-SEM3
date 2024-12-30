@@ -1,0 +1,12 @@
+﻿/* Đảm bảo tất cả hình ảnh có kích thước giống nhau và không bị méo */
+.image-preview img {
+    max-width: 100px; /* Kích thước tối đa theo chiều ngang */
+    max-height: 100px; /* Kích thước tối đa theo chiều dọc */
+    width: auto;
+    height: auto;
+    object-fit: cover; /* Đảm bảo hình ảnh giữ tỉ lệ và không bị méo */
+}
+
+.container {
+    max-width: 1600px;
+}

@@ -1,0 +1,105 @@
+﻿/* General Container Styling */
+.container {
+    margin-top: 5rem;
+
+}
+
+/* Card Styling */
+.card {
+    border: 0;
+    border-radius: 1rem;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+/* Card Body Padding */
+.card-body {
+    padding: 2rem;
+}
+
+/* Form Group Margin */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+/* Form Label Styling */
+.form-label {
+    font-weight: bold;
+    color: #555;
+}
+
+/* Rating Icons Styling */
+.rating-icons i,
+.rating-icons i.fa-solid {
+    cursor: pointer;
+    font-size: 2rem;
+    color: #d3d3d3;
+    transition: color 0.3s;
+}
+
+    /* Highlighted Icons Styling */
+    .rating-icons i.fa-solid {
+        color: #ffcc00;
+    }
+
+    /* Hover Effect for Icons */
+    .rating-icons i:hover,
+    .rating-icons i:hover ~ i {
+        color: #ffcc00;
+    }
+
+/* Textarea Styling */
+textarea.form-control {
+    border-radius: 0.375rem;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    transition: box-shadow 0.3s;
+}
+
+    /* Textarea Focus Effect */
+    textarea.form-control:focus {
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+    }
+
+/* Button Styling */
+.btn {
+    padding-left: 2rem;
+    padding-right: 2rem;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    border-radius: 0.625rem;
+    background-color: #333;
+    color: #fff;
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+    /* Button Hover Effect */
+    .btn:hover {
+        background-color: #555;
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+    }
+
+/* Completion Item Styling */
+.completion-item {
+    margin-bottom: 1rem;
+    padding: 1rem;
+    border: 1px solid #eaeaea;
+    border-radius: 0.5rem;
+    background-color: #f9f9f9;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.05);
+}
+
+    /* Completion Image Styling */
+    .completion-item img {
+        max-width: 100%;
+        border-radius: 0.5rem;
+        margin-top: 0.5rem;
+    }
+
+    /* Completion Text Styling */
+    .completion-item p {
+        margin: 0.5rem 0;
+        color: #555;
+    }
+
+        /* Strong Text Styling */
+        .completion-item p strong {
+            color: #333;
+        }

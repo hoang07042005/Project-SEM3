@@ -1,0 +1,66 @@
+﻿.container {
+    max-width: 1400px;
+}
+
+.card {
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.card-header {
+    font-size: 1.5rem;
+    border-bottom: none;
+    text-transform: uppercase;
+}
+
+.btn {
+    border-radius: 10px;
+    font-size: 1rem;
+}
+
+.btn-danger {
+    background-color: #e63946;
+    border: none;
+}
+
+    .btn-danger:hover {
+        background-color: #d62828;
+    }
+
+.btn-secondary {
+    background-color: #6c757d;
+    border: none;
+}
+
+    .btn-secondary:hover {
+        background-color: #495057;
+    }
+
+.fw-bold {
+    font-weight: 700;
+}
+
+.fw-semibold {
+    font-weight: 600;
+}
+
+hr {
+    border-top: 2px solid #ddd;
+}
+
+dl {
+    font-size: 0.9rem;
+}
+
+.text-muted {
+    font-weight: 500;
+    color: #6c757d !important;
+}
+
+.me-2 {
+    margin-right: 0.5rem;
+}
+
+body.main-layout {
+    background-color: currentcolor;
+}

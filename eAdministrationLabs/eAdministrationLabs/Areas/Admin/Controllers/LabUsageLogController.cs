@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace eAdministrationLabs.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Route("admin/labusagelog")]
+    [Route("admin/LabUsageLog")]
     ////[Authorize(Roles = "Admin, Manager, Technician, Staff")]
     [Authorize(Policy = "AdminOnly")]
     [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
@@ -27,11 +27,146 @@ namespace eAdministrationLabs.Areas.Admin.Controllers
         // GET: Admin/LabUsageLog
         [Route("")]
         [Route("index")]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? statusFilter)
         {
-            var eAdministrationLabsContext = _context.LabUsageLogs.Include(l => l.Lab).Include(l => l.User);
+            ViewBag.StatusOptions = _context.StatusLogs.ToList();
+            IQueryable<LabUsageLog> eAdministrationLabsContext = _context.LabUsageLogs.Include(l => l.Lab).Include(l => l.StatusLog).Include(l => l.User);
+
+            if (!statusFilter.HasValue)
+            {
+                statusFilter = 1; // 1 là ID của trạng thái Pending
+            }
+
+            // Lọc theo trạng thái
+            eAdministrationLabsContext = eAdministrationLabsContext.Where(h => h.StatusLogId == statusFilter);
+
+            eAdministrationLabsContext = eAdministrationLabsContext
+                .OrderBy(h => h.StatusLogId != 1);
+
+            ViewBag.StatusFilter = statusFilter;
+
             return View(await eAdministrationLabsContext.ToListAsync());
         }
+
+        //[HttpPost]
+        //public JsonResult UpdateStatus(int id, int statusId)
+        //{
+        //    // Find the LabUsageLog by its ID
+        //    var labUsageLog = _context.LabUsageLogs
+        //        .FirstOrDefault(l => l.Id == id);
+
+        //    if (labUsageLog != null)
+        //    {
+        //        // Update the status of the LabUsageLog
+        //        labUsageLog.StatusLogId = statusId;
+
+        //        // Check if the status is "Approve" and update the related Lab's status
+        //        if (statusId ==2 /* The ID of the "Approve" status */)
+        //        {
+        //            // Find the related Lab
+        //            var lab = _context.Labs.FirstOrDefault(l => l.Id == labUsageLog.LabId);
+
+        //            if (lab != null)
+        //            {
+        //                // Find the "Active" status from the StatusLab table
+        //                var activeStatus = _context.StatusLabs
+        //                    .FirstOrDefault(s => s.StatusName == "Active");
+
+        //                if (activeStatus != null)
+        //                {
+        //                    // Update the Lab's status to "Active"
+        //                    lab.StatusLabId = activeStatus.Id;
+        //                }
+        //            }
+        //        }
+
+        //        // Save changes to the database
+        //        try
+        //        {
+        //            _context.SaveChanges();
+        //            return Json(new { success = true, message = "Trạng thái đã được cập nhật." });
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            return Json(new { success = false, message = "Lỗi khi lưu dữ liệu: " + ex.Message });
+        //        }
+        //    }
+
+        //    return Json(new { success = false, message = "Không tìm thấy LabUsageLog." });
+        //}
+
+
+        [HttpPost]
+public JsonResult UpdateStatus(int id, int statusId)
+{
+    // Find the LabUsageLog by its ID
+    var labUsageLog = _context.LabUsageLogs
+        .FirstOrDefault(l => l.Id == id);
+
+    if (labUsageLog != null)
+    {
+        // Update the status of the LabUsageLog
+        labUsageLog.StatusLogId = statusId;
+
+        // Check if the status is "Approve" and update the related Lab's status
+        if (statusId == 2 /* The ID of the "Approve" status */)
+        {
+            // Find the related Lab
+            var lab = _context.Labs.FirstOrDefault(l => l.Id == labUsageLog.LabId);
+
+            if (lab != null)
+            {
+                // Find the "Active" status from the StatusLab table
+                var activeStatus = _context.StatusLabs
+                    .FirstOrDefault(s => s.StatusName == "Active");
+
+                if (activeStatus != null)
+                {
+                    // Update the Lab's status to "Active"
+                    lab.StatusLabId = activeStatus.Id;
+                }
+            }
+        }
+
+        // Check if EndTime has passed and update Lab status to "Inactive"
+        if (labUsageLog.EndTime <= DateTime.Now)
+        {
+            // Find the related Lab
+            var lab = _context.Labs.FirstOrDefault(l => l.Id == labUsageLog.LabId);
+
+            if (lab != null)
+            {
+                // Find the "Inactive" status from the StatusLab table
+                var inactiveStatus = _context.StatusLabs
+                    .FirstOrDefault(s => s.StatusName == "Inactive");
+
+                if (inactiveStatus != null)
+                {
+                    // Update the Lab's status to "Inactive"
+                    lab.StatusLabId = inactiveStatus.Id;
+                }
+            }
+        }
+
+        // Save changes to the database
+        try
+        {
+            _context.SaveChanges();
+            return Json(new { success = true, message = "Trạng thái đã được cập nhật." });
+        }
+        catch (Exception ex)
+        {
+            return Json(new { success = false, message = "Lỗi khi lưu dữ liệu: " + ex.Message });
+        }
+    }
+
+    return Json(new { success = false, message = "Không tìm thấy LabUsageLog." });
+}
+
+
+
+
+
 
         // GET: Admin/LabUsageLog/Details/5
         [Route("Details")]
@@ -44,6 +179,7 @@ namespace eAdministrationLabs.Areas.Admin.Controllers
 
             var labUsageLog = await _context.LabUsageLogs
                 .Include(l => l.Lab)
+                .Include(l => l.StatusLog)
                 .Include(l => l.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (labUsageLog == null)
@@ -59,6 +195,7 @@ namespace eAdministrationLabs.Areas.Admin.Controllers
         public IActionResult Create()
         {
             ViewData["LabId"] = new SelectList(_context.Labs, "Id", "Id");
+            ViewData["StatusLogId"] = new SelectList(_context.StatusLogs, "Id", "Id");
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id");
             return View();
         }
@@ -69,7 +206,7 @@ namespace eAdministrationLabs.Areas.Admin.Controllers
         [Route("Create")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,LabId,UserId,Purpose,StartTime,EndTime,CreatedAt")] LabUsageLog labUsageLog)
+        public async Task<IActionResult> Create([Bind("Id,LabId,UserId,Purpose,StatusLogId,StartTime,EndTime,CreatedAt")] LabUsageLog labUsageLog)
         {
             if (ModelState.IsValid)
             {
@@ -78,6 +215,7 @@ namespace eAdministrationLabs.Areas.Admin.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["LabId"] = new SelectList(_context.Labs, "Id", "Id", labUsageLog.LabId);
+            ViewData["StatusLogId"] = new SelectList(_context.StatusLogs, "Id", "Id", labUsageLog.StatusLogId);
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", labUsageLog.UserId);
             return View(labUsageLog);
         }
@@ -97,6 +235,7 @@ namespace eAdministrationLabs.Areas.Admin.Controllers
                 return NotFound();
             }
             ViewData["LabId"] = new SelectList(_context.Labs, "Id", "Id", labUsageLog.LabId);
+            ViewData["StatusLogId"] = new SelectList(_context.StatusLogs, "Id", "Id", labUsageLog.StatusLogId);
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", labUsageLog.UserId);
             return View(labUsageLog);
         }
@@ -107,7 +246,7 @@ namespace eAdministrationLabs.Areas.Admin.Controllers
         [Route("Edit")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,LabId,UserId,Purpose,StartTime,EndTime,CreatedAt")] LabUsageLog labUsageLog)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,LabId,UserId,Purpose,StatusLogId,StartTime,EndTime,CreatedAt")] LabUsageLog labUsageLog)
         {
             if (id != labUsageLog.Id)
             {
@@ -135,6 +274,7 @@ namespace eAdministrationLabs.Areas.Admin.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["LabId"] = new SelectList(_context.Labs, "Id", "Id", labUsageLog.LabId);
+            ViewData["StatusLogId"] = new SelectList(_context.StatusLogs, "Id", "Id", labUsageLog.StatusLogId);
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", labUsageLog.UserId);
             return View(labUsageLog);
         }
@@ -150,6 +290,7 @@ namespace eAdministrationLabs.Areas.Admin.Controllers
 
             var labUsageLog = await _context.LabUsageLogs
                 .Include(l => l.Lab)
+                .Include(l => l.StatusLog)
                 .Include(l => l.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (labUsageLog == null)
@@ -162,7 +303,6 @@ namespace eAdministrationLabs.Areas.Admin.Controllers
 
         // POST: Admin/LabUsageLog/Delete/5
         [Route("Delete")]
-        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {

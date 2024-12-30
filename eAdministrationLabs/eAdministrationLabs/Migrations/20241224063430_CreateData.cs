@@ -67,6 +67,19 @@ namespace eAdministrationLabs.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "StatusLog",
+                columns: table => new
+                {
+                    StatusLogID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    StatusName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK__StatusLog__5E1E5E8CE4764C2F", x => x.StatusLogID);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "StatusRequests",
                 columns: table => new
                 {
@@ -189,6 +202,7 @@ namespace eAdministrationLabs.Migrations
                     LabID = table.Column<int>(type: "int", nullable: false),
                     UserID = table.Column<int>(type: "int", nullable: false),
                     Purpose = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    StatusLogID = table.Column<int>(type: "int", nullable: false),
                     StartTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     EndTime = table.Column<DateTime>(type: "datetime", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime", nullable: true, defaultValueSql: "(getdate())")
@@ -201,6 +215,12 @@ namespace eAdministrationLabs.Migrations
                         column: x => x.LabID,
                         principalTable: "Labs",
                         principalColumn: "LabID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK__LabUsageL__StatusLogID__59FA5E80",
+                        column: x => x.StatusLogID,
+                        principalTable: "StatusLog",
+                        principalColumn: "StatusLogID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK__LabUsageL__UserI__59063A47",
@@ -421,6 +441,11 @@ namespace eAdministrationLabs.Migrations
                 column: "LabID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_LabUsageLogs_StatusLogID",
+                table: "LabUsageLogs",
+                column: "StatusLogID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_LabUsageLogs_UserID",
                 table: "LabUsageLogs",
                 column: "UserID");
@@ -509,6 +534,9 @@ namespace eAdministrationLabs.Migrations
 
             migrationBuilder.DropTable(
                 name: "StatusRequests");
+
+            migrationBuilder.DropTable(
+                name: "StatusLog");
 
             migrationBuilder.DropTable(
                 name: "Users");

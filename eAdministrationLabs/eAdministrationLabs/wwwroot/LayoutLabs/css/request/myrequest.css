@@ -1,0 +1,27 @@
+﻿.container {
+    max-width: 1500px;
+}
+
+
+/* Chỉnh sửa màu sắc nền và chữ khi hover trên toàn bộ dropdown */
+#statusFilter {
+    position: relative;
+}
+
+    #statusFilter option {
+        background-color: #ffffff; /* Nền mặc định là trắng */
+        color: #495057; /* Màu chữ mặc định */
+    }
+
+        #statusFilter option:hover {
+            background-color: #6c757d; /* Nền xám khi hover */
+            color: #ffffff; /* Màu chữ trắng khi hover */
+        }
+
+body.main-layout {
+    background-color: currentcolor;
+}
+
+form {
+    background-color: darkgray;
+}

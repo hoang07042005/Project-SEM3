@@ -1,5 +1,6 @@
 ﻿@model List<eAdministrationLabs.Models.ViewModels.RequestViewModel>
 
+
 <link href="~/layoutlabs/css/bg_title.css" rel="stylesheet" />
 
 <div class="background-image">
@@ -20,8 +21,8 @@
                 <th scope="col">Status</th>
                 <th scope="col">Notes</th>
                 <th scope="col">Changed By</th>
-                <th scope="col">Created At</th>
                 <th scope="col">Image</th>
+                <th scope="col">Created At</th>
             </tr>
         </thead>
         <tbody>
@@ -34,15 +35,20 @@
                         <td>@request.LabName</td>
                         <td>@request.EquipmentName</td>
 
-                        <td>
-                            <select class="form-control status-select" data-id="@request.Id" data-current-status="@request.StatusName">
-                                @foreach (var status in ViewBag.StatusOptions)
-                                {
-                                    <option value="@status.Id" selected="@(status.StatusName == request.StatusName)">
-                                        @status.StatusName
-                                    </option>
-                                }
-                            </select>
+                        <td style="max-width:180px;">
+                            <div style="display: flex; align-items: center;">
+                                <select class="form-control status-select" data-id="@request.Id" data-current-status="@request.StatusName" onchange="handleStatusChange(this)" style="width: 150px;">
+                                    @foreach (var status in ViewBag.StatusOptions)
+                                    {
+                                        <option value="@status.Id" selected="@(status.StatusName == request.StatusName)">
+                                            @status.StatusName
+                                        </option>
+                                    }
+                                </select>
+                                <button type="button" class="btn btn-success checkmark-btn" style="display:none; margin-left: 10px;" onclick="redirectToCompletionDetails(@request.Id)">
+                                    <i class="fa fa-check"></i>
+                                </button>
+                            </div>
                         </td>
 
                         <td title="@request.Notes">
@@ -56,7 +62,7 @@
                             }
                         </td>
                         <td>@request.ChangedBy</td>
-                        <td>@request.CreatedAt.ToString("dd/MM/yyyy")</td>
+                     
                         
                         <td>
                                 @if (!string.IsNullOrEmpty(request.ImageBase64))
@@ -68,7 +74,8 @@
                                 <span class="text-muted">No image</span>
                                 }
                         </td>
-                        
+
+                        <td>@request.CreatedAt.ToString("dd/MM/yyyy")</td>
                     </tr>
                 }
             }
@@ -107,6 +114,26 @@
         });
     </script>
 
+
+    <script>
+        function handleStatusChange(selectElement) {
+            var selectedStatusName = selectElement.options[selectElement.selectedIndex].text;
+            var requestId = $(selectElement).data('id');
+
+            // If status is "Complete", show the checkmark button
+            if (selectedStatusName === "Complete") {
+                $('.checkmark-btn').show();  // Show the checkmark button
+            } else {
+                $('.checkmark-btn').hide();  // Hide the checkmark button
+            }
+        }
+
+        // Redirect to the CompletionDetails page when the checkmark is clicked
+        function redirectToCompletionDetails(requestId) {
+            window.location.href = '/Request/CreateCompletion/' + requestId;
+        }
+    </script>
+
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const selects = document.querySelectorAll('.status-select');
@@ -121,16 +148,53 @@
                     "In Progress": ["Complete"]
                 };
 
-                // Get the allowed statuses for the current status
-                const allowedStatuses = allowedTransitions[currentStatus] || [];
+                // Initialize options based on current status
+                updateSelectOptions(select, currentStatus, allowedTransitions);
 
-                // Filter the options in the select dropdown
-                Array.from(select.options).forEach(option => {
-                    if (!allowedStatuses.includes(option.text)) {
-                        option.style.display = 'none'; // Hide options not allowed
+                // Check if the current status is 'Complete' to show the button
+                if (currentStatus === "Complete") {
+                    const checkmarkBtn = select.nextElementSibling;
+                    if (checkmarkBtn && checkmarkBtn.classList.contains('checkmark-btn')) {
+                        checkmarkBtn.style.display = 'inline-block';
                     }
-                });
+                }
             });
         });
+
+        function handleStatusChange(selectElement) {
+            const newStatus = selectElement.options[selectElement.selectedIndex].text;
+            const allowedTransitions = {
+                "Pending": ["Approved", "Reject"],
+                "Approved": ["In Progress"],
+                "In Progress": ["Complete"]
+            };
+
+            // Update the select options based on the new status
+            updateSelectOptions(selectElement, newStatus, allowedTransitions);
+
+            // Show/hide the 'Complete' button based on the new status
+            const checkmarkBtn = selectElement.nextElementSibling;
+            if (newStatus === "Complete") {
+                checkmarkBtn.style.display = 'inline-block';
+            } else {
+                checkmarkBtn.style.display = 'none';
+            }
+        }
+
+        function updateSelectOptions(select, currentStatus, allowedTransitions) {
+            const allowedStatuses = allowedTransitions[currentStatus] || [];
+
+            // Show/hide options based on allowed statuses
+            Array.from(select.options).forEach(option => {
+                if (allowedStatuses.includes(option.text) || option.text === currentStatus) {
+                    option.style.display = 'block'; // Show allowed options
+                } else {
+                    option.style.display = 'none'; // Hide not allowed options
+                }
+            });
+
+            // Update the data-current-status attribute
+            select.setAttribute('data-current-status', currentStatus);
+        }
     </script>
 }

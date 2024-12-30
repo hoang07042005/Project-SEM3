@@ -2,10 +2,11 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+
 using System.Security.Claims;
 using eAdministrationLabs.Models.ViewModels;
 using eAdministrationLabs.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace eAdministrationLabs.Controllers;
 

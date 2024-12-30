@@ -5,20 +5,38 @@
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<h1>Index</h1>
 
 <p class="text-end">
     <a asp-action="Create" class="btn btn-success">Create New</a>
 </p>
+
+<!-- Dropdown lọc trạng thái -->
+<form method="get" asp-action="Index">
+    <div class="row mb-3">
+        <div class="col-md-4">
+            <label for="statusFilter" class="form-label">Status</label>
+            <select class="form-select" id="statusFilter" name="statusFilter" onchange="this.form.submit()">
+                <option value="" class="text-center" selected="@(ViewBag.StatusFilter == null ? "selected" : null)">-- All --</option>
+                @foreach (var status in ViewBag.StatusOptions)
+                {
+                    <option value="@status.Id" selected="@(ViewBag.StatusFilter == status.Id ? "selected" : null)" style="text-align: center;">
+                        @status.StatusName
+                    </option>
+                }
+            </select>
+        </div>
+
+        <div class="col-md-4 d-flex align-items-end">
+            <button type="submit" class="btn btn-primary">Filter</button>
+        </div>
+    </div>
+</form>
+
+
+
 <table class="table" style=" border: 1px solid #e5e5e5;">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Lab)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.User)
-            </th>
             <th>
                 @Html.DisplayNameFor(model => model.Purpose)
             </th>
@@ -31,19 +49,21 @@
             <th>
                 @Html.DisplayNameFor(model => model.CreatedAt)
             </th>
-            
+            <th>
+                @Html.DisplayNameFor(model => model.Lab)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.User)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StatusLog)
+            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Lab.LabName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.User.FullName)
-            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Purpose)
             </td>
@@ -56,19 +76,72 @@
             <td>
                 @Html.DisplayFor(modelItem => item.CreatedAt)
             </td>
-            
             <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary btn-sm">
-                        <i class="fas fa-edit" style="font-size:1em;"></i>
-                    </a> |
-                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">
-                        <i class="fas fa-info-circle" style="font-size:1em;"></i>
-                    </a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">
-                        <i class="fas fa-trash-alt" style="font-size:1em;"></i>
-                    </a>
-                </td>
+                @Html.DisplayFor(modelItem => item.Lab.LabName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.User.FullName)
+            </td>
+            <td>
+                <select class="form-control status-dropdown" data-id="@item.Id">
+                    @foreach (var status in ViewBag.StatusOptions)
+                    {
+                        <option value="@status.Id" selected="@(item.StatusLogId == status.Id)">
+                            @status.StatusName
+                        </option>
+                    }
+                </select>
+            </td>
+
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary btn-sm">
+                    <i class="fas fa-edit" style="font-size:1em;"></i>
+                </a> |
+                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">
+                    <i class="fas fa-info-circle" style="font-size:1em;"></i>
+                </a> |
+                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">
+                    <i class="fas fa-trash-alt" style="font-size:1em;"></i>
+                </a>
+            </td>
         </tr>
 }
     </tbody>
 </table>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Handle change in status dropdown
+            $('.status-dropdown').change(function () {
+                var id = $(this).data('id');  // Get the LabUsageLog ID
+                var statusId = $(this).val();  // Get the selected status ID
+                var token = $('input[name="__RequestVerificationToken"]').val();
+                // Send the updated status to the server using AJAX
+                $.ajax({
+                    url: '@Url.Action("UpdateStatus", "LabUsageLog")', // The controller action URL
+                    type: 'POST',
+                    data: {
+                        id: id,
+                        statusId: statusId
+                    },
+                    success: function (response) {
+                        if (response.success) {
+                            alert('Status updated successfully!');
+
+                            // Find the selected option and mark it as selected
+                            var selectedOption = $(".status-dropdown[data-id='" + logId + "']").find("option[value='" + statusId + "']");
+                            selectedOption.prop("selected", true);
+                        } else {
+                            alert('Error updating status: ' + response.message);
+                        }
+                    },
+                    error: function () {
+                        alert('Error updating status.');
+                    }
+                });
+            });
+        });
+    </script>
+
+}

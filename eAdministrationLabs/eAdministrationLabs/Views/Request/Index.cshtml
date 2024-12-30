@@ -1,4 +1,4 @@
-﻿@* @model IEnumerable<eAdministrationLabs.Models.ViewModels.RequestViewModel> *@
+﻿@* 
 
 @using X.PagedList;
 @using X.PagedList.Mvc.Core;
@@ -39,7 +39,7 @@
                     <th>Notes</th>
                     <th>Created At</th>
                     <th>Image</th>
-                    @* <th>Actions</th> *@
+
                 </tr>
             </thead>
             <tbody>
@@ -129,4 +129,109 @@
 
         document.body.appendChild(modal);
     }
+</script> *@ 
+
+
+@using X.PagedList
+@using X.PagedList.Mvc.Core
+@model X.PagedList.IPagedList<eAdministrationLabs.Models.ViewModels.RequestViewModel>
+
+@{
+    ViewData["Title"] = "Request List";
+    Layout = "~/Views/Shared/_LayoutLabs.cshtml";
+}
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
+<link href="~/layoutlabs/css/bg_title.css" rel="stylesheet" />
+<link href="~/layoutlabs/css/request/requeslist.css" rel="stylesheet" />
+
+<div class="background-image">
+    <div class="content">
+        <h3>Request / View All Requests</h3>
+    </div>
+</div>
+
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <div class="d-flex justify-content-between">
+                <p>
+                    <a asp-action="Create" class="btn btn-dark">Add Request</a>
+                </p>
+                <input type="text" id="searchInput" class="form-control" placeholder="Search Requests..." style="max-width: 300px;">
+            </div>
+
+            @if (Model.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Lab Name</th>
+                                <th>Equipment</th>
+                                <th>User Name</th>
+                                <th>Status</th>
+                                <th>Changed By</th>
+                                <th>Notes</th>
+                                <th>Created At</th>
+                                <th>Image</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.Id</td>
+                                    <td>@item.LabName</td>
+                                    <td>@item.EquipmentName</td>
+                                    <td>@item.UserName</td>
+                                    <td>@item.StatusName</td>
+                                    <td>@item.ChangedBy</td>
+                                    <td>@item.Notes</td>
+                                    <td>@item.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                                    <td>
+                                        @if (!string.IsNullOrEmpty(item.ImageBase64))
+                                        {
+                                            <img src="data:image/png;base64,@item.ImageBase64" alt="Request Image" onclick="showImage(this)" />
+                                        }
+                                        else
+                                        {
+                                            <span>No Image</span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                <div class="pagination">
+                    @Html.PagedListPager(Model, page => Url.Action("Index", new { page }), new PagedListRenderOptions
+           {
+               LiElementClasses = new List<string> { "page-item" },
+               PageClasses = new List<string> { "page-link" }
+           })
+                </div>
+            }
+            else
+            {
+                <p class="text-muted text-center">No requests found. Click "Create New Request" to get started.</p>
+            }
+        </div>
+    </div>
+</div>
+
+<script>
+    // Search functionality for filtering the table rows based on input
+    document.getElementById('searchInput').addEventListener('input', function () {
+        var filter = this.value.toLowerCase();
+        var rows = document.querySelectorAll('.table tbody tr');
+
+        rows.forEach(function (row) {
+            var text = row.textContent.toLowerCase();
+            row.style.display = text.includes(filter) ? '' : 'none';
+        });
+    });
 </script>

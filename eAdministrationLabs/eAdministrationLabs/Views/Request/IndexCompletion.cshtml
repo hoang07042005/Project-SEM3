@@ -1,0 +1,40 @@
+﻿@model IEnumerable<eAdministrationLabs.Models.RequestCompletion>
+
+@{
+    ViewData["Title"] = "Index Completion";
+}
+
+<h2>Display Completion</h2>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>History Request ID</th>
+            <th>Completed By</th>
+            <th>Completion Time</th>
+            <th>Image</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.HistoryRequestId</td>
+                <td>@item.CompletedBy</td>
+                <td>@item.CompletionTime</td>
+                <td>
+                    @if (!string.IsNullOrEmpty(item.ImageBase64))
+                    {
+                        <img src="data:image/png;base64,@item.ImageBase64" alt="Completion Image" width="100" />
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div>
+    <a asp-action="Index" class="btn btn-primary">Back to List</a>
+</div>

@@ -35,6 +35,8 @@ namespace eAdministrationLabs.Areas.Admin.Controllers
         {
             // L?y t?ng s? User
             int totalUsers = _context.Users.Count();
+            int totalLabs = _context.Labs.Count();
+
 
             // L?y t?ng s? l??ng Request ?ã nh?n
             int totalRequests = _context.Requests.Count();
@@ -43,10 +45,15 @@ namespace eAdministrationLabs.Areas.Admin.Controllers
             int completedRequests = _context.HistoryRequests
                 .Count(hr => hr.StatusRequest.StatusName == "Complete");
 
+            int pendingRequests = _context.HistoryRequests
+                .Count(hr => hr.StatusRequest.StatusName == "Pending");
+
             // Truy?n d? li?u sang view
             ViewData["TotalUsers"] = totalUsers;
             ViewData["TotalRequests"] = totalRequests;
             ViewData["CompletedRequests"] = completedRequests;
+            ViewData["PendingRequests"] = pendingRequests;
+            ViewData["TotalClasses"] = totalLabs;
 
             return View();
         }

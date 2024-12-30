@@ -13,7 +13,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<EAdministrationLabsContext>(options =>
     options.UseSqlServer(connectionString));
 
-// Thêm b? nh? ??m và c?u hình session
+
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {
@@ -22,22 +22,25 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
-// ??ng ký EmailService
-builder.Services.AddTransient<EmailService>();
 
-// C?u hình tùy ch?n cho x? lý form
+builder.Services.AddTransient<EmailService>();
+builder.Services.AddHostedService<LabStatusUpdater>();
+
+
+
 builder.Services.Configure<FormOptions>(options =>
 {
-    options.MultipartBodyLengthLimit = 10 * 1024 * 1024; // 10MB
+    options.MultipartBodyLengthLimit = 10 * 1024 * 1024; 
 });
 
-// C?u hình xác th?c và phân quy?n
+
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
         options.LoginPath = "/Account/Login";
         options.AccessDeniedPath = "/Account/AccessDenied";
     });
+
 
 builder.Services.AddAuthorization(options =>
 {
@@ -47,7 +50,7 @@ builder.Services.AddAuthorization(options =>
 
 var app = builder.Build();
 
-// C?u hình pipeline x? lý HTTP request
+
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -57,12 +60,10 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseSession();
+app.UseAuthentication();
+app.UseAuthorization();
 
-// Middleware xác th?c và phân quy?n
-app.UseAuthentication(); // ??m b?o middleware authentication ch?y tr??c
-app.UseAuthorization();  // ??m b?o middleware authorization ch?y sau
 
-// ??nh tuy?n các controller
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
@@ -70,7 +71,7 @@ app.MapControllerRoute(
 app.MapControllerRoute(
     name: "admin",
     pattern: "admin/{controller=HomeAdmin}/{action=Index}/{id?}")
-    .RequireAuthorization("AdminOnly"); // Yêu c?u phân quy?n cho admin
+    .RequireAuthorization("AdminOnly");
 
-// Ch?y ?ng d?ng
+
 app.Run();

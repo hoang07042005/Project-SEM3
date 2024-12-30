@@ -25,7 +25,5 @@ public partial class Lab
 
     public virtual ICollection<Request> Requests { get; set; } = new List<Request>();
 
-    public virtual ICollection<Software> Softwares { get; set; } = new List<Software>();
-
     public virtual StatusLab StatusLab { get; set; } = null!;
 }

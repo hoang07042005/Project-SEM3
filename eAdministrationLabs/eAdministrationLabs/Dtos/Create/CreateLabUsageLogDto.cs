@@ -6,6 +6,8 @@
 
         public int UserId { get; set; }
 
+        public int StatusLogId { get; set; }
+
         public string Purpose { get; set; } = null!;
 
         public DateTime StartTime { get; set; }

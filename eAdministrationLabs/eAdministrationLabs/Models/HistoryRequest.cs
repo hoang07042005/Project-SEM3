@@ -21,6 +21,8 @@ public partial class HistoryRequest
 
     public virtual ICollection<Feedback> Feedbacks { get; set; } = new List<Feedback>();
 
+    public virtual ICollection<RequestCompletion> RequestCompletions { get; set; } = new List<RequestCompletion>();
+
     public virtual Request Request { get; set; } = null!;
 
     public virtual StatusRequest StatusRequest { get; set; } = null!;

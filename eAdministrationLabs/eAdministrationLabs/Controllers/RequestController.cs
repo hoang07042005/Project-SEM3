@@ -4,12 +4,13 @@ using Microsoft.AspNetCore.Hosting;
 using System.IO;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+
 using eAdministrationLabs.Models.ViewModels;
 using X.PagedList;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using eAdministrationLabs.Services;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace eAdministrationLabs.Controllers
@@ -20,13 +21,15 @@ namespace eAdministrationLabs.Controllers
         private readonly IWebHostEnvironment _hostingEnvironment;
         private readonly ILogger<RequestController> _logger;
         private readonly EmailService _emailService;
+        private readonly IWebHostEnvironment _env;
 
-        public RequestController(EAdministrationLabsContext context, IWebHostEnvironment hostingEnvironment, ILogger<RequestController> logger, EmailService emailService)
+        public RequestController(EAdministrationLabsContext context, IWebHostEnvironment hostingEnvironment, ILogger<RequestController> logger, EmailService emailService, IWebHostEnvironment env)
         {
             _context = context;
             _hostingEnvironment = hostingEnvironment;
             _logger = logger;
             _emailService = emailService;
+            _env = env;
         }
 
 
@@ -58,31 +61,87 @@ namespace eAdministrationLabs.Controllers
 
 
 
+        //public async Task<IActionResult> MyRequest(int? page, string statusFilter = "All")
+        //{
+
+        //    int pageSize = 3;
+        //    int pageNumber = page == null || page < 0 ? 1 : page.Value;
+
+        //    // Lấy thông tin tài khoản đang đăng nhập
+        //    var currentFullName = User.Identity?.Name;
+
+        //    // Lấy thông tin User ID
+        //    var currentUser = await _context.Users
+        //        .FirstOrDefaultAsync(u => u.FullName == currentFullName);
+
+        //    if (currentUser == null)
+        //    {
+        //        return RedirectToAction("Login", "Account"); // Nếu không tìm thấy tài khoản, chuyển hướng về đăng nhập
+        //    }
+
+        //    // Lấy danh sách tất cả requests của người dùng hiện tại
+        //    var myRequestsQuery = _context.Requests
+        //        .Where(r => r.HistoryRequests
+        //            .OrderByDescending(h => h.ChangedAt)
+        //            .FirstOrDefault().UserId == currentUser.Id);
+
+        //    // Áp dụng bộ lọc theo trạng thái
+        //    if (!string.IsNullOrEmpty(statusFilter) && statusFilter != "All")
+        //    {
+        //        myRequestsQuery = myRequestsQuery.Where(r => r.HistoryRequests
+        //            .OrderByDescending(h => h.ChangedAt)
+        //            .FirstOrDefault().StatusRequest.StatusName == statusFilter);
+        //    }
+
+        //    // Truy vấn và chuyển đổi sang ViewModel
+        //    var myRequests = await myRequestsQuery
+        //        .Select(r => new RequestViewModel
+        //        {
+        //            Id = r.Id,
+        //            LabName = r.Lab.LabName,
+        //            EquipmentName = r.Equipment != null ? r.Equipment.NameEquipment : "N/A",
+        //            StatusName = r.HistoryRequests.OrderByDescending(h => h.ChangedAt).FirstOrDefault().StatusRequest.StatusName,
+        //            Notes = r.HistoryRequests.OrderByDescending(h => h.ChangedAt).FirstOrDefault().Notes,
+        //            ImageBase64 = Convert.ToBase64String(r.Image.Image),
+        //            CreatedAt = r.CreatedAt ?? DateTime.MinValue
+        //        })
+        //        .ToListAsync();
+
+        //    // Truyền dữ liệu bộ lọc trạng thái đến View
+        //    ViewBag.StatusFilter = statusFilter;
+        //    ViewBag.AvailableStatuses = new List<string> { "All", "Pending", "Approved", "In Progress", "Complete", "Reject" };
+        //    PagedList<RequestViewModel> requestViewModels = new PagedList<RequestViewModel>(myRequests, pageNumber, pageSize);
+
+        //    return View(requestViewModels);
+        //}
+
+
         public async Task<IActionResult> MyRequest(int? page, string statusFilter = "All")
         {
-
             int pageSize = 3;
             int pageNumber = page == null || page < 0 ? 1 : page.Value;
 
-            // Lấy thông tin tài khoản đang đăng nhập
+            // Get the currently logged-in user's full name
             var currentFullName = User.Identity?.Name;
 
-            // Lấy thông tin User ID
+            // Get current user's information
             var currentUser = await _context.Users
+                .AsNoTracking()
                 .FirstOrDefaultAsync(u => u.FullName == currentFullName);
 
             if (currentUser == null)
             {
-                return RedirectToAction("Login", "Account"); // Nếu không tìm thấy tài khoản, chuyển hướng về đăng nhập
+                return RedirectToAction("Login", "Account"); // Redirect to login if user not found
             }
 
-            // Lấy danh sách tất cả requests của người dùng hiện tại
+            // Get the list of all requests from the current user
             var myRequestsQuery = _context.Requests
+                .AsNoTracking()
                 .Where(r => r.HistoryRequests
                     .OrderByDescending(h => h.ChangedAt)
                     .FirstOrDefault().UserId == currentUser.Id);
 
-            // Áp dụng bộ lọc theo trạng thái
+            // Apply status filter
             if (!string.IsNullOrEmpty(statusFilter) && statusFilter != "All")
             {
                 myRequestsQuery = myRequestsQuery.Where(r => r.HistoryRequests
@@ -90,8 +149,18 @@ namespace eAdministrationLabs.Controllers
                     .FirstOrDefault().StatusRequest.StatusName == statusFilter);
             }
 
-            // Truy vấn và chuyển đổi sang ViewModel
+            // Count total requests and rejected requests
+            int totalRequests = await myRequestsQuery.CountAsync();
+            int rejectedRequests = await myRequestsQuery
+                .CountAsync(r => r.HistoryRequests
+                    .OrderByDescending(h => h.ChangedAt)
+                    .FirstOrDefault().StatusRequest.StatusName == "Reject");
+
+            // Apply pagination and project to ViewModel
             var myRequests = await myRequestsQuery
+                .OrderBy(r => r.Id) // Ensure consistent ordering
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
                 .Select(r => new RequestViewModel
                 {
                     Id = r.Id,
@@ -104,9 +173,11 @@ namespace eAdministrationLabs.Controllers
                 })
                 .ToListAsync();
 
-            // Truyền dữ liệu bộ lọc trạng thái đến View
+            // Pass the status filter and available statuses to the view
             ViewBag.StatusFilter = statusFilter;
             ViewBag.AvailableStatuses = new List<string> { "All", "Pending", "Approved", "In Progress", "Complete", "Reject" };
+            ViewBag.TotalRequests = totalRequests;
+            ViewBag.RejectedRequests = rejectedRequests;
             PagedList<RequestViewModel> requestViewModels = new PagedList<RequestViewModel>(myRequests, pageNumber, pageSize);
 
             return View(requestViewModels);
@@ -397,16 +468,16 @@ namespace eAdministrationLabs.Controllers
         }
 
 
-        [Authorize] // Đảm bảo action chỉ truy cập được bởi người dùng đã đăng nhập
+        [Authorize]
         public async Task<IActionResult> GetRequestsByChangedBy()
         {
-           
+            // Pass the status options to the view
             ViewBag.StatusOptions = _context.StatusRequests.ToList();
-            
 
-            // Lấy tên đầy đủ của người dùng đang đăng nhập
-            var fullName = User.Identity?.Name;  // Trong trường hợp này, User.Identity.Name là tên đăng nhập của người dùng. Nếu bạn cần sử dụng tên đầy đủ, có thể lấy từ database hoặc thông qua claims.
+            // Get the full name of the currently logged-in user
+            var fullName = User.Identity?.Name;
 
+            // Check if the full name is null or empty
             if (string.IsNullOrEmpty(fullName))
             {
                 ModelState.AddModelError("", "Không thể xác định tên đầy đủ của tài khoản đang đăng nhập.");
@@ -415,7 +486,7 @@ namespace eAdministrationLabs.Controllers
 
             try
             {
-                // Lấy danh sách requests có ChangedBy trùng với tên đầy đủ của tài khoản đăng nhập
+                // Fetch the requests and their latest history, filter by ChangedBy, and map to RequestViewModel
                 var requests = await _context.Requests
                     .Select(r => new
                     {
@@ -436,11 +507,19 @@ namespace eAdministrationLabs.Controllers
                     })
                     .ToListAsync();
 
-                ViewData["ChangedBy"] = fullName; // Truyền tên đầy đủ vào View
-                return View(requests);
+                // Order the requests to prioritize "Pending" status
+                var orderedRequests = requests
+                    .OrderByDescending(r => r.StatusName == "Pending")
+                    .ThenBy(r => r.CreatedAt)
+                    .ToList();
+
+                // Pass the full name of the user who changed the requests to the view
+                ViewData["ChangedBy"] = fullName;
+                return View(orderedRequests);
             }
             catch (Exception ex)
             {
+                // Handle any exceptions that occur during data fetching
                 ModelState.AddModelError("", "Đã xảy ra lỗi khi tải dữ liệu.");
                 return View(new List<RequestViewModel>());
             }
@@ -696,6 +775,126 @@ namespace eAdministrationLabs.Controllers
                 return Json(new { success = false, message = "An unexpected error occurred." });
             }
         }
+
+
+        [HttpGet]
+        public IActionResult IndexCompletion()
+        {
+            var requestCompletions = _context.RequestCompletions
+                .Select(rc => new RequestCompletion
+                {
+                    Id = rc.Id,
+                    HistoryRequestId = rc.HistoryRequestId,
+                    CompletedBy = rc.CompletedBy,
+                    CompletionTime = rc.CompletionTime,
+                    ImageBase64 = rc.ImageBase64
+                })
+                .ToList();
+
+            return View(requestCompletions);
+        }
+
+        [HttpGet]
+        [Route("Request/CreateCompletion/{historyRequestId}")]
+        public IActionResult CreateCompletion(int historyRequestId)
+        {
+            var historyRequest = _context.HistoryRequests
+                .Include(h => h.Request)
+                .FirstOrDefault(h => h.Id == historyRequestId);
+
+            if (historyRequest == null || historyRequest.Request == null)
+            {
+                return NotFound();
+            }
+
+            var request = historyRequest.Request;
+            var lab = _context.Labs.FirstOrDefault(l => l.Id == request.LabId);
+            var equipment = _context.Equipments.FirstOrDefault(e => e.Id == request.EquipmentId);
+
+
+            var viewModel = new CompletionViewModel
+            {
+                HistoryRequestId = historyRequestId,
+                LabName = lab?.LabName,
+                NameEquipment = equipment?.NameEquipment,
+            };
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateCompletion(CompletionViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                // Kiểm tra lỗi trong ModelState và trả về thông báo
+                var errors = string.Join(", ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));
+                ModelState.AddModelError("", "Model validation failed: " + errors);
+                return View(model); // Trả về view với lỗi
+            }
+
+            var historyRequest = _context.HistoryRequests
+                .Include(h => h.Request)
+                .FirstOrDefault(h => h.Id == model.HistoryRequestId);
+
+            if (historyRequest == null || historyRequest.Request == null)
+            {
+                ModelState.AddModelError("", "Không tìm thấy HistoryRequest.");
+                return View(model); // Kiểm tra xem có bị null không.
+            }
+
+            // Tiến hành lưu file (nếu có)
+            string filePath = null;
+            if (model.ImageFile != null && model.ImageFile.Length > 0)
+            {
+                try
+                {
+                    var fileName = Guid.NewGuid().ToString() + Path.GetExtension(model.ImageFile.FileName);
+                    var uploadsFolder = Path.Combine(_env.WebRootPath, "uploads");
+
+                    if (!Directory.Exists(uploadsFolder))
+                    {
+                        Directory.CreateDirectory(uploadsFolder);
+                    }
+
+                    filePath = Path.Combine(uploadsFolder, fileName);
+
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await model.ImageFile.CopyToAsync(fileStream);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("ImageFile", "Lỗi tải lên tệp: " + ex.Message);
+                    return View(model); // Trả về view nếu có lỗi tải file.
+                }
+            }
+
+            var requestCompletion = new RequestCompletion
+            {
+                HistoryRequestId = model.HistoryRequestId,
+                CompletedBy = User.Identity.Name,
+                CompletionTime = DateTime.Now, // Hoặc có thể lấy từ thời gian người dùng đã chọn
+                ImageBase64 = filePath != null ? Convert.ToBase64String(System.IO.File.ReadAllBytes(filePath)) : null, // Lưu hình ảnh dưới dạng base64
+            };
+
+            try
+            {
+                _context.RequestCompletions.Add(requestCompletion);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("GetRequestsByChangedBy"); // Thành công, chuyển hướng.
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", "Lỗi khi lưu dữ liệu: " + ex.Message);
+                return View(model); // Xử lý lỗi.
+            }
+        }
+
+
+
 
 
     }

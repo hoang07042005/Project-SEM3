@@ -14,6 +14,7 @@ using Microsoft.Build.Framework;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Diagnostics;
 using System.Numerics;
+using Microsoft.CodeAnalysis.Scripting;
 
 
 namespace eAdministrationLabs.Areas.Admin.Controllers
@@ -48,17 +49,24 @@ namespace eAdministrationLabs.Areas.Admin.Controllers
                 .Include(h => h.StatusRequest)
                 .Include(h => h.User);
 
-            // Filter by "Changed By"
+            // Nếu không có bộ lọc trạng thái nào được chọn, mặc định chỉ hiển thị trạng thái "Pending"
+            if (!statusFilter.HasValue)
+            {
+                statusFilter = 1; // 1 là ID của trạng thái Pending
+            }
+
+            // Lọc theo trạng thái
+            eAdministrationLabsContext = eAdministrationLabsContext.Where(h => h.StatusRequestId == statusFilter);
+
+            // Lọc theo "Changed By"
             if (!string.IsNullOrEmpty(changedByFilter))
             {
                 eAdministrationLabsContext = eAdministrationLabsContext.Where(h => h.ChangedBy.Contains(changedByFilter.Trim()));
             }
 
-            // Filter by status
-            if (statusFilter.HasValue)
-            {
-                eAdministrationLabsContext = eAdministrationLabsContext.Where(h => h.StatusRequestId == statusFilter.Value);
-            }
+            eAdministrationLabsContext = eAdministrationLabsContext
+                .OrderBy(h => h.StatusRequestId != 1) // Ưu tiên trạng thái Pending nếu có
+                .ThenByDescending(h => h.ChangedAt);
 
             var statusOptions = await _context.StatusRequests.ToListAsync();
             var technicalStaffUsers = await _context.Users
@@ -67,7 +75,7 @@ namespace eAdministrationLabs.Areas.Admin.Controllers
 
             // Pass filter values to the ViewBag
             ViewBag.ChangedByFilter = changedByFilter;
-            ViewBag.StatusFilter = statusFilter;
+            ViewBag.StatusFilter = statusFilter; // Gửi trạng thái đang được lọc để hiển thị lại trên giao diện
             ViewBag.TechnicalStaffUsers = technicalStaffUsers;
             ViewBag.StatusOptions = statusOptions;
 
@@ -83,6 +91,11 @@ namespace eAdministrationLabs.Areas.Admin.Controllers
                 // Kiểm tra HistoryRequest
                 var historyRequest = await _context.HistoryRequests
                     .Include(h => h.Request)
+                    .ThenInclude(r => r.Equipment)
+                    .Include(h => h.Request)
+                    .ThenInclude(r => r.Lab)
+                    .Include(h => h.Request)
+                    .ThenInclude(r => r.Image)
                     .Include(h => h.User)
                     .FirstOrDefaultAsync(h => h.Id == id);
 
@@ -118,7 +131,7 @@ namespace eAdministrationLabs.Areas.Admin.Controllers
                         await _context.SaveChangesAsync();
 
                         // Gửi email thông báo
-                        await SendStatusEmail(newUser, "Assigned to Request Update", historyRequest.RequestId);
+                        await SendStatusEmail(newUser, "Assigned to Request Update", historyRequest.RequestId, historyRequest.Request.Lab.LabName, historyRequest.Request.Equipment.NameEquipment, historyRequest.Notes, historyRequest.Request.Image.Image);
 
                         await transaction.CommitAsync();
 
@@ -141,7 +154,7 @@ namespace eAdministrationLabs.Areas.Admin.Controllers
         }
 
 
-        private async Task SendStatusEmail(User user, string statusName, int requestId)
+        private async Task SendStatusEmail(User user, string statusName, int requestId, string labName, string nameEquipment, string notes, byte[] imageBytes)
         {
             string subject = string.Empty;
             string body = string.Empty;
@@ -214,14 +227,19 @@ namespace eAdministrationLabs.Areas.Admin.Controllers
         </body>
         </html>";
             }
-
+            string imageBase64 = imageBytes != null ? Convert.ToBase64String(imageBytes) : null;
             // Dựa trên statusName, tạo nội dung email và subject
             if (statusName == "Assigned to Request Update")
             {
                 subject = "You have been assigned to a request update";
-                body = $"{GetEmailBodyHeader(statusName)}<p>You have been assigned to handle the update for request (ID: {requestId}).</p>< p > Please check your tasks and ensure the request is processed promptly.</ p >{ GetEmailBodyFooter()}";
-
+                body = $"{GetEmailBodyHeader(statusName)}<p>You have been assigned to handle the update for request (ID: {requestId}).</p><p>Lab Name: {labName}</p><p>Equipment Name: {nameEquipment}</p><p>Notes: {notes}</p>";
+                if (!string.IsNullOrEmpty(imageBase64))
+                {
+                    body += $"<img src='data:image/png;base64,{imageBase64}' style='max-width:100px; max-height:100px;' alt='Request Image' />";
+                }
+                body += $"<p> Please check your tasks and ensure the request is processed promptly.</p>{GetEmailBodyFooter()}";
             }
+       
             else if (statusName == "Approved" || statusName == "In Progress" || statusName == "Complete")
             {
                 subject = $"Your request has been {statusName}";
@@ -239,9 +257,6 @@ namespace eAdministrationLabs.Areas.Admin.Controllers
                 await _emailService.SendEmailAsync(user.Email, subject, body);
             }
         }
-
-
-
 
 
 
