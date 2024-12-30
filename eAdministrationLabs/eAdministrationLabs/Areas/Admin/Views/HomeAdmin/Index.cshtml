@@ -51,17 +51,9 @@
     @ViewData["PendingRequests"],
     @ViewData["TotalClasses"]
         ];
-
-        // Tính phần trăm thay đổi
-        const percentChanges = data.map((value, index, array) => {
-            if (index === 0) return 0; // Không có thay đổi cho giá trị đầu tiên
-            return (((value - array[index - 1]) / array[index - 1]) * 100).toFixed(2); // Tính % thay đổi
-        });
-
         const ctx = document.getElementById('myChart').getContext('2d');
         new Chart(ctx, {
-            type: 'line',
-            data: {
+            type: 'line', 
                 labels: ['Total Users', 'Total Requests', 'Completed Requests', 'Pending Requests', 'Total Classes'],
                 datasets: [{
                     label: 'Statistics',
@@ -81,23 +73,13 @@
                     legend: {
                         display: true,
                         position: 'top'
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function (context) {
-                                const index = context.dataIndex;
-                                const value = context.raw;
-                                const percentChange = percentChanges[index];
-                                return `${context.dataset.label}: ${value} (${percentChange}% change)`;
-                            }
-                        }
                     }
                 },
                 scales: {
                     x: {
                         title: {
                             display: true,
-                            text: 'Chart',
+                            text: ' Chart',
                             font: {
                                 size: 14,
                                 weight: 'bold'
@@ -115,10 +97,10 @@
                             }
                         },
                         ticks: {
-                            callback: function (value) {
-                                return Math.floor(value); // Bỏ phần thập phân
+                            callback: function(value) {
+                                return Math.floor(value); 
                             },
-                            stepSize: 1
+                            stepSize: 1 
                         }
                     }
                 }

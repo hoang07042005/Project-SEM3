@@ -74,68 +74,6 @@ public class AccountController : Controller
 
     [HttpGet]
     public IActionResult Login() => View();
-
-
-
-    //[HttpPost]
-    //public async Task<IActionResult> Login(LoginViewModel model)
-    //{
-    //    if (ModelState.IsValid)
-    //    {
-    //        // Kiểm tra người dùng có trong cơ sở dữ liệu không
-    //        var user = await _context.Users
-    //            .Include(u => u.UserRoles)
-    //            .ThenInclude(ur => ur.Role)
-    //            .FirstOrDefaultAsync(u => u.Email == model.Email);
-    //        if (user != null && BCrypt.Net.BCrypt.Verify(model.Password, user.Password))
-    //        {
-    //            // Tạo Claims cho người dùng
-    //            var claims = new List<Claim>
-    //                {
-    //                    new Claim(ClaimTypes.Name, user.FullName),
-    //                    new Claim(ClaimTypes.Email, user.Email),
-    //                };
-
-    //            // Lấy danh sách các role của người dùng
-    //            var roles = user.UserRoles.Select(ur => ur.Role.RoleName).ToList();
-
-    //            // Thêm Claims cho các role
-    //            foreach (var role in roles)
-    //            {
-    //                claims.Add(new Claim(ClaimTypes.Role, role));
-    //            }
-
-    //            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-    //            var authProperties = new AuthenticationProperties
-    //            {
-    //                IsPersistent = true, // Duy trì session đăng nhập
-    //            };
-
-    //            // Đăng nhập người dùng và lưu vào cookie
-    //            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
-    //            HttpContext.Session.SetString("FullName", user.FullName);
-    //            HttpContext.Session.SetInt32("UserID", user.Id);
-    //            HttpContext.Session.SetString("Roles", string.Join(",", roles));
-
-    //            if (roles.Contains("administrator"))
-    //            {
-    //                return RedirectToAction("Index", "HomeAdmin", new { area = "Admin" });
-    //            }
-    //            else if (roles.Contains("students") || roles.Contains("technicalstaff"))
-    //            {
-    //                return RedirectToAction("Index", "Home");
-    //            }
-
-    //        }
-
-    //        // Nếu đăng nhập thất bại
-    //        ModelState.AddModelError("", "Invalid login attempt.");
-    //    }
-
-    //    return View(model);
-    //}
-
-
     [HttpPost]
     public async Task<IActionResult> Login(LoginViewModel model)
     {
@@ -150,10 +88,10 @@ public class AccountController : Controller
             {
                 // Tạo Claims cho người dùng
                 var claims = new List<Claim>
-                {
-                    new Claim(ClaimTypes.Name, user.FullName),
-                    new Claim(ClaimTypes.Email, user.Email),
-                };
+            {
+                new Claim(ClaimTypes.Name, user.FullName),
+                new Claim(ClaimTypes.Email, user.Email),
+            };
 
                 var roles = user.UserRoles.Select(ur => ur.Role.RoleName).ToList();
                 foreach (var role in roles)
@@ -172,7 +110,7 @@ public class AccountController : Controller
                 // Lưu vào cookie và session
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
                 HttpContext.Session.SetString("FullName", user.FullName);
-                HttpContext.Session.SetInt32("UserID", user.Id);
+                HttpContext.Session.SetInt32("User ID", user.Id);
                 HttpContext.Session.SetString("Roles", string.Join(",", roles));
 
                 // Tạo cookie riêng biệt cho phiên làm việc của trình duyệt bình thường
@@ -182,6 +120,7 @@ public class AccountController : Controller
                     HttpOnly = true,  // Bảo mật cookie
                 });
 
+                // Chuyển hướng người dùng dựa trên vai trò
                 if (roles.Contains("administrator"))
                 {
                     return RedirectToAction("Index", "HomeAdmin", new { area = "Admin" });
@@ -191,10 +130,14 @@ public class AccountController : Controller
                     return RedirectToAction("Index", "Home");
                 }
             }
-
-            ModelState.AddModelError("", "Invalid login attempt.");
+            else
+            {
+                // Thêm thông báo lỗi chung
+                ModelState.AddModelError("", "Error password or account.");
+            }
         }
 
+        // Nếu có lỗi, trả về view với model để hiển thị thông báo lỗi
         return View(model);
     }
 
