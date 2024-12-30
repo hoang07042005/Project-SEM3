@@ -3,11 +3,15 @@
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<h1 class="mb-4 text-center">Admin Dashboard</h1>
+<div class="text-center mb-4">
+    <h1 class="dashboard-title">Admin Dashboard</h1>
+    <p class="dashboard-subtitle">Welcome to the administration panel. Manage everything efficiently!</p>
+</div>
 
 
 
-<div class="row g-4">
+
+<div class="row g-3 justify-content-center">
     @foreach (var card in new[] {
     new { Title = "Total Users", Count = ViewData["TotalUsers"], BgColor = "bg-info", Icon = "fas fa-users" },
     new { Title = "Total Requests", Count = ViewData["TotalRequests"], BgColor = "bg-secondary", Icon = "fas fa-file-alt" },
@@ -16,8 +20,8 @@
     new { Title = "Total Classes", Count = ViewData["TotalClasses"], BgColor = "bg-dark", Icon = "fas fa-chalkboard-teacher" }
     })
     {
-        <div class="col-md-2">
-            <div class="card text-white @card.BgColor">
+        <div class="col-12 col-sm-6 col-md-4 col-lg-2 d-flex">
+            <div class="card text-white @card.BgColor w-100">
                 <div class="card-body d-flex align-items-center">
                     <i class="@card.Icon fa-2x me-3"></i>
                     <div>
@@ -36,6 +40,7 @@
     </div>
 </div>
 
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
@@ -45,42 +50,84 @@
     @ViewData["CompletedRequests"],
     @ViewData["PendingRequests"],
     @ViewData["TotalClasses"]
-            ];
+        ];
+
+        // Tính phần trăm thay đổi
+        const percentChanges = data.map((value, index, array) => {
+            if (index === 0) return 0; // Không có thay đổi cho giá trị đầu tiên
+            return (((value - array[index - 1]) / array[index - 1]) * 100).toFixed(2); // Tính % thay đổi
+        });
+
         const ctx = document.getElementById('myChart').getContext('2d');
         new Chart(ctx, {
-            type: 'bar',
+            type: 'line',
             data: {
                 labels: ['Total Users', 'Total Requests', 'Completed Requests', 'Pending Requests', 'Total Classes'],
                 datasets: [{
                     label: 'Statistics',
                     data: data,
-                    backgroundColor: [
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(153, 102, 255, 0.2)'
-                    ],
-                    borderColor: [
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(153, 102, 255, 1)'
-                    ],
-                    borderWidth: 1
+                    fill: false,
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    tension: 0.3,
+                    pointBackgroundColor: 'rgba(75, 192, 192, 1)',
+                    pointBorderColor: '#fff',
+                    pointRadius: 5
                 }]
             },
             options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function (context) {
+                                const index = context.dataIndex;
+                                const value = context.raw;
+                                const percentChange = percentChanges[index];
+                                return `${context.dataset.label}: ${value} (${percentChange}% change)`;
+                            }
+                        }
+                    }
+                },
                 scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Chart',
+                            font: {
+                                size: 14,
+                                weight: 'bold'
+                            }
+                        }
+                    },
                     y: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Values',
+                            font: {
+                                size: 14,
+                                weight: 'bold'
+                            }
+                        },
+                        ticks: {
+                            callback: function (value) {
+                                return Math.floor(value); // Bỏ phần thập phân
+                            },
+                            stepSize: 1
+                        }
                     }
                 }
             }
         });
     });
 </script>
+
+
 
 <style>
     body {
@@ -95,4 +142,21 @@
     .alert {
         margin-bottom: 20px;
     }
+
+
+    .dashboard-title {
+        font-size: 3rem; /* Tăng kích thước chữ */
+        font-weight: bold; /* Làm chữ đậm */
+        color: #343a40; /* Màu chữ đậm */
+        text-transform: uppercase; /* Viết hoa tất cả */
+        letter-spacing: 2px; /* Tạo khoảng cách giữa các chữ */
+        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); /* Đổ bóng chữ */
+    }
+
+    .dashboard-subtitle {
+        font-size: 1.2rem; /* Kích thước nhỏ hơn */
+        color: #6c757d; /* Màu xám nhạt */
+        margin-top: 10px; /* Thêm khoảng cách phía trên */
+    }
+
 </style>

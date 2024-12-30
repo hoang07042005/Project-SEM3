@@ -12,8 +12,8 @@ using eAdministrationLabs.Models;
 namespace eAdministrationLabs.Migrations
 {
     [DbContext(typeof(EAdministrationLabsContext))]
-    [Migration("20241229074422_DeleteSoftwares")]
-    partial class DeleteSoftwares
+    [Migration("20241230144157_CreateData")]
+    partial class CreateData
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -42,17 +42,12 @@ namespace eAdministrationLabs.Migrations
                         .HasColumnType("int")
                         .HasColumnName("LabID");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id")
                         .HasName("PK__EquiLabs__80AC09910675DFE1");
 
                     b.HasIndex("EquipmentId");
 
                     b.HasIndex("LabId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("EquiLabs");
                 });
@@ -608,10 +603,6 @@ namespace eAdministrationLabs.Migrations
                         .IsRequired()
                         .HasConstraintName("FK__EquiLabs__LabID__4CA06362");
 
-                    b.HasOne("eAdministrationLabs.Models.User", null)
-                        .WithMany("EquiLabs")
-                        .HasForeignKey("UserId");
-
                     b.Navigation("Equipment");
 
                     b.Navigation("Lab");
@@ -851,8 +842,6 @@ namespace eAdministrationLabs.Migrations
 
             modelBuilder.Entity("eAdministrationLabs.Models.User", b =>
                 {
-                    b.Navigation("EquiLabs");
-
                     b.Navigation("Feedbacks");
 
                     b.Navigation("HistoryRequests");

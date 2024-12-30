@@ -67,7 +67,7 @@ namespace eAdministrationLabs.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "StatusLog",
+                name: "StatusLogs",
                 columns: table => new
                 {
                     StatusLogID = table.Column<int>(type: "int", nullable: false)
@@ -168,17 +168,11 @@ namespace eAdministrationLabs.Migrations
                     EquiLabID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     EquipmentID = table.Column<int>(type: "int", nullable: false),
-                    LabID = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: true)
+                    LabID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK__EquiLabs__80AC09910675DFE1", x => x.EquiLabID);
-                    table.ForeignKey(
-                        name: "FK_EquiLabs_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "UserID");
                     table.ForeignKey(
                         name: "FK__EquiLabs__Equipm__4BAC3F29",
                         column: x => x.EquipmentID,
@@ -219,7 +213,7 @@ namespace eAdministrationLabs.Migrations
                     table.ForeignKey(
                         name: "FK__LabUsageL__StatusLogID__59FA5E80",
                         column: x => x.StatusLogID,
-                        principalTable: "StatusLog",
+                        principalTable: "StatusLogs",
                         principalColumn: "StatusLogID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -258,30 +252,6 @@ namespace eAdministrationLabs.Migrations
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK__Requests__LabID__619B8048",
-                        column: x => x.LabID,
-                        principalTable: "Labs",
-                        principalColumn: "LabID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Softwares",
-                columns: table => new
-                {
-                    SoftwareID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Version = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    License = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true, defaultValue: "Free"),
-                    LabID = table.Column<int>(type: "int", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime", nullable: true, defaultValueSql: "(getdate())"),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime", nullable: true, defaultValueSql: "(getdate())")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK__Software__25EDB8DCBF9069AC", x => x.SoftwareID);
-                    table.ForeignKey(
-                        name: "FK__Softwares__LabID__5441852A",
                         column: x => x.LabID,
                         principalTable: "Labs",
                         principalColumn: "LabID",
@@ -390,6 +360,28 @@ namespace eAdministrationLabs.Migrations
                         principalColumn: "UserID");
                 });
 
+            migrationBuilder.CreateTable(
+                name: "RequestCompletions",
+                columns: table => new
+                {
+                    CompletionID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    HistoryRequestID = table.Column<int>(type: "int", nullable: false),
+                    CompletionTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CompletedBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    ImageBase64 = table.Column<string>(type: "nvarchar(max)", maxLength: 2147483647, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK__RequestCompletion__33A8519A00162311", x => x.CompletionID);
+                    table.ForeignKey(
+                        name: "FK_RequestCompletions_HistoryRequests_HistoryRequestID",
+                        column: x => x.HistoryRequestID,
+                        principalTable: "HistoryRequests",
+                        principalColumn: "HistoryID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_EquiLabs_EquipmentID",
                 table: "EquiLabs",
@@ -399,11 +391,6 @@ namespace eAdministrationLabs.Migrations
                 name: "IX_EquiLabs_LabID",
                 table: "EquiLabs",
                 column: "LabID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_EquiLabs_UserId",
-                table: "EquiLabs",
-                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Feedbacks_RequestID",
@@ -466,6 +453,11 @@ namespace eAdministrationLabs.Migrations
                 column: "UserID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_RequestCompletions_HistoryRequestID",
+                table: "RequestCompletions",
+                column: "HistoryRequestID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Requests_EquipmentID",
                 table: "Requests",
                 column: "EquipmentID");
@@ -478,11 +470,6 @@ namespace eAdministrationLabs.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Requests_LabID",
                 table: "Requests",
-                column: "LabID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Softwares_LabID",
-                table: "Softwares",
                 column: "LabID");
 
             migrationBuilder.CreateIndex(
@@ -515,28 +502,28 @@ namespace eAdministrationLabs.Migrations
                 name: "Notifications");
 
             migrationBuilder.DropTable(
-                name: "Softwares");
+                name: "RequestCompletions");
 
             migrationBuilder.DropTable(
                 name: "UserRoles");
 
             migrationBuilder.DropTable(
-                name: "HistoryRequests");
-
-            migrationBuilder.DropTable(
                 name: "LabUsageLogs");
 
             migrationBuilder.DropTable(
+                name: "HistoryRequests");
+
+            migrationBuilder.DropTable(
                 name: "Roles");
+
+            migrationBuilder.DropTable(
+                name: "StatusLogs");
 
             migrationBuilder.DropTable(
                 name: "Requests");
 
             migrationBuilder.DropTable(
                 name: "StatusRequests");
-
-            migrationBuilder.DropTable(
-                name: "StatusLog");
 
             migrationBuilder.DropTable(
                 name: "Users");
