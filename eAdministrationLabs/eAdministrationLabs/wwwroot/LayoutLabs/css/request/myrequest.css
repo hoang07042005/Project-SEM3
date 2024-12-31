@@ -17,9 +17,10 @@
             background-color: #6c757d; /* Nền xám khi hover */
             color: #ffffff; /* Màu chữ trắng khi hover */
         }
+
 body.main-layout {
-    background-color: currentcolor;
+    background-color: darkgray !important;
 }
-form {
-    background-color: darkgray;
+.form {
+    background-color: currentcolor !important;
 }

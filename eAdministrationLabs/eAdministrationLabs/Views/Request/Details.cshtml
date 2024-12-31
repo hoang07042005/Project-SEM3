@@ -7,6 +7,7 @@
 
 <link href="~/layoutlabs/css/bg_title.css" rel="stylesheet" />
 <link href="~/layoutlabs/css/request/requestdetail.css" rel="stylesheet" />
+
 <div class="background-image">
     <div class="content">
         <h3>Request / Details</h3>
@@ -14,76 +15,80 @@
 </div>
 
 <div class="container mt-5">
-    <div class="card shadow-sm" style="background-color: #f7f7f7; border-radius: 10px;">
-        <div class="card-header text-white text-center" style="background-color: #343a40;">
-            <h4 class="custom-title mb-0">Request Details</h4>
-        </div>
+    <div class="card shadow-lg detail-card">
+        
+
+        <!-- Body -->
         <div class="card-body">
-            <div class="row text-center">
+            <div class="row g-4 text-center">
                 <!-- Lab Name -->
-                <div class="col-md-4 mb-3">
+                <div class="col-md-4">
                     <div class="detail-item">
-                        <i class="fas fa-flask text-primary mb-2" style="font-size: 24px;"></i>
-                        <h6 class="font-weight-bold">Lab Name</h6>
+                        <i class="fas fa-flask detail-icon text-primary"></i>
+                        <h6>Lab Name</h6>
                         <p>@Model.LabName</p>
                     </div>
                 </div>
                 <!-- Equipment Name -->
-                <div class="col-md-4 mb-3">
+                <div class="col-md-4">
                     <div class="detail-item">
-                        <i class="fas fa-tools text-info mb-2" style="font-size: 24px;"></i>
-                        <h6 class="font-weight-bold">Equipment Name</h6>
+                        <i class="fas fa-tools detail-icon text-info"></i>
+                        <h6>Equipment Name</h6>
                         <p>@Model.EquipmentName</p>
                     </div>
                 </div>
                 <!-- Status -->
-                <div class="col-md-4 mb-3">
+                <div class="col-md-4">
                     <div class="detail-item">
-                        <i class="fas fa-clipboard-check text-success mb-2" style="font-size: 24px;"></i>
-                        <h6 class="font-weight-bold">Status</h6>
+                        <i class="fas fa-clipboard-check detail-icon text-success"></i>
+                        <h6>Status</h6>
                         <p>@Model.StatusName</p>
                     </div>
                 </div>
-            </div>
-            <div class="row text-center">
                 <!-- Created At -->
-                <div class="col-md-4 mb-3">
+                <div class="col-md-4">
                     <div class="detail-item">
-                        <i class="fas fa-calendar-alt text-secondary mb-2" style="font-size: 24px;"></i>
-                        <h6 class="font-weight-bold">Created At</h6>
+                        <i class="fas fa-calendar-alt detail-icon text-secondary"></i>
+                        <h6>Created At</h6>
                         <p>@Model.CreatedAt.ToString("dd/MM/yyyy HH:mm:ss")</p>
                     </div>
                 </div>
                 <!-- Changed By -->
-                <div class="col-md-4 mb-3">
+                <div class="col-md-4">
                     <div class="detail-item">
-                        <i class="fas fa-user-edit text-warning mb-2" style="font-size: 24px;"></i>
-                        <h6 class="font-weight-bold">Changed By</h6>
+                        <i class="fas fa-user-edit detail-icon text-warning"></i>
+                        <h6>Changed By</h6>
                         <p>@Model.ChangedBy</p>
                     </div>
                 </div>
                 <!-- Notes -->
-                <div class="col-md-4 mb-3">
+                <div class="col-md-4">
                     <div class="detail-item">
-                        <i class="fas fa-sticky-note text-danger mb-2" style="font-size: 24px;"></i>
-                        <h6 class="font-weight-bold">Notes</h6>
+                        <i class="fas fa-sticky-note detail-icon text-danger"></i>
+                        <h6>Notes</h6>
                         <p>@Model.Notes</p>
                     </div>
                 </div>
             </div>
+
+            <!-- Attached Image -->
             @if (!string.IsNullOrEmpty(Model.ImageBase64))
             {
                 <div class="text-center mt-4">
                     <h6 class="font-weight-bold">Attached Image</h6>
-                    <img id="previewImage" src="data:image/jpeg;base64,@Model.ImageBase64" class="img-fluid shadow-sm" style="max-width: 300px; border-radius: 10px;" alt="Request Image">
+                    <img id="previewImage" src="data:image/jpeg;base64,@Model.ImageBase64"
+                         class="img-fluid shadow-sm"
+                         style="max-width: 300px; border-radius: 10px;"
+                         alt="Request Image">
                 </div>
             }
         </div>
-    </div>
-    <div class="text-center mb-4 custom-link-container">
-        <div class="text-center mt-3">
-            <a href="@Url.Action("Notifications", "Request")" class="d-block text-center mt-3" style="font-weight: bold; color: #000;">← Back To List</a>
+
+        <!-- Footer -->
+        <div class="card-footer text-center">
+            <a href="@Url.Action("Notifications", "Request")" class="text-dark text-decoration-none">
+                <i class="fas fa-arrow-left mr-2"></i> Back to List
+            </a>
         </div>
     </div>
 </div>
-

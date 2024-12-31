@@ -1,5 +1,5 @@
 ﻿.container {
-    max-width: 1600px;
+    max-width: 1800px;
     margin: 0 auto;
 }
 
@@ -18,7 +18,7 @@
 }
 
     .table th, .table td {
-        padding: 12px;
+        padding: 16px;
         text-align: center;
         border: 1px solid #ddd;
         word-wrap: break-word;
@@ -96,8 +96,9 @@
         color: white;
     }
 body.main-layout {
-    background-color: currentColor;
+    background-color: darkgray;
 }
-.card-body {
-    background-color: darkgrey;
+
+tr{
+    text-transform:uppercase
 }

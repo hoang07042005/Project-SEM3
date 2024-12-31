@@ -10,11 +10,14 @@
 
 /* Giới hạn container ở max-width 1600px */
 .container {
-    max-width: 1600px;
+    max-width: 1900px;
     width: 100%;
     overflow-x: hidden; /* Ẩn thừa nếu có */
     margin: 0 auto; /* Đảm bảo căn giữa */
     padding: 0;
+}
+body.main-layout {
+    background-color: darkgray;
 }
 
 .d-flex.justify-content-between {
@@ -32,14 +35,18 @@
     .table th, .table td {
         padding: 12px;
         text-align: center;
-        border: 1px solid #ddd;
         word-wrap: break-word; /* Đảm bảo nội dung dài sẽ không tràn ra ngoài */
     }
-
-/* Nếu bảng vẫn tràn, thì thêm quy tắc này */
-.table-container {
-    overflow-x: auto;
-}
+    .table th {
+        background-color: #000000;
+    }
+    th{
+        color : white;
+    }
+        /* Nếu bảng vẫn tràn, thì thêm quy tắc này */
+        .table-container {
+            overflow-x: auto;
+        }
 
 /* Thêm một số chỉnh sửa nếu cần cho giao diện */
 .table tr:hover {
@@ -72,9 +79,3 @@
     .table a:hover i {
         color: #007bff;
     }
-.card-body {
-    background-color: darkgrey;
-}
-body.main-layout {
-    background-color: currentColor;
-}

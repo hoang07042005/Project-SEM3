@@ -1,52 +1,51 @@
-﻿.custom-link-container {
-    margin-top: 20px;
+﻿/* General Style */
+.container {
+    font-family: 'Arial', sans-serif;
+}
+
+.detail-card {
+    background-color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
 }
 
 .custom-title {
-    font-style: italic;
-    font-size: 20px;
+    font-size: 1.5rem;
     font-weight: bold;
-    color: #ffffff;
-}
-
-.background-image .content {
-    text-align: center;
-    padding: 20px 0;
 }
 
 .detail-item {
-    padding: 15px;
-    background-color: #fff;
-    border-radius:30px;
+    padding: 20px;
+    text-align: center !important;
+    transition: all 0.2s ease-in-out;
+}
+    .detail-item:hover {
+        background-color: #f1f1f1;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        transform: translateY(-5px);
+    }
+
+.detail-icon {
+    font-size: 32px;
+    margin-bottom: 10px;
 }
 
-    .detail-item h6 {
-        margin-bottom: 5px;
-        color: #343a40;
-    }
 
-    .detail-item p {
-        margin: 0;
-        color: #6c757d;
-    }
-
-.custom-link {
-    font-size: 16px;
+.btn-outline-primary {
+    font-size: 1rem;
     font-weight: bold;
-    color: #000; /* Màu chữ đen */
-    text-decoration: none; /* Loại bỏ gạch chân */
+    border-radius: 30px;
+    transition: all 0.2s;
 }
 
-    .custom-link:hover {
-        text-decoration: underline; /* Gạch chân khi hover */
-        color: #555; /* Màu xám nhạt khi hover */
+    .btn-outline-primary:hover {
+        background-color: #007bff;
+        color: white;
     }
-.card-body {
+body.main-layout {
     background-color: darkgray;
 }
-body.main-layout {
-    background-color: currentcolor;
-}
-.card.shadow-sm {
-    border: 0;
+.card-body {
+    background-color: ivory;
 }

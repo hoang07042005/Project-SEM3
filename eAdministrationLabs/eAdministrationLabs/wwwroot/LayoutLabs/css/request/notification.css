@@ -1,22 +1,61 @@
 ﻿.container {
-    max-width: 100%;
+    max-width: 1800px !important;
+    width: 100% !important;
 }
-
-.table-row:hover {
-    background-color: #f1f1f1;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+a#unread-tab {
+    color: black;
 }
-
-.badge {
-    font-size: 0.9rem;
+a#all-tab {
+    color: black;
+}
+a#read-tab {
+    color: black;
 }
 body.main-layout {
-    background-color: currentColor;
-}
-.col-lg-10 {
-    width: 120%;
-}
-.card-body {
     background-color: darkgray;
+}
+/* Tùy chỉnh nút Details */
+.btn-outline-primary {
+    color: black !important; /* Màu chữ */
+    border-color: black !important; /* Màu viền */
+    background-color: transparent; /* Nền trong suốt */
+    transition: all 0.3s ease-in-out;
+}
+
+    .btn-outline-primary:hover {
+        color: #fff; /* Màu chữ khi hover */
+        background-color: #fff !important; /* Nền khi hover */
+        border-color: black !important;
+        ; /* Màu viền khi hover */
+    }
+
+/* Tùy chỉnh badge trạng thái */
+.badge {
+    font-size: 0.9rem;
+    padding: 0.5em 0.7em;
+    border-radius: 0.5rem;
+}
+
+    .badge.bg-warning {
+        background-color: #ffc107; /* Màu vàng */
+        color: #212529; /* Màu chữ */
+    }
+
+    .badge.bg-success {
+        background-color: black; /* Màu xanh lá */
+        color: #fff; /* Màu chữ */
+    }
+
+/* Tùy chỉnh văn bản không có chi tiết */
+.text-muted {
+    font-style: italic;
+    font-size: 0.9rem;
+}
+
+/* Tùy chỉnh bảng */
+.table-hover tbody tr:hover {
+    background-color: white; /* Màu nền khi hover */
+}
+i.fas.fa-trash-alt {
+    color: brown;
 }

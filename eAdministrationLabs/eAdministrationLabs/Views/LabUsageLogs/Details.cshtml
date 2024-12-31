@@ -5,7 +5,7 @@
     Layout = "~/Views/Shared/_LayoutLabs.cshtml";
 }
 <link href="~/layoutlabs/css/bg_title.css" rel="stylesheet" />
-<link href="~/layoutlabs/css/labs/detailslab.css" rel="stylesheet" />
+<link href="~/layoutlabs/css/request/requestdetail.css" rel="stylesheet" />
 <div class="background-image">
     <div class="content">
         <h3>Labs / Details</h3>
@@ -13,76 +13,69 @@
 </div>
 
 <div class="container mt-5">
-    
-    <!-- Nội dung chính -->
-    <div class="card shadow-sm" style="background-color: #f7f7f7; border-radius: 10px;">
-        <div class="card-header text-white text-center" style="background-color: #343a40;">
-            <h4 class="custom-title mb-0">Lab User Details</h4>
-        </div>
+    <div class="card shadow-lg detail-card">
+        
+
+        <!-- Nội dung chính -->
         <div class="card-body">
-            <div class="row text-center">
-                <!-- Lab Name -->
-                <div class="col-md-4 mb-3">
+            <div class="row g-4">
+                <!-- Lab -->
+                <div class="col-md-4">
                     <div class="detail-item">
-                        <i class="fas fa-flask text-primary mb-2" style="font-size: 24px;"></i>
-                        <h6 class="font-weight-bold">@Html.DisplayNameFor(model => model.Lab)</h6>
+                        <i class="fas fa-flask detail-icon text-primary"></i>
+                        <h6>@Html.DisplayNameFor(model => model.Lab)</h6>
                         <p>@Html.DisplayFor(model => model.Lab.LabName)</p>
                     </div>
                 </div>
                 <!-- User -->
-                <div class="col-md-4 mb-3">
+                <div class="col-md-4">
                     <div class="detail-item">
-                        <i class="fas fa-user text-info mb-2" style="font-size: 24px;"></i>
-                        <h6 class="font-weight-bold">@Html.DisplayNameFor(model => model.User)</h6>
+                        <i class="fas fa-user detail-icon text-info"></i>
+                        <h6>@Html.DisplayNameFor(model => model.User)</h6>
                         <p>@Html.DisplayFor(model => model.User.FullName)</p>
                     </div>
                 </div>
                 <!-- Purpose -->
-                <div class="col-md-4 mb-3">
+                <div class="col-md-4">
                     <div class="detail-item">
-                        <i class="fas fa-clipboard-list text-success mb-2" style="font-size: 24px;"></i>
-                        <h6 class="font-weight-bold">@Html.DisplayNameFor(model => model.Purpose)</h6>
+                        <i class="fas fa-clipboard-list detail-icon text-success"></i>
+                        <h6>@Html.DisplayNameFor(model => model.Purpose)</h6>
                         <p>@Html.DisplayFor(model => model.Purpose)</p>
                     </div>
                 </div>
-            </div>
-            <div class="row text-center">
                 <!-- Start Time -->
-                <div class="col-md-4 mb-3">
+                <div class="col-md-4">
                     <div class="detail-item">
-                        <i class="fas fa-clock text-warning mb-2" style="font-size: 24px;"></i>
-                        <h6 class="font-weight-bold">@Html.DisplayNameFor(model => model.StartTime)</h6>
+                        <i class="fas fa-clock detail-icon text-warning"></i>
+                        <h6>@Html.DisplayNameFor(model => model.StartTime)</h6>
                         <p>@Html.DisplayFor(model => model.StartTime)</p>
                     </div>
                 </div>
                 <!-- End Time -->
-                <div class="col-md-4 mb-3">
+                <div class="col-md-4">
                     <div class="detail-item">
-                        <i class="fas fa-clock text-danger mb-2" style="font-size: 24px;"></i>
-                        <h6 class="font-weight-bold">@Html.DisplayNameFor(model => model.EndTime)</h6>
+                        <i class="fas fa-clock detail-icon text-danger"></i>
+                        <h6>@Html.DisplayNameFor(model => model.EndTime)</h6>
                         <p>@Html.DisplayFor(model => model.EndTime)</p>
                     </div>
                 </div>
                 <!-- Created At -->
-                <div class="col-md-4 mb-3">
+                <div class="col-md-4">
                     <div class="detail-item">
-                        <i class="fas fa-calendar-alt text-secondary mb-2" style="font-size: 24px;"></i>
-                        <h6 class="font-weight-bold">@Html.DisplayNameFor(model => model.CreatedAt)</h6>
+                        <i class="fas fa-calendar-alt detail-icon text-secondary"></i>
+                        <h6>@Html.DisplayNameFor(model => model.CreatedAt)</h6>
                         <p>@Html.DisplayFor(model => model.CreatedAt)</p>
                     </div>
                 </div>
             </div>
         </div>
-        
+
+        <!-- Footer -->
+        <div class="card-footer text-center">
+            <a href="@Url.Action("Notifications", "Request")" class="text-dark text-decoration-none">
+                <i class="fas fa-arrow-left mr-2"></i> Back to List
+            </a>
         </div>
-    <!-- Nút Back to List -->
-    
-    <div class="text-center mb-4 custom-link-container">
-        <a href="@Url.Action("Notifications", "Request")" class="custom-link">
-            <i class="fas fa-arrow-left mr-2"></i> Back to List
-        </a>
+        
     </div>
-
 </div>
-
- 
