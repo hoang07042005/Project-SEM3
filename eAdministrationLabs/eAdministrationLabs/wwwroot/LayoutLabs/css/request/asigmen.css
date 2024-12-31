@@ -8,5 +8,8 @@
 }
 
 .container {
-    max-width: 1600px;
+    max-width: 1700px;
+}
+body.main-layout {
+    background-color: azure;
 }

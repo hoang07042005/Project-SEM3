@@ -20,13 +20,13 @@
     .table th, .table td {
         padding: 16px;
         text-align: center;
-        border: 1px solid #ddd;
         word-wrap: break-word;
     }
 
     .table th {
-        background-color: #f4f4f4;
+        background-color: #000000;
         font-weight: bold;
+        color: white;
     }
 
     .table tr:hover {
