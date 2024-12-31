@@ -58,6 +58,15 @@
                         <span class="nav-link-text ms-4">Lab</span>
                     </a>
                 </li>
+@*                 <li class="nav-item">
+                    <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "EquiLab" ? "active bg-gradient-dark text-white" : "text-dark")"
+                       asp-area="admin"
+                       asp-controller="EquiLab"
+                       asp-action="Index">
+                        <i class="material-symbols-rounded opacity-5">devices</i>
+                        <span class="nav-link-text ms-4">EquiLab</span>
+                    </a>
+                </li> *@
                 <li class="nav-item">
                     <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "EquiLab" ? "active bg-gradient-dark text-white" : "text-dark")"
                        asp-area="admin"
@@ -101,15 +110,6 @@
                        asp-action="Index">
                         <i class="material-symbols-rounded opacity-5">history</i>
                         <span class="nav-link-text ms-4">HistoryRequest</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Software" ? "active bg-gradient-dark text-white" : "text-dark")"
-                       asp-area="admin"
-                       asp-controller="Software"
-                       asp-action="Index">
-                        <i class="fas fa-laptop-code opacity-5"></i>
-                        <span class="nav-link-text ms-4">Software</span>
                     </a>
                 </li>
                 <li class="nav-item">
