@@ -33,6 +33,7 @@ namespace eAdministrationLabs.Services
                 Subject = subject,
                 Body = body,
                 IsBodyHtml = true
+
             };
 
             mailMessage.To.Add(toEmail);

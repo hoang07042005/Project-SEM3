@@ -12,8 +12,8 @@ using eAdministrationLabs.Models;
 namespace eAdministrationLabs.Migrations
 {
     [DbContext(typeof(EAdministrationLabsContext))]
-    [Migration("20241222044610_CreateData")]
-    partial class CreateData
+    [Migration("20241229120521_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
