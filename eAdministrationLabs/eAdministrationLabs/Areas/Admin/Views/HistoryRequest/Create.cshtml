@@ -1,48 +1,109 @@
 ﻿@model eAdministrationLabs.Dtos.Create.CreateHistoryRequestDto
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Create History Request";
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<h1>Create</h1>
+<div class="container mt-5">
+    <h1 class="text-center text-primary">Create History Request</h1>
+    <h4 class="text-center">History Request Details</h4>
+    <hr />
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <form asp-action="Create" class="shadow p-4 rounded" style="background-color: #f9f9f9;">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
-<h4>HistoryRequest</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="UserId" class="control-label"></label>
-                <select asp-for="UserId" class ="form-control" asp-items="ViewBag.UserId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="RequestId" class="control-label"></label>
-                <select asp-for="RequestId" class ="form-control" asp-items="ViewBag.RequestId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="StatusRequestId" class="control-label"></label>
-                <select asp-for="StatusRequestId" class ="form-control" asp-items="ViewBag.StatusRequestId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="ChangedBy" class="control-label"></label>
-                <input asp-for="ChangedBy" class="form-control" />
-                <span asp-validation-for="ChangedBy" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Notes" class="control-label"></label>
-                <input asp-for="Notes" class="form-control" />
-                <span asp-validation-for="Notes" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+                <!-- User Selection -->
+                <div class="form-group mb-4">
+                    <label asp-for="UserId" class="control-label text-primary fw-bold">Select User</label>
+                    <select asp-for="UserId" class="form-control" asp-items="ViewBag.UserId">
+                        <option value="">-- Select User --</option>
+                    </select>
+                    <span asp-validation-for="UserId" class="text-danger"></span>
+                </div>
+
+                <!-- Request Selection -->
+                <div class="form-group mb-4">
+                    <label asp-for="RequestId" class="control-label text-primary fw-bold">Select Request</label>
+                    <select asp-for="RequestId" class="form-control" asp-items="ViewBag.RequestId">
+                        <option value="">-- Select Request --</option>
+                    </select>
+                    <span asp-validation-for="RequestId" class="text-danger"></span>
+                </div>
+
+                <!-- Status Request Selection -->
+                <div class="form-group mb-4">
+                    <label asp-for="StatusRequestId" class="control-label text-primary fw-bold">Select Status</label>
+                    <select asp-for="StatusRequestId" class="form-control" asp-items="ViewBag.StatusRequestId">
+                        <option value="">-- Select Status --</option>
+                    </select>
+                    <span asp-validation-for="StatusRequestId" class="text-danger"></span>
+                </div>
+
+                <!-- Changed By -->
+                <div class="form-group mb-4">
+                    <label asp-for="ChangedBy" class="control-label text-primary fw-bold">Changed By</label>
+                    <input asp-for="ChangedBy" class="form-control" placeholder="Enter who changed the request" />
+                    <span asp-validation-for="ChangedBy" class="text-danger"></span>
+                </div>
+
+                <!-- Notes -->
+                <div class="form-group mb-4">
+                    <label asp-for="Notes" class="control-label text-primary fw-bold">Notes</label>
+                    <input asp-for="Notes" class="form-control" placeholder="Enter any notes" />
+                    <span asp-validation-for="Notes" class="text-danger"></span>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="d-flex justify-content-between align-items-center">
+                    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+<style>
+    body {
+        background-color: #f4f8fc;
+    }
 
+    h1 {
+        font-size: 2rem;
+        font-weight: bold;
+    }
+
+    h4 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .form-label {
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .form-control {
+        padding: 0.75rem;
+        font-size: 1rem;
+        border-radius: 8px;
+        border: 1px solid #ced4da;
+    }
+
+        .form-control:focus {
+            outline: none;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+
+    .btn {
+        font-size: 1rem;
+        padding: 0.6rem 1.2rem;
+        border-radius: 8px;
+    }
+
+    .shadow {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+</style>

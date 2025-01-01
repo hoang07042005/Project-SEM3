@@ -5,31 +5,76 @@
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<h1>Create</h1>
+<div class="container mt-5">
+    <h1 class="text-center text-primary">Create EquiLab</h1>
+    <hr />
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <form asp-action="Create" class="shadow p-4 rounded" style="background-color: #f9f9f9;">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
-<h4>EquiLab</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="EquipmentId" class="control-label"></label>
-                <select asp-for="EquipmentId" class ="form-control" asp-items="ViewBag.EquipmentId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="LabId" class="control-label"></label>
-                <select asp-for="LabId" class ="form-control" asp-items="ViewBag.LabId"></select>
-            </div>
+                <!-- Equipment Selection -->
+                <div class="form-group mb-4">
+                    <label asp-for="EquipmentId" class="control-label text-primary fw-bold">Select Equipment</label>
+                    <select asp-for="EquipmentId" class="form-control" asp-items="ViewBag.EquipmentId">
+                        <option value="">-- Select Equipment --</option>
+                    </select>
+                    <span asp-validation-for="EquipmentId" class="text-danger"></span>
+                </div>
 
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+                <!-- Lab Selection -->
+                <div class="form-group mb-4">
+                    <label asp-for="LabId" class="control-label text-primary fw-bold">Select Lab</label>
+                    <select asp-for="LabId" class="form-control" asp-items="ViewBag.LabId">
+                        <option value="">-- Select Lab --</option>
+                    </select>
+                    <span asp-validation-for="LabId" class="text-danger"></span>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="d-flex justify-content-between align-items-center">
+                    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+<style>
+    body {
+        background-color: #f4f8fc;
+    }
 
+    h1 {
+        font-size: 2rem;
+        font-weight: bold;
+    }
+
+    .form-label {
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .form-control {
+        padding: 0.75rem;
+        font-size: 1rem;
+        border-radius: 8px;
+        border: 1px solid #ced4da;
+    }
+
+        .form-control:focus {
+            outline: none;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+
+    .btn {
+        font-size: 1rem;
+        padding: 0.6rem 1.2rem;
+        border-radius: 8px;
+    }
+
+    .shadow {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+</style>

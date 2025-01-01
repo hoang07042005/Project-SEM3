@@ -1,45 +1,106 @@
 ﻿@model eAdministrationLabs.Dtos.Create.CreateLabDto
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Create Lab";
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<h1>Create</h1>
+<div class="container mt-5">
+    <h1 class="text-center text-primary">Create New Lab</h1>
+    <h4 class="text-center">Lab Details</h4>
+    <hr />
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <form asp-action="Create" class="shadow p-4 rounded" style="background-color: #f9f9f9;">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
-<h4>Lab</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="LabName" class="control-label"></label>
-                <input asp-for="LabName" class="form-control" />
-                <span asp-validation-for="LabName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Location" class="control-label"></label>
-                <input asp-for="Location" class="form-control" />
-                <span asp-validation-for="Location" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Capacity" class="control-label"></label>
-                <input asp-for="Capacity" class="form-control" />
-                <span asp-validation-for="Capacity" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="StatusLabId" class="control-label"></label>
-                <select asp-for="StatusLabId" class ="form-control" asp-items="ViewBag.StatusLabId"></select>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+                <!-- Lab Name -->
+                <div class="form-group mb-4">
+                    <label asp-for="LabName" class="control-label text-primary fw-bold">Lab Name</label>
+                    <input asp-for="LabName" class="form-control" placeholder="Enter lab name" />
+                    <span asp-validation-for="LabName" class="text-danger"></span>
+                </div>
+
+                <!-- Location -->
+                <div class="form-group mb-4">
+                    <label asp-for="Location" class="control-label text-primary fw-bold">Location</label>
+                    <input asp-for="Location" class="form-control" placeholder="Enter lab location" />
+                    <span asp-validation-for="Location" class="text-danger"></span>
+                </div>
+
+                <!-- Capacity -->
+                <div class="form-group mb-4">
+                    <label asp-for="Capacity" class="control-label text-primary fw-bold">Capacity</label>
+                    <input asp-for="Capacity" class="form-control" type="number" placeholder="Enter lab capacity" />
+                    <span asp-validation-for="Capacity" class="text-danger"></span>
+                </div>
+
+                <!-- Status Lab -->
+                <div class="form-group mb-4">
+                    <label asp-for="StatusLabId" class="control-label text-primary fw-bold">Status</label>
+                    <select asp-for="StatusLabId" class="form-control" asp-items="ViewBag.StatusLabId">
+                        <option value="">-- Select Status --</option>
+                    </select>
+                    <span asp-validation-for="StatusLabId" class="text-danger"></span>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="d-flex justify-content-between align-items-center">
+                    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+<style>
+    body {
+        background-color: #f4f8fc;
+    }
 
+    h1 {
+        font-size: 2rem;
+        font-weight: bold;
+    }
+
+    h4 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .form-label {
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .form-control {
+        padding: 0.75rem;
+        font-size: 1rem;
+        border-radius: 8px;
+        border: 1px solid #ced4da;
+    }
+
+        .form-control:focus {
+            outline: none;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+
+    .btn {
+        font-size: 1rem;
+        padding: 0.6rem 1.2rem;
+        border-radius: 8px;
+    }
+
+    .shadow {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .text-primary {
+        color: #e91e63 !important;
+    }
+
+    .text-danger {
+        color: #dc3545;
+    }
+</style>

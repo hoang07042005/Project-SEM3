@@ -1,47 +1,102 @@
 ﻿@model eAdministrationLabs.Models.Request
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edit Request";
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<h1>Edit</h1>
+<div class="container mt-5">
+    <h1 class="text-center text-primary">Edit Request</h1>
+    <p class="text-center text-muted">Modify the details of the selected request below.</p>
+    <hr />
 
-<h4>Request</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="LabId" class="control-label"></label>
-                <select asp-for="LabId" class="form-control" asp-items="ViewBag.LabId"></select>
-                <span asp-validation-for="LabId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="EquipmentId" class="control-label"></label>
-                <select asp-for="EquipmentId" class="form-control" asp-items="ViewBag.EquipmentId"></select>
-                <span asp-validation-for="EquipmentId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ImageId" class="control-label"></label>
-                <select asp-for="ImageId" class="form-control" asp-items="ViewBag.ImageId"></select>
-                <span asp-validation-for="ImageId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CreatedAt" class="control-label"></label>
-                <input asp-for="CreatedAt" class="form-control" />
-                <span asp-validation-for="CreatedAt" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <form asp-action="Edit" class="shadow p-4 rounded" style="background-color: #f9f9f9;">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                <input type="hidden" asp-for="Id" />
+
+                <!-- Lab -->
+                <div class="form-group mb-4">
+                    <label asp-for="LabId" class="form-label text-primary fw-bold">Lab</label>
+                    <select asp-for="LabId" class="form-control">
+                        <option value="">-- Select Lab --</option>
+                        @Html.Raw(ViewBag.LabId)
+                    </select>
+                    <span asp-validation-for="LabId" class="text-danger"></span>
+                </div>
+
+                <!-- Equipment -->
+                <div class="form-group mb-4">
+                    <label asp-for="EquipmentId" class="form-label text-primary fw-bold">Equipment</label>
+                    <select asp-for="EquipmentId" class="form-control">
+                        <option value="">-- Select Equipment --</option>
+                        @Html.Raw(ViewBag.EquipmentId)
+                    </select>
+                    <span asp-validation-for="EquipmentId" class="text-danger"></span>
+                </div>
+
+                <!-- Image -->
+                <div class="form-group mb-4">
+                    <label asp-for="ImageId" class="form-label text-primary fw-bold">Image</label>
+                    <select asp-for="ImageId" class="form-control">
+                        <option value="">-- Select Image --</option>
+                        @Html.Raw(ViewBag.ImageId)
+                    </select>
+                    <span asp-validation-for="ImageId" class="text-danger"></span>
+                </div>
+
+                <!-- Created At -->
+                <div class="form-group mb-4">
+                    <label asp-for="CreatedAt" class="form-label text-primary fw-bold">Created At</label>
+                    <input asp-for="CreatedAt" type="datetime-local" class="form-control" />
+                    <span asp-validation-for="CreatedAt" class="text-danger"></span>
+                </div>
+
+                <!-- Save and Back Buttons -->
+                <div class="d-flex justify-content-between align-items-center">
+                    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+<style>
+    body {
+        background-color: #f4f8fc;
+    }
 
+    h1 {
+        font-size: 2rem;
+        font-weight: bold;
+    }
+
+    .form-label {
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .form-control {
+        padding: 0.75rem;
+        font-size: 1rem;
+        border-radius: 8px;
+        border: 1px solid #ced4da;
+    }
+
+        .form-control:focus {
+            outline: none;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+
+    .btn {
+        font-size: 1rem;
+        padding: 0.6rem 1.2rem;
+        border-radius: 8px;
+    }
+
+    .shadow {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+</style>

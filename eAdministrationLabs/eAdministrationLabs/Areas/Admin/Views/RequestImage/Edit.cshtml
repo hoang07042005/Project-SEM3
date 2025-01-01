@@ -1,41 +1,90 @@
 ﻿@model eAdministrationLabs.Models.RequestImage
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edit Request Image";
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<h1>Edit</h1>
+<div class="container mt-5">
+    <h1 class="text-center text-primary">Edit Request Image</h1>
+    <p class="text-center text-muted">Update or replace the current image below.</p>
+    <hr />
 
-<div class="row">
-    <div class="col-md-6">
-        <form asp-action="Edit" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <form asp-action="Edit" enctype="multipart/form-data" class="shadow p-4 rounded" style="background-color: #f9f9f9;">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
-            <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="Id" />
 
-            <div class="form-group">
+                <!-- Current Image -->
                 @if (Model.Image != null)
                 {
-                    <label>Current Image:</label>
-                    <img src="data:image/png;base64,@Convert.ToBase64String(Model.Image)"
-                         alt="Current Image" class="img-thumbnail" width="200" />
+                    <div class="form-group text-center mb-4">
+                        <label class="form-label text-primary fw-bold">Current Image</label>
+                        <div>
+                            <img src="data:image/png;base64,@Convert.ToBase64String(Model.Image)"
+                                 alt="Current Image" class="img-thumbnail" width="250" />
+                        </div>
+                    </div>
                 }
-            </div>
 
-            <div class="form-group">
-                <label asp-for="Image" class="control-label"></label>
-                <input asp-for="Image" type="file" class="form-control" />
-                <span asp-validation-for="Image" class="text-danger"></span>
-            </div>
+                <!-- Upload New Image -->
+                <div class="form-group mb-4">
+                    <label asp-for="Image" class="form-label text-primary fw-bold">Upload New Image</label>
+                    <input asp-for="Image" type="file" class="form-control" />
+                    <span asp-validation-for="Image" class="text-danger"></span>
+                </div>
 
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+                <!-- Save and Back Buttons -->
+                <div class="d-flex justify-content-between align-items-center">
+                    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+<style>
+    body {
+        background-color: #f4f8fc;
+    }
+
+    h1 {
+        font-size: 2rem;
+        font-weight: bold;
+    }
+
+    .form-label {
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .form-control {
+        padding: 0.75rem;
+        font-size: 1rem;
+        border-radius: 8px;
+        border: 1px solid #ced4da;
+    }
+
+        .form-control:focus {
+            outline: none;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+
+    .btn {
+        font-size: 1rem;
+        padding: 0.6rem 1.2rem;
+        border-radius: 8px;
+    }
+
+    .shadow {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .img-thumbnail {
+        border-radius: 12px;
+        margin-top: 1rem;
+    }
+</style>

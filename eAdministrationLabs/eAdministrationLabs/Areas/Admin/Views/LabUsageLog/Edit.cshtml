@@ -1,62 +1,133 @@
 ﻿@model eAdministrationLabs.Models.LabUsageLog
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edit Lab Usage Log";
     Layout = "~/Views/Shared/_LayoutLabs.cshtml";
 }
 
-<h1>Edit</h1>
+<div class="container mt-5">
+    <h1 class="text-center text-primary">Edit Lab Usage Log</h1>
+    <p class="text-center text-muted">Update the details for the lab usage log entry.</p>
+    <hr />
 
-<h4>LabUsageLog</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="LabId" class="control-label"></label>
-                <select asp-for="LabId" class="form-control" asp-items="ViewBag.LabId"></select>
-                <span asp-validation-for="LabId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UserId" class="control-label"></label>
-                <select asp-for="UserId" class="form-control" asp-items="ViewBag.UserId"></select>
-                <span asp-validation-for="UserId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Purpose" class="control-label"></label>
-                <input asp-for="Purpose" class="form-control" />
-                <span asp-validation-for="Purpose" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="StatusLogId" class="control-label"></label>
-                <select asp-for="StatusLogId" class="form-control" asp-items="ViewBag.StatusLogId"></select>
-                <span asp-validation-for="StatusLogId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="StartTime" class="control-label"></label>
-                <input asp-for="StartTime" class="form-control" />
-                <span asp-validation-for="StartTime" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="EndTime" class="control-label"></label>
-                <input asp-for="EndTime" class="form-control" />
-                <span asp-validation-for="EndTime" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CreatedAt" class="control-label"></label>
-                <input asp-for="CreatedAt" class="form-control" />
-                <span asp-validation-for="CreatedAt" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <form asp-action="Edit" class="shadow p-4 rounded" style="background-color: #f9f9f9;">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                <input type="hidden" asp-for="Id" />
+
+                <!-- Lab -->
+                <div class="form-group mb-4">
+                    <label asp-for="LabId" class="form-label text-primary fw-bold">Lab</label>
+                    <select asp-for="LabId" class="form-control">
+                        <option value="" disabled selected>-- Select Lab --</option>
+                        @foreach (var item in ViewBag.LabId as SelectList)
+                        {
+                            <option value="@item.Value">@item.Text</option>
+                        }
+                    </select>
+                    <span asp-validation-for="LabId" class="text-danger"></span>
+                </div>
+
+                <!-- User -->
+                <div class="form-group mb-4">
+                    <label asp-for="UserId" class="form-label text-primary fw-bold">User</label>
+                    <select asp-for="UserId" class="form-control">
+                        <option value="" disabled selected>-- Select User --</option>
+                        @foreach (var item in ViewBag.UserId as SelectList)
+                        {
+                            <option value="@item.Value">@item.Text</option>
+                        }
+                    </select>
+                    <span asp-validation-for="UserId" class="text-danger"></span>
+                </div>
+
+                <!-- Purpose -->
+                <div class="form-group mb-4">
+                    <label asp-for="Purpose" class="form-label text-primary fw-bold">Purpose</label>
+                    <textarea asp-for="Purpose" class="form-control" rows="3" placeholder="Enter the purpose of usage"></textarea>
+                    <span asp-validation-for="Purpose" class="text-danger"></span>
+                </div>
+
+                <!-- Status -->
+                <div class="form-group mb-4">
+                    <label asp-for="StatusLogId" class="form-label text-primary fw-bold">Status</label>
+                    <select asp-for="StatusLogId" class="form-control">
+                        <option value="" disabled selected>-- Select Status --</option>
+                        @foreach (var item in ViewBag.StatusLogId as SelectList)
+                        {
+                            <option value="@item.Value">@item.Text</option>
+                        }
+                    </select>
+                    <span asp-validation-for="StatusLogId" class="text-danger"></span>
+                </div>
+
+                <!-- Start Time -->
+                <div class="form-group mb-4">
+                    <label asp-for="StartTime" class="form-label text-primary fw-bold">Start Time</label>
+                    <input asp-for="StartTime" type="datetime-local" class="form-control" />
+                    <span asp-validation-for="StartTime" class="text-danger"></span>
+                </div>
+
+                <!-- End Time -->
+                <div class="form-group mb-4">
+                    <label asp-for="EndTime" class="form-label text-primary fw-bold">End Time</label>
+                    <input asp-for="EndTime" type="datetime-local" class="form-control" />
+                    <span asp-validation-for="EndTime" class="text-danger"></span>
+                </div>
+
+                <!-- Created At -->
+                <div class="form-group mb-4">
+                    <label asp-for="CreatedAt" class="form-label text-primary fw-bold">Created At</label>
+                    <input asp-for="CreatedAt" type="datetime-local" class="form-control" />
+                    <span asp-validation-for="CreatedAt" class="text-danger"></span>
+                </div>
+
+                <!-- Save Button -->
+                <div class="d-flex justify-content-between align-items-center">
+                    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+<style>
+    body {
+        background-color: #f4f8fc;
+    }
 
+    h1 {
+        font-size: 2rem;
+        font-weight: bold;
+    }
+
+    .form-label {
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .form-control {
+        padding: 0.75rem;
+        font-size: 1rem;
+        border-radius: 8px;
+        border: 1px solid #ced4da;
+    }
+
+        .form-control:focus {
+            outline: none;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+
+    .btn {
+        font-size: 1rem;
+        padding: 0.6rem 1.2rem;
+        border-radius: 8px;
+    }
+
+    .shadow {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+</style>

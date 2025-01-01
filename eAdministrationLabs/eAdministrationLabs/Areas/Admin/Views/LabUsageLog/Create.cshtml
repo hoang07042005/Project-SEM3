@@ -1,53 +1,124 @@
 ﻿@model eAdministrationLabs.Models.LabUsageLog
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Create Lab Usage Log";
     Layout = "~/Views/Shared/_LayoutLabs.cshtml";
 }
 
-<h1>Create</h1>
+<div class="container mt-5">
+    <h1 class="text-center text-primary">Create Lab Usage Log</h1>
+    <h4 class="text-center">Log Details</h4>
+    <hr />
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <form asp-action="Create" class="shadow p-4 rounded" style="background-color: #f9f9f9;">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
-<h4>LabUsageLog</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="LabId" class="control-label"></label>
-                <select asp-for="LabId" class ="form-control" asp-items="ViewBag.LabId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="UserId" class="control-label"></label>
-                <select asp-for="UserId" class ="form-control" asp-items="ViewBag.UserId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="Purpose" class="control-label"></label>
-                <input asp-for="Purpose" class="form-control" />
-                <span asp-validation-for="Purpose" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="StatusLogId" class="control-label"></label>
-                <select asp-for="StatusLogId" class ="form-control" asp-items="ViewBag.StatusLogId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="StartTime" class="control-label"></label>
-                <input asp-for="StartTime" class="form-control" />
-                <span asp-validation-for="StartTime" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="EndTime" class="control-label"></label>
-                <input asp-for="EndTime" class="form-control" />
-                <span asp-validation-for="EndTime" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+                <!-- Lab Selection -->
+                <div class="form-group mb-4">
+                    <label asp-for="LabId" class="control-label text-primary fw-bold">Select Lab</label>
+                    <select asp-for="LabId" class="form-control" asp-items="ViewBag.LabId">
+                        <option value="">-- Select Lab --</option>
+                    </select>
+                    <span asp-validation-for="LabId" class="text-danger"></span>
+                </div>
+
+                <!-- User Selection -->
+                <div class="form-group mb-4">
+                    <label asp-for="UserId" class="control-label text-primary fw-bold">Select User</label>
+                    <select asp-for="UserId" class="form-control" asp-items="ViewBag.UserId">
+                        <option value="">-- Select User --</option>
+                    </select>
+                    <span asp-validation-for="UserId" class="text-danger"></span>
+                </div>
+
+                <!-- Purpose -->
+                <div class="form-group mb-4">
+                    <label asp-for="Purpose" class="control-label text-primary fw-bold">Purpose</label>
+                    <input asp-for="Purpose" class="form-control" placeholder="Enter purpose of lab usage" />
+                    <span asp-validation-for="Purpose" class="text-danger"></span>
+                </div>
+
+                <!-- Status Log Selection -->
+                <div class="form-group mb-4">
+                    <label asp-for="StatusLogId" class="control-label text-primary fw-bold">Select Status</label>
+                    <select asp-for="StatusLogId" class="form-control" asp-items="ViewBag.StatusLogId">
+                        <option value="">-- Select Status --</option>
+                    </select>
+                    <span asp-validation-for="StatusLogId" class="text-danger"></span>
+                </div>
+
+                <!-- Start Time -->
+                <div class="form-group mb-4">
+                    <label asp-for="StartTime" class="control-label text-primary fw-bold">Start Time</label>
+                    <input asp-for="StartTime" class="form-control" type="datetime-local" />
+                    <span asp-validation-for="StartTime" class="text-danger"></span>
+                </div>
+
+                <!-- End Time -->
+                <div class="form-group mb-4">
+                    <label asp-for="EndTime" class="control-label text-primary fw-bold">End Time</label>
+                    <input asp-for="EndTime" class="form-control" type="datetime-local" />
+                    <span asp-validation-for="EndTime" class="text-danger"></span>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="d-flex justify-content-between align-items-center">
+                    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+<style>
+    body {
+        background-color: #f4f8fc;
+    }
 
+    h1 {
+        font-size: 2rem;
+        font-weight: bold;
+    }
+
+    h4 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .form-label {
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .form-control {
+        padding: 0.75rem;
+        font-size: 1rem;
+        border-radius: 8px;
+        border: 1px solid #ced4da;
+    }
+
+        .form-control:focus {
+            outline: none;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+
+    .btn {
+        font-size: 1rem;
+        padding: 0.6rem 1.2rem;
+        border-radius: 8px;
+    }
+
+    .shadow {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .text-primary {
+        color: #dc3545 
+    }
+
+    .text-danger {
+        color: #dc3545;
+    }
+</style>

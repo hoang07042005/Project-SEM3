@@ -1,57 +1,126 @@
 ﻿@model eAdministrationLabs.Models.HistoryRequest
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edit History Request";
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<h1>Edit</h1>
+<div class="container mt-5">
+    <h1 class="text-center text-primary">Edit History Request</h1>
+    <p class="text-center text-muted">Update the details of the history request.</p>
+    <hr />
 
-<h4>HistoryRequest</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="UserId" class="control-label"></label>
-                <select asp-for="UserId" class="form-control" asp-items="ViewBag.UserId"></select>
-                <span asp-validation-for="UserId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="RequestId" class="control-label"></label>
-                <select asp-for="RequestId" class="form-control" asp-items="ViewBag.RequestId"></select>
-                <span asp-validation-for="RequestId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="StatusRequestId" class="control-label"></label>
-                <select asp-for="StatusRequestId" class="form-control" asp-items="ViewBag.StatusRequestId"></select>
-                <span asp-validation-for="StatusRequestId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ChangedBy" class="control-label"></label>
-                <input asp-for="ChangedBy" class="form-control" />
-                <span asp-validation-for="ChangedBy" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ChangedAt" class="control-label"></label>
-                <input asp-for="ChangedAt" class="form-control" />
-                <span asp-validation-for="ChangedAt" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Notes" class="control-label"></label>
-                <input asp-for="Notes" class="form-control" />
-                <span asp-validation-for="Notes" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <form asp-action="Edit" class="shadow p-4 rounded" style="background-color: #f9f9f9;">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                <input type="hidden" asp-for="Id" />
+
+                <!-- User -->
+                <div class="form-group mb-4">
+                    <label asp-for="UserId" class="form-label text-primary fw-bold">User</label>
+                    <select asp-for="UserId" class="form-control">
+                        <option value="" disabled selected>-- Select User --</option>
+                        @foreach (var item in ViewBag.UserId as SelectList)
+                        {
+                            <option value="@item.Value">@item.Text</option>
+                        }
+                    </select>
+                    <span asp-validation-for="UserId" class="text-danger"></span>
+                </div>
+
+                <!-- Request -->
+                <div class="form-group mb-4">
+                    <label asp-for="RequestId" class="form-label text-primary fw-bold">Request</label>
+                    <select asp-for="RequestId" class="form-control">
+                        <option value="" disabled selected>-- Select Request --</option>
+                        @foreach (var item in ViewBag.RequestId as SelectList)
+                        {
+                            <option value="@item.Value">@item.Text</option>
+                        }
+                    </select>
+                    <span asp-validation-for="RequestId" class="text-danger"></span>
+                </div>
+
+                <!-- Status -->
+                <div class="form-group mb-4">
+                    <label asp-for="StatusRequestId" class="form-label text-primary fw-bold">Status</label>
+                    <select asp-for="StatusRequestId" class="form-control">
+                        <option value="" disabled selected>-- Select Status --</option>
+                        @foreach (var item in ViewBag.StatusRequestId as SelectList)
+                        {
+                            <option value="@item.Value">@item.Text</option>
+                        }
+                    </select>
+                    <span asp-validation-for="StatusRequestId" class="text-danger"></span>
+                </div>
+
+                <!-- Changed By -->
+                <div class="form-group mb-4">
+                    <label asp-for="ChangedBy" class="form-label text-primary fw-bold">Changed By</label>
+                    <input asp-for="ChangedBy" class="form-control" placeholder="Enter the name of the person who made changes" />
+                    <span asp-validation-for="ChangedBy" class="text-danger"></span>
+                </div>
+
+                <!-- Changed At -->
+                <div class="form-group mb-4">
+                    <label asp-for="ChangedAt" class="form-label text-primary fw-bold">Changed At</label>
+                    <input asp-for="ChangedAt" type="datetime-local" class="form-control" />
+                    <span asp-validation-for="ChangedAt" class="text-danger"></span>
+                </div>
+
+                <!-- Notes -->
+                <div class="form-group mb-4">
+                    <label asp-for="Notes" class="form-label text-primary fw-bold">Notes</label>
+                    <textarea asp-for="Notes" class="form-control" rows="3" placeholder="Add any notes..."></textarea>
+                    <span asp-validation-for="Notes" class="text-danger"></span>
+                </div>
+
+                <!-- Save Button -->
+                <div class="d-flex justify-content-between align-items-center">
+                    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+<style>
+    body {
+        background-color: #f4f8fc;
+    }
 
+    h1 {
+        font-size: 2rem;
+        font-weight: bold;
+    }
+
+    .form-label {
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .form-control {
+        padding: 0.75rem;
+        font-size: 1rem;
+        border-radius: 8px;
+        border: 1px solid #ced4da;
+    }
+
+        .form-control:focus {
+            outline: none;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+
+    .btn {
+        font-size: 1rem;
+        padding: 0.6rem 1.2rem;
+        border-radius: 8px;
+    }
+
+    .shadow {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+</style>
