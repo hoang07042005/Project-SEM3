@@ -5,35 +5,35 @@
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<h1>Register</h1>
+
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Register" method="post">
             <!-- Username -->
-            <div class="mb-3">
+            <div class="mb-3" >
                 <label asp-for="FullName" class="form-label"></label>
-                <input asp-for="FullName" class="form-control" />
+                <input asp-for="FullName" class="form-control" style="border: 1px solid #ccc; border-radius: 6px;" />
                 <span asp-validation-for="FullName" class="text-danger"></span>
             </div>
 
             <!-- Email -->
-            <div class="mb-3">
+            <div class="mb-3" >
                 <label asp-for="Email" class="form-label"></label>
-                <input asp-for="Email" class="form-control" />
+                <input asp-for="Email" class="form-control" style="border: 1px solid #ccc; border-radius: 6px;" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
 
             <!-- Password -->
             <div class="mb-3">
                 <label asp-for="Password" class="form-label"></label>
-                <input asp-for="Password" type="password" class="form-control" />
+                <input asp-for="Password" type="password" class="form-control" style="border: 1px solid #ccc; border-radius: 6px;" />
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
 
             <!-- Confirm Password -->
-            <div class="mb-3">
+            <div class="mb-3" >
                 <label asp-for="ConfirmPassword" class="form-label"></label>
-                <input asp-for="ConfirmPassword" type="password" class="form-control" />
+                <input asp-for="ConfirmPassword" type="password" class="form-control" style="border: 1px solid #ccc; border-radius: 6px;" />
                 <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
             </div>
 

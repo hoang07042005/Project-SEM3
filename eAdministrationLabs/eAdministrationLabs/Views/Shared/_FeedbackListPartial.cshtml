@@ -1,0 +1,41 @@
+﻿@using X.PagedList.Mvc.Core
+@model X.PagedList.IPagedList<eAdministrationLabs.Models.Feedback>
+
+<div class="feedback-list col-md-12 text-dark">
+    <div class="row">
+        @foreach (var feedback in Model)
+        {
+
+            var ratingStars = string.Join("", Enumerable.Range(1, feedback.Rating).Select(i =>
+            "<img src ='https://localhost:7085/layoutlabs/images/1.png' alt='' width='24' height='24'>")) +
+            string.Join("", Enumerable.Range(1, 5 - feedback.Rating).Select(i =>
+            "<img src ='https://localhost:7085/layoutlabs/images/1-1.png' alt='' width='24' height='24'>"));
+
+            <div class="col-md-6 mb-4">
+                <div class="moving-box p-3 border rounded shadow-sm bg-white">
+                    <div class="feedback-item d-flex align-items-center mb-2">
+                        <img src="@Url.Content("~/LayoutLabs/images/Account 2.png")"
+                             class="avatar"
+                             alt="User Avatar" style="width: 40px; height: 40px;" />
+                        <strong class="username ms-2" style="margin-left:20px;">@(feedback.User?.FullName ?? "Unknown User")</strong>
+                    </div>
+
+                    <div class="feedback-item mb-2">
+                        <strong>Rating:</strong> <span>@Html.Raw(ratingStars)</span>
+                    </div>
+
+                    <div class="feedback-item">
+                        <strong>Comment:</strong>
+                        <span class="comment" style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis;">
+                            @feedback.Comment
+                        </span>
+                    </div>
+
+                </div>
+            </div>
+        }
+    </div>
+    <div class="pagination-container" style="display: flex; justify-content: center; margin-top: 20px;">
+        @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
+    </div>
+</div>

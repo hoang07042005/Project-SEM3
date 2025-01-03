@@ -5,7 +5,7 @@
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<h1>Index</h1>
+
 
 <p class="text-end">
     <a asp-action="Register" class="btn btn-success">Create New</a>
@@ -46,12 +46,12 @@
             </td>
             
             <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary btn-sm">
+@*                     <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary btn-sm">
                         <i class="fas fa-edit" style="font-size:1em;"></i>
                     </a> |
                     <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">
                         <i class="fas fa-info-circle" style="font-size:1em;"></i>
-                    </a> |
+                    </a> | *@
                     <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">
                         <i class="fas fa-trash-alt" style="font-size:1em;"></i>
                     </a>

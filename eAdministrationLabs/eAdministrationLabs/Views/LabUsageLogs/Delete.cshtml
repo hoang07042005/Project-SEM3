@@ -1,103 +1,4 @@
-﻿@* @model eAdministrationLabs.Models.LabUsageLog
-
-@{
-    ViewData["Title"] = "Delete";
-    Layout = "~/Views/Shared/_LayoutLabs.cshtml";
-}
-
-<link href="~/layoutlabs/css/bg_title.css" rel="stylesheet" />
-
-<div class="background-image">
-    <div class="content">
-        <h3>Request / Delete</h3>
-    </div>
-</div>
-
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-lg-8">
-            <div class="card shadow-sm" style="background-color: #f7f7f7;">
-                <div class="card-body">
-                    <h3 class="text-center">Are you sure you want to delete this?</h3>
-                    <div class="mb-4">
-
-                        <hr />
-                        <dl class="row">
-                            <dt class="col-sm-2">
-                                @Html.DisplayNameFor(model => model.Purpose)
-                            </dt>
-                            <dd class="col-sm-10">
-                                @Html.DisplayFor(model => model.Purpose)
-                            </dd>
-                            <dt class="col-sm-2">
-                                @Html.DisplayNameFor(model => model.StartTime)
-                            </dt>
-                            <dd class="col-sm-10">
-                                @Html.DisplayFor(model => model.StartTime)
-                            </dd>
-                            <dt class="col-sm-2">
-                                @Html.DisplayNameFor(model => model.EndTime)
-                            </dt>
-                            <dd class="col-sm-10">
-                                @Html.DisplayFor(model => model.EndTime)
-                            </dd>
-                            <dt class="col-sm-2">
-                                @Html.DisplayNameFor(model => model.CreatedAt)
-                            </dt>
-                            <dd class="col-sm-10">
-                                @Html.DisplayFor(model => model.CreatedAt)
-                            </dd>
-                            <dt class="col-sm-2">
-                                @Html.DisplayNameFor(model => model.Lab)
-                            </dt>
-                            <dd class="col-sm-10">
-                                @Html.DisplayFor(model => model.Lab.Id)
-                            </dd>
-                            <dt class="col-sm-2">
-                                @Html.DisplayNameFor(model => model.User)
-                            </dt>
-                            <dd class="col-sm-10">
-                                @Html.DisplayFor(model => model.User.Id)
-                            </dd>
-                            <dt class="col-sm-2">
-                                @Html.DisplayNameFor(model => model.StatusLog)
-                            </dt>
-                            <dd class="col-sm-10">
-                                @Html.DisplayFor(model => model.StatusLog.StatusName)
-                            </dd>
-                        </dl>
-                    </div>
-                    <form asp-action="Delete">
-                        <input type="hidden" asp-for="Id" />
-                        <div class="d-flex justify-content-between">
-                            <button type="submit" class="btn btn-danger px-4">Delete</button>
-                            <a href="@Url.Action("Index")" class="back-btn btn btn-secondary px-4">
-                                <i class="fas fa-arrow-left"></i> Back to List
-                            </a>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-
-<style>
-
-
-    .back-btn:hover {
-        text-decoration: underline;
-    }
-
-    .back-btn i {
-        margin-right: 8px;
-    }
-</style> *@
-
-
-
+﻿
 @model eAdministrationLabs.Models.LabUsageLog
 
 @{
@@ -116,8 +17,8 @@
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-lg-6">
-            <div class="card border-0 shadow-sm rounded">
-                <div class="card-header bg-danger text-white text-center">
+            <div class="card border-0 shadow-sm rounded text-dark">
+                <div class="card-header text-center">
                     <h4 class="fw-bold mb-0">Confirm Deletion</h4>
                 </div>
                 <div class="card-body bg-light">
@@ -126,6 +27,16 @@
                     </p>
                     <hr class="mb-4" />
                     <dl class="row mb-4">
+
+                        <dt class="col-sm-5 text-muted">@Html.DisplayNameFor(model => model.Lab)</dt>
+                        <dd class="col-sm-7 fw-bold">@Html.DisplayFor(model => model.Lab.LabName)</dd>
+
+                        <dt class="col-sm-5 text-muted">@Html.DisplayNameFor(model => model.User)</dt>
+                        <dd class="col-sm-7 fw-bold">@Html.DisplayFor(model => model.User.FullName)</dd>
+
+                        <dt class="col-sm-5 text-muted">@Html.DisplayNameFor(model => model.StatusLog)</dt>
+                        <dd class="col-sm-7 fw-bold">@Html.DisplayFor(model => model.StatusLog.StatusName)</dd>
+
                         <dt class="col-sm-5 text-muted">@Html.DisplayNameFor(model => model.Purpose)</dt>
                         <dd class="col-sm-7 fw-bold">@Html.DisplayFor(model => model.Purpose)</dd>
 
@@ -138,14 +49,7 @@
                         <dt class="col-sm-5 text-muted">@Html.DisplayNameFor(model => model.CreatedAt)</dt>
                         <dd class="col-sm-7 fw-bold">@Html.DisplayFor(model => model.CreatedAt)</dd>
 
-                        <dt class="col-sm-5 text-muted">@Html.DisplayNameFor(model => model.Lab)</dt>
-                        <dd class="col-sm-7 fw-bold">@Html.DisplayFor(model => model.Lab.LabName)</dd>
-
-                        <dt class="col-sm-5 text-muted">@Html.DisplayNameFor(model => model.User)</dt>
-                        <dd class="col-sm-7 fw-bold">@Html.DisplayFor(model => model.User.FullName)</dd>
-
-                        <dt class="col-sm-5 text-muted">@Html.DisplayNameFor(model => model.StatusLog)</dt>
-                        <dd class="col-sm-7 fw-bold">@Html.DisplayFor(model => model.StatusLog.StatusName)</dd>
+                       
                     </dl>
                     <form asp-action="Delete">
                         <input type="hidden" asp-for="Id" />

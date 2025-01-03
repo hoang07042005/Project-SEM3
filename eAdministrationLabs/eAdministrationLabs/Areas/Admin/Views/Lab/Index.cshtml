@@ -5,7 +5,7 @@
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<h1>Index</h1>
+
 
 <p class="text-end">
     <a asp-action="Create" class="btn btn-success">Create New</a>
@@ -16,13 +16,13 @@
             <th>
                 @Html.DisplayNameFor(model => model.LabName)
             </th>
-            <th>
+            <th class="text-center">
                 @Html.DisplayNameFor(model => model.Location)
             </th>
-            <th>
+            <th class="text-center">
                 @Html.DisplayNameFor(model => model.Capacity)
             </th>
-            <th>
+            <th class ="text-center">
                 @Html.DisplayNameFor(model => model.StatusLab)
             </th>
             <th>
@@ -40,13 +40,13 @@
             <td>
                 @Html.DisplayFor(modelItem => item.LabName)
             </td>
-            <td>
+                <td class="text-center">
                 @Html.DisplayFor(modelItem => item.Location)
             </td>
-            <td>
+                <td class="text-center">
                 @Html.DisplayFor(modelItem => item.Capacity)
             </td>
-            <td>
+            <td class="text-center">
                 @Html.DisplayFor(modelItem => item.StatusLab.StatusName)
                 @* <select class="form-control status-select" data-id="@item.Id" style="color: #000000;">
             @foreach (var status in ViewBag.StatusOptions)

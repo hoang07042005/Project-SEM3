@@ -3,6 +3,7 @@
 
 <link href="~/layoutlabs/css/bg_title.css" rel="stylesheet" />
 
+
 <div class="background-image">
     <div class="content">
         <h3>Request / Submit a request</h3>
@@ -14,8 +15,7 @@
 
     <table class="table table-bordered table-striped">
         <thead>
-            <tr>
-                <th scope="col">#</th>
+            <tr class="text-dark">
                 <th scope="col">Lab Name</th>
                 <th scope="col">Equipment</th>
                 <th scope="col">Status</th>
@@ -30,12 +30,11 @@
             {
                 foreach (var request in Model)
                 {
-                    <tr>
-                        <th scope="row">@request.Id</th>
+                    <tr class="text-dark">
                         <td>@request.LabName</td>
                         <td>@request.EquipmentName</td>
 
-                        <td style="max-width:180px;">
+                        <td style="max-width:220px;">
                             <div style="display: flex; align-items: center;">
                                 <select class="form-control status-select" data-id="@request.Id" data-current-status="@request.StatusName" onchange="handleStatusChange(this)" style="width: 150px;">
                                     @foreach (var status in ViewBag.StatusOptions)
@@ -67,7 +66,7 @@
                         <td>
                                 @if (!string.IsNullOrEmpty(request.ImageBase64))
                                 {
-                                <img src="data:image/png;base64,@request.ImageBase64" class="img-thumbnail" style="max-width: 100px; max-height: 100px;" alt="Request Image" />
+                                <img src="data:image/png;base64,@request.ImageBase64" class="img-thumbnail" style="max-width: 100px; max-height: 100px;" alt="Request Image" onclick="showImage(this)"  />
                                 }
                                 else
                                 {
@@ -104,7 +103,11 @@
                         statusId: statusId
                     },
                     success: function (result) {
-                        alert("Status update successful.");
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: 'Status update successful.'
+                        });
                     },
                     error: function () {
                         alert("There was an error updating status.");
@@ -197,4 +200,59 @@
             select.setAttribute('data-current-status', currentStatus);
         }
     </script>
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // Khởi tạo Select2
+            $('#statusFilter').select2({
+                width: '100%',  // Đảm bảo Select2 chiếm toàn bộ chiều rộng
+                placeholder: "Select a status",  // Thêm placeholder nếu cần
+                allowClear: true // Cho phép xóa lựa chọn
+            });
+        });
+
+        function showImage(imgElement) {
+            var src = imgElement.src;
+            var modal = document.createElement('div');
+            modal.id = 'imageModal';
+            modal.style.position = 'fixed';
+            modal.style.top = '50%';
+            modal.style.left = '50%';
+            modal.style.transform = 'translate(-50%, -50%)';
+            modal.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+            modal.style.zIndex = '1000';
+            modal.style.padding = '20px';
+            modal.style.borderRadius = '10px';
+            modal.style.textAlign = 'center';
+            modal.style.overflow = 'hidden';
+
+            var img = document.createElement('img');
+            img.src = src;
+            img.style.maxWidth = '90%';
+            img.style.maxHeight = '90%';
+            img.style.borderRadius = '5px';
+
+            var closeBtn = document.createElement('button');
+            closeBtn.innerHTML = 'Close';
+            closeBtn.style.position = 'absolute';
+            closeBtn.style.top = '10px';
+            closeBtn.style.right = '10px';
+            closeBtn.style.padding = '5px 10px';
+            closeBtn.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+            closeBtn.style.color = 'white';
+            closeBtn.style.border = 'none';
+            closeBtn.style.borderRadius = '5px';
+            closeBtn.onclick = function () {
+                document.body.removeChild(modal);
+            };
+
+            modal.appendChild(img);
+            modal.appendChild(closeBtn);
+
+            document.body.appendChild(modal);
+        }
+    </script>
+
+
 }

@@ -48,120 +48,73 @@ namespace eAdministrationLabs.Areas.Admin.Controllers
             return View(await eAdministrationLabsContext.ToListAsync());
         }
 
-        //[HttpPost]
-        //public JsonResult UpdateStatus(int id, int statusId)
-        //{
-        //    // Find the LabUsageLog by its ID
-        //    var labUsageLog = _context.LabUsageLogs
-        //        .FirstOrDefault(l => l.Id == id);
-
-        //    if (labUsageLog != null)
-        //    {
-        //        // Update the status of the LabUsageLog
-        //        labUsageLog.StatusLogId = statusId;
-
-        //        // Check if the status is "Approve" and update the related Lab's status
-        //        if (statusId ==2 /* The ID of the "Approve" status */)
-        //        {
-        //            // Find the related Lab
-        //            var lab = _context.Labs.FirstOrDefault(l => l.Id == labUsageLog.LabId);
-
-        //            if (lab != null)
-        //            {
-        //                // Find the "Active" status from the StatusLab table
-        //                var activeStatus = _context.StatusLabs
-        //                    .FirstOrDefault(s => s.StatusName == "Active");
-
-        //                if (activeStatus != null)
-        //                {
-        //                    // Update the Lab's status to "Active"
-        //                    lab.StatusLabId = activeStatus.Id;
-        //                }
-        //            }
-        //        }
-
-        //        // Save changes to the database
-        //        try
-        //        {
-        //            _context.SaveChanges();
-        //            return Json(new { success = true, message = "Trạng thái đã được cập nhật." });
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            return Json(new { success = false, message = "Lỗi khi lưu dữ liệu: " + ex.Message });
-        //        }
-        //    }
-
-        //    return Json(new { success = false, message = "Không tìm thấy LabUsageLog." });
-        //}
-
 
         [HttpPost]
-public JsonResult UpdateStatus(int id, int statusId)
-{
-    // Find the LabUsageLog by its ID
-    var labUsageLog = _context.LabUsageLogs
-        .FirstOrDefault(l => l.Id == id);
-
-    if (labUsageLog != null)
-    {
-        // Update the status of the LabUsageLog
-        labUsageLog.StatusLogId = statusId;
-
-        // Check if the status is "Approve" and update the related Lab's status
-        if (statusId == 2 /* The ID of the "Approve" status */)
+        public JsonResult UpdateStatus(int id, int statusId)
         {
-            // Find the related Lab
-            var lab = _context.Labs.FirstOrDefault(l => l.Id == labUsageLog.LabId);
+            // Find the LabUsageLog by its ID
+            var labUsageLog = _context.LabUsageLogs
+                .FirstOrDefault(l => l.Id == id);
 
-            if (lab != null)
+            if (labUsageLog != null)
             {
-                // Find the "Active" status from the StatusLab table
-                var activeStatus = _context.StatusLabs
-                    .FirstOrDefault(s => s.StatusName == "Active");
+                // Update the status of the LabUsageLog
+                labUsageLog.StatusLogId = statusId;
 
-                if (activeStatus != null)
+                // Check if the status is "Approve" and update the related Lab's status
+                if (statusId == 2 )
                 {
-                    // Update the Lab's status to "Active"
-                    lab.StatusLabId = activeStatus.Id;
+                    // Find the related Lab
+                    var lab = _context.Labs.FirstOrDefault(l => l.Id == labUsageLog.LabId);
+
+                    if (lab != null)
+                    {
+                        // Find the "Active" status from the StatusLab table
+                        var activeStatus = _context.StatusLabs
+                            .FirstOrDefault(s => s.StatusName == "Active");
+
+                        if (activeStatus != null)
+                        {
+                            // Update the Lab's status to "Active"
+                            lab.StatusLabId = activeStatus.Id;
+                        }
+                    }
+                }
+
+                // Check if EndTime has passed and update Lab status to "Inactive"
+                if (labUsageLog.EndTime <= DateTime.Now)
+                {
+                    // Find the related Lab
+                    var lab = _context.Labs.FirstOrDefault(l => l.Id == labUsageLog.LabId);
+
+                    if (lab != null)
+                    {
+                        // Find the "Inactive" status from the StatusLab table
+                        var inactiveStatus = _context.StatusLabs
+                            .FirstOrDefault(s => s.StatusName == "Inactive");
+
+                        if (inactiveStatus != null)
+                        {
+                            // Update the Lab's status to "Inactive"
+                            lab.StatusLabId = inactiveStatus.Id;
+                        }
+                    }
+                }
+
+                // Save changes to the database
+                try
+                {
+                    _context.SaveChanges();
+                    return Json(new { success = true, message = "Trạng thái đã được cập nhật." });
+                }
+                catch (Exception ex)
+                {
+                    return Json(new { success = false, message = "Lỗi khi lưu dữ liệu: " + ex.Message });
                 }
             }
+
+            return Json(new { success = false, message = "Không tìm thấy LabUsageLog." });
         }
-
-        // Check if EndTime has passed and update Lab status to "Inactive"
-        if (labUsageLog.EndTime <= DateTime.Now)
-        {
-            // Find the related Lab
-            var lab = _context.Labs.FirstOrDefault(l => l.Id == labUsageLog.LabId);
-
-            if (lab != null)
-            {
-                // Find the "Inactive" status from the StatusLab table
-                var inactiveStatus = _context.StatusLabs
-                    .FirstOrDefault(s => s.StatusName == "Inactive");
-
-                if (inactiveStatus != null)
-                {
-                    // Update the Lab's status to "Inactive"
-                    lab.StatusLabId = inactiveStatus.Id;
-                }
-            }
-        }
-
-        // Save changes to the database
-        try
-        {
-            _context.SaveChanges();
-            return Json(new { success = true, message = "Trạng thái đã được cập nhật." });
-        }
-        catch (Exception ex)
-        {
-            return Json(new { success = false, message = "Lỗi khi lưu dữ liệu: " + ex.Message });
-        }
-    }
-
-    return Json(new { success = false, message = "Không tìm thấy LabUsageLog." });
-}
 
 
 

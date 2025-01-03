@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace eAdministrationLabs.Models;
 
@@ -23,6 +24,7 @@ public partial class User
 
     public virtual ICollection<HistoryRequest> HistoryRequests { get; set; } = new List<HistoryRequest>();
 
+    [JsonIgnore]
     public virtual ICollection<Feedback> Feedbacks { get; set; } = new List<Feedback>();
 
     public virtual ICollection<LabUsageLog> LabUsageLogs { get; set; } = new List<LabUsageLog>();

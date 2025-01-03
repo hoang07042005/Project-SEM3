@@ -22,6 +22,7 @@
     <!-- awesome fontfamily -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 
     <!--[if lt IE 9]>
@@ -34,9 +35,7 @@
 
 <body class="main-layout">
     <!-- loader  -->
-    <div class="loader_bg">
-        <div class="loader"><img src="~/LayoutLabs/images/loading.gif" alt="" /></div>
-    </div>
+
     <!-- end loader -->
     <!-- header -->
     <header>
@@ -147,12 +146,16 @@
             </div>
         </nav>
     </header>
+
     <!-- end header -->
 
 
 
 
     <div  style="margin-top:15vh; margin-bottom:5vh;">
+@*         <div class="loader_bg">
+            <div class="loader"><img src="~/LayoutLabs/images/loading.gif" alt="" /></div>
+        </div> *@
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
@@ -168,24 +171,23 @@
                 <div class="row">
                     <div class="col-md-3">
                         <a class="logo_footer" asp-area="" asp-controller="Home" asp-action="Index">
-                            <img src="~/LayoutLabs/images/logo1-Photoroom.png" alt="#" />
+                            <img src="~/LayoutLabs/images/logo1-Photoroom.png" alt="Logo" />
                         </a>
                     </div>
                     <div class="col-md-3 col-sm-6">
                         <div class="Informa helpful">
-                            <h3>Useful Link</h3>
+                            <h3>Useful Links</h3>
                             <ul>
-                                <li><a href="index.html">Home</a></li>
-                                <li><a href="about.html">About</a></li>
-                                <li><a href="we_do.html">What we do</a></li>
-                                <li><a href="portfolio.html">Portfolio</a></li>
-                                <li><a href="contact.html">Contact us</a></li>
+                                <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                                <li><a asp-area="" asp-controller="Request" asp-action="Index">Request</a></li>
+                                <li><a asp-area="" asp-controller="LabUsageLogs" asp-action="Index">Lab Usage Logs</a></li>
+                                <li><a asp-area="" asp-controller="Request" asp-action="Notifications">Notifications</a></li>
                             </ul>
                         </div>
                     </div>
                     <div class="col-md-3 col-sm-6">
                         <div class="Informa conta">
-                            <h3>contact Us</h3>
+                            <h3>Contact Us</h3>
                             <ul>
                                 <li>
                                     <a href="Javascript:void(0)">
@@ -194,16 +196,24 @@
                                 </li>
                                 <li>
                                     <a href="Javascript:void(0)">
-                                        <i class="fa fa-phone" aria-hidden="true"></i> Call +01
-                                        1234567890
+                                        <i class="fa fa-phone" aria-hidden="true"></i> Call +01 1234567890
                                     </a>
                                 </li>
                                 <li>
                                     <a href="Javascript:void(0)">
-                                        <i class="fa fa-envelope" aria-hidden="true"></i>
-                                        demo@gmail.com
+                                        <i class="fa fa-envelope" aria-hidden="true"></i> demo@gmail.com
                                     </a>
                                 </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <div class="Informa terms">
+                            <h3>Quick Links</h3>
+                            <ul>
+                                <li><a href="javascript:void(0)" style="color: #ffffff;">Privacy Policy</a></li>
+                                <li><a href="javascript:void(0)" style="color: #ffffff;">Terms of Service</a></li>
+                                <li><a href="javascript:void(0)" style="color: #ffffff;">Site Map</a></li>
                             </ul>
                         </div>
                     </div>
@@ -217,13 +227,11 @@
                         </div>
                         <div class="col-md-6">
                             <ul class="social_icon text_align_center">
-                                <li> <a href="Javascript:void(0)"><i class="fa fa-facebook-f"></i></a></li>
-                                <li> <a href="Javascript:void(0)"><i class="fa fa-twitter"></i></a></li>
-                                <li>
-                                    <a href="Javascript:void(0)"><i class="fa fa-linkedin-square" aria-hidden="true"></i></a>
-                                </li>
-                                <li> <a href="Javascript:void(0)"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
-                                <li> <a href="Javascript:void(0)"><i class="fa fa-youtube-play" aria-hidden="true"></i></a></li>
+                                <li><a href="javascript:void(0)"><i class="fab fa-facebook-f"></i></a></li>
+                                <li><a href="javascript:void(0)"><i class="fab fa-twitter"></i></a></li>
+                                <li><a href="javascript:void(0)"><i class="fab fa-linkedin"></i></a></li>
+                                <li><a href="javascript:void(0)"><i class="fab fa-instagram"></i></a></li>
+                                <li><a href="javascript:void(0)"><i class="fab fa-youtube"></i></a></li>
                             </ul>
                         </div>
                     </div>
@@ -231,6 +239,7 @@
             </div>
         </div>
     </footer>
+
     <!-- end footer -->
     <!-- Javascript files-->
     <script src="~/LayoutLabs/js/jquery.min.js"></script>

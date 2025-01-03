@@ -61,61 +61,6 @@ namespace eAdministrationLabs.Controllers
 
 
 
-        //public async Task<IActionResult> MyRequest(int? page, string statusFilter = "All")
-        //{
-
-        //    int pageSize = 3;
-        //    int pageNumber = page == null || page < 0 ? 1 : page.Value;
-
-        //    // Lấy thông tin tài khoản đang đăng nhập
-        //    var currentFullName = User.Identity?.Name;
-
-        //    // Lấy thông tin User ID
-        //    var currentUser = await _context.Users
-        //        .FirstOrDefaultAsync(u => u.FullName == currentFullName);
-
-        //    if (currentUser == null)
-        //    {
-        //        return RedirectToAction("Login", "Account"); // Nếu không tìm thấy tài khoản, chuyển hướng về đăng nhập
-        //    }
-
-        //    // Lấy danh sách tất cả requests của người dùng hiện tại
-        //    var myRequestsQuery = _context.Requests
-        //        .Where(r => r.HistoryRequests
-        //            .OrderByDescending(h => h.ChangedAt)
-        //            .FirstOrDefault().UserId == currentUser.Id);
-
-        //    // Áp dụng bộ lọc theo trạng thái
-        //    if (!string.IsNullOrEmpty(statusFilter) && statusFilter != "All")
-        //    {
-        //        myRequestsQuery = myRequestsQuery.Where(r => r.HistoryRequests
-        //            .OrderByDescending(h => h.ChangedAt)
-        //            .FirstOrDefault().StatusRequest.StatusName == statusFilter);
-        //    }
-
-        //    // Truy vấn và chuyển đổi sang ViewModel
-        //    var myRequests = await myRequestsQuery
-        //        .Select(r => new RequestViewModel
-        //        {
-        //            Id = r.Id,
-        //            LabName = r.Lab.LabName,
-        //            EquipmentName = r.Equipment != null ? r.Equipment.NameEquipment : "N/A",
-        //            StatusName = r.HistoryRequests.OrderByDescending(h => h.ChangedAt).FirstOrDefault().StatusRequest.StatusName,
-        //            Notes = r.HistoryRequests.OrderByDescending(h => h.ChangedAt).FirstOrDefault().Notes,
-        //            ImageBase64 = Convert.ToBase64String(r.Image.Image),
-        //            CreatedAt = r.CreatedAt ?? DateTime.MinValue
-        //        })
-        //        .ToListAsync();
-
-        //    // Truyền dữ liệu bộ lọc trạng thái đến View
-        //    ViewBag.StatusFilter = statusFilter;
-        //    ViewBag.AvailableStatuses = new List<string> { "All", "Pending", "Approved", "In Progress", "Complete", "Reject" };
-        //    PagedList<RequestViewModel> requestViewModels = new PagedList<RequestViewModel>(myRequests, pageNumber, pageSize);
-
-        //    return View(requestViewModels);
-        //}
-
-
         public async Task<IActionResult> MyRequest(int? page, string statusFilter = "All")
         {
             int pageSize = 3;
@@ -367,7 +312,7 @@ namespace eAdministrationLabs.Controllers
         public async Task<IActionResult> Notifications(int? page)
         {
             
-            int pageSize = 6;
+            int pageSize = 4;
             int pageNumber = page == null || page < 0 ? 1 : page.Value;
            
 
@@ -534,6 +479,9 @@ namespace eAdministrationLabs.Controllers
             {
                 var historyRequest = await _context.HistoryRequests
                     .Include(h => h.Request)
+                    .ThenInclude(r => r.Equipment)
+                    .Include(h => h.Request)
+                    .ThenInclude(r => r.Lab)
                     .Include(r => r.User)
                     .FirstOrDefaultAsync(c => c.Id == id);
 
@@ -685,8 +633,13 @@ namespace eAdministrationLabs.Controllers
                                                     </div>
                                                     <div class='email-body'>
                                                         <p>Dear {user.FullName},</p>
-                                                        <p>We are writing to inform you that your request (ID: {historyRequest.RequestId}) has been updated to <strong>{status.StatusName}</strong>.</p>
-                                                        <p>Please take a moment to provide your feedback:</p>
+                                                        <p>We are writing to inform you that your request (ID: {historyRequest.RequestId})</strong>.</p>
+                                                        <p><strong>Lab Name:</strong> {historyRequest.Request.Lab.LabName}</p>
+                                                        <p><strong>Equipment Name:</strong> {historyRequest.Request.Equipment.NameEquipment}</p>
+                                                        <p><strong>has been updated to <strong>{status.StatusName}</p>
+                                                       
+
+
                                                         <p>Please take a moment to provide your feedback:</p>
                                                       <p><a href='https://localhost:7085/Feedback/Index?RequestId={historyRequest.RequestId}'>Click here to provide your feedback</a></p>
                                                         <p>Thank you for using our service. If you have any questions or need further assistance, please do not hesitate to reach out to us.</p>
@@ -794,6 +747,7 @@ namespace eAdministrationLabs.Controllers
             return View(requestCompletions);
         }
 
+
         [HttpGet]
         [Route("Request/CreateCompletion/{historyRequestId}")]
         public IActionResult CreateCompletion(int historyRequestId)
@@ -821,6 +775,7 @@ namespace eAdministrationLabs.Controllers
 
             return View(viewModel);
         }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -892,9 +847,6 @@ namespace eAdministrationLabs.Controllers
                 return View(model); // Xử lý lỗi.
             }
         }
-
-
-
 
 
     }

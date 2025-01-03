@@ -4,7 +4,15 @@
     ViewData["Title"] = "Complete Request";
 }
 
-<h1>@ViewData["Title"]</h1>
+
+<link href="~/layoutlabs/css/bg_title.css" rel="stylesheet" />
+<div class="background-image">
+    <div class="content">
+        <h3>Request / Complete Request</h3>
+    </div>
+</div>
+
+
 
 <form asp-action="CreateCompletion" method="post" enctype="multipart/form-data">
     <input asp-for="HistoryRequestId" type="hidden" />
@@ -27,13 +35,20 @@
         <input asp-for="CompletedBy" class="form-control" value="@User.Identity.Name" />
     </div>
     <div class="form-group">
-        <label asp-for="ImageFile"></label>
-        <input asp-for="ImageFile" type="file" class="form-control-file" id="imageInput" accept="image/*" />
-    </div>
-    <div class="form-group">
         <img id="imagePreview" src="#" alt="Preview" style="max-width: 300px; display: none;" />
     </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
+@*     <div class="form-group">
+        <label asp-for="ImageFile"></label>
+        <input asp-for="ImageFile" type="file" class="form-control-file" id="imageInput" accept="image/*" />
+    </div> *@
+
+    <div class="form-group">
+        <label asp-for="ImageFile" class="control-label">Upload Image</label>
+        <input asp-for="ImageFile" class="form-control" type="file" accept="image/*" id="imageInput" />
+        <small class="form-text text-muted">Allowed formats: JPG, PNG, GIF. Max size: 5MB.</small>
+        <span asp-validation-for="ImageFile" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-dark px-4">Submit</button>
 </form>
 
 <script>
@@ -127,7 +142,7 @@
         display: block;
         width: 100%;
         padding: 14px;
-        background-color: #007bff;
+        background-color: #0000000;
         border: none;
         border-radius: 5px;
         color: white;

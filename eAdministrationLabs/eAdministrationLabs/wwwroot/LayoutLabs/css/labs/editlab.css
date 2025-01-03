@@ -1,15 +1,107 @@
-﻿.container {
-    max-width: 1600px;
-    width: 100%;
-    overflow-x: hidden; /* Ẩn thừa nếu có */
-    margin: 0 auto; /* Đảm bảo căn giữa */
+﻿/* Reset some default styles */
+body, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    font-size: 100%;
+    vertical-align: baseline;
+    background: transparent;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f4f7f6;
+    color: #333;
+    margin: 0;
     padding: 0;
 }
 
-.card-body {
-    background-color: darkgray;
+.container {
+    margin-top: 3rem;
 }
 
-body.main-layout {
-    background-color: currentColor;
+.card {
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+}
+
+.card-body {
+    padding: 2rem;
+}
+
+.form-group label {
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.form-control {
+    border-radius: 8px;
+    border: 1px solid #ced4da;
+    padding: 0.75rem;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    background-color: #f8f9fa;
+}
+
+    .form-control:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        background-color: #ffffff;
+    }
+
+.btn {
+    border-radius: 8px;
+    padding: 0.75rem 1.5rem;
+    transition: background-color 0.3s, box-shadow 0.3s, transform 0.3s;
+    font-weight: 600;
+}
+
+.btn-outline-dark {
+    border: 2px solid #343a40;
+    color: #343a40;
+}
+
+    .btn-outline-dark:hover {
+        background-color: #343a40;
+        color: #fff;
+        transform: scale(1.05);
+    }
+
+.btn-dark {
+    background-color: #343a40;
+    color: #fff;
+}
+
+    .btn-dark:hover {
+        background-color: #23272b;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transform: scale(1.05);
+    }
+
+.text-danger {
+    font-size: 0.875em;
+}
+
+.d-flex {
+    display: flex !important;
+}
+
+.justify-content-between {
+    justify-content: space-between !important;
+}
+
+.text-black {
+    color: #000;
+}
+
+.bg-light {
+    background-color: #f8f9fa !important;
+}
+
+.border-dark {
+    border-color: #343a40 !important;
 }

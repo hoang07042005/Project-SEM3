@@ -5,7 +5,7 @@
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<h1>Index</h1>
+
 
 <p class="text-end">
     <a asp-action="Create" class="btn btn-success">Create New</a>
@@ -16,7 +16,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.CreatedAt)
             </th>
-            <th>
+            <th class="text-center">
                 @Html.DisplayNameFor(model => model.Equipment)
             </th>
             <th>
@@ -34,7 +34,7 @@
             <td>
                 @Html.DisplayFor(modelItem => item.CreatedAt)
             </td>
-            <td>
+                <td class="text-center">
                 @Html.DisplayFor(modelItem => item.Equipment.NameEquipment)
             </td>
             <td>

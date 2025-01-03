@@ -1,136 +1,4 @@
-﻿@* 
-
-@using X.PagedList;
-@using X.PagedList.Mvc.Core;
-@model X.PagedList.IPagedList<eAdministrationLabs.Models.ViewModels.RequestViewModel>
-@{
-    ViewData["Title"] = "Request List";
-}
-
-
-<link href="~/layoutlabs/css/bg_title.css" rel="stylesheet" />
-
-
-
-<div class="background-image">
-    <div class="content">
-        <h3>Request / View all requests</h3>
-    </div>
-</div>
-
-
-
-<div class="container mt-4">
-    <h2>Request List</h2>
-
-    <a asp-action="Create" class="btn btn-primary mb-3">Create New Request</a>
-
-    @if (Model.Any())
-    {
-        <table class="table table-bordered table-striped">
-            <thead>
-                <tr>
-                    <th></th>
-                    <th>Lab Name</th>
-                    <th>Equipment</th>
-                    <th>User Name</th>
-                    <th>Status</th>
-                    <th>Changed By</th>
-                    <th>Notes</th>
-                    <th>Created At</th>
-                    <th>Image</th>
-
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var request in Model)
-                {
-                    <tr>
-                        <td>@request.Id</td>
-                        <td>@request.LabName</td>
-                        <td>@request.EquipmentName</td>
-                        <td>@request.UserName</td>
-                        <td>@request.StatusName</td>
-                        <td>@request.ChangedBy</td>
-                        <td>@request.Notes</td>
-                        <td>@request.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss")</td>
-                        <td>
-                            @if (!string.IsNullOrEmpty(request.ImageBase64))
-                            {
-                                <img src="data:image/png;base64,@request.ImageBase64" alt="Request Image"
-                                     style="max-height: 70px; max-width: 70px;" onclick="showImage(this)" />
-                            }
-                            else
-                            {
-                                <span>No Image</span>
-                            }
-                        </td>
-
-                    </tr>
-                }
-            </tbody>
-        </table>
-    }
-    else
-    {
-        <p class="text-muted">No requests found. Click "Create New Request" to get started.</p>
-    }
-</div>
-
-
-<div class="d-flex justify-content-end" style="margin-top: 5vh; margin-right:20vh;">
-    @Html.PagedListPager(Model, page => Url.Action("Index", new { page = page }), new PagedListRenderOptions
-{
-    LiElementClasses = new List<string> { "page-item" },
-    PageClasses = new List<string> { "page-link" }
-})
-</div>
-
-
-
-<script type="text/javascript">
-    function showImage(imgElement) {
-        var src = imgElement.src;
-        var modal = document.createElement('div');
-        modal.id = 'imageModal';
-        modal.style.position = 'fixed';
-        modal.style.top = '50%';
-        modal.style.left = '50%';
-        modal.style.transform = 'translate(-50%, -50%)';
-        modal.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
-        modal.style.zIndex = '1000';
-        modal.style.padding = '20px';
-        modal.style.borderRadius = '10px';
-        modal.style.textAlign = 'center';
-        modal.style.overflow = 'hidden';
-
-        var img = document.createElement('img');
-        img.src = src;
-        img.style.maxWidth = '90%';
-        img.style.maxHeight = '90%';
-        img.style.borderRadius = '5px';
-
-        var closeBtn = document.createElement('button');
-        closeBtn.innerHTML = 'Close';
-        closeBtn.style.position = 'absolute';
-        closeBtn.style.top = '10px';
-        closeBtn.style.right = '10px';
-        closeBtn.style.padding = '5px 10px';
-        closeBtn.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
-        closeBtn.style.color = 'white';
-        closeBtn.style.border = 'none';
-        closeBtn.style.borderRadius = '5px';
-        closeBtn.onclick = function () {
-            document.body.removeChild(modal);
-        };
-
-        modal.appendChild(img);
-        modal.appendChild(closeBtn);
-
-        document.body.appendChild(modal);
-    }
-</script> *@ 
-
+﻿
 
 @using X.PagedList
 @using X.PagedList.Mvc.Core
@@ -153,7 +21,7 @@
 
 <div class="container mt-4">
     <div class="card shadow-sm">
-        <div class="card-body">
+        <div class="card-body text-dark" style="background-color:#ffffff;">
             <div class="d-flex justify-content-between">
                 <p>
                     <a asp-action="Create" class="btn btn-dark">Add Request</a>
@@ -188,7 +56,7 @@
                                     <td>@item.UserName</td>
                                     <td>@item.StatusName</td>
                                     <td>@item.ChangedBy</td>
-                                    <td>@item.Notes</td>
+                                    <td class="description-cell" style="max-width: 300px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">@item.Notes</td>
                                     <td>@item.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss")</td>
                                     <td>
                                         @if (!string.IsNullOrEmpty(item.ImageBase64))

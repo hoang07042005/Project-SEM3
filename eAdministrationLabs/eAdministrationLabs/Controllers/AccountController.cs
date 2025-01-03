@@ -186,13 +186,16 @@ public class AccountController : Controller
                 {
                     return RedirectToAction("Index", "HomeAdmin", new { area = "Admin" });
                 }
-                else if (roles.Contains("students") || roles.Contains("technicalstaff"))
+                else if (roles.Contains("user") || roles.Contains("technicalstaff"))
                 {
                     return RedirectToAction("Index", "Home");
                 }
             }
-
-            ModelState.AddModelError("", "Invalid login attempt.");
+            else
+            {
+                // Thêm thông báo lỗi chung
+                ModelState.AddModelError("", "Error password or account.");
+            }
         }
 
         return View(model);

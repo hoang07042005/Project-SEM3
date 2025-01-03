@@ -53,7 +53,7 @@ namespace eAdministrationLabs.Areas.Admin.Controllers
             ViewData["TotalRequests"] = totalRequests;
             ViewData["CompletedRequests"] = completedRequests;
             ViewData["PendingRequests"] = pendingRequests;
-            ViewData["TotalClasses"] = totalLabs;
+            ViewData["TotalLabs"] = totalLabs;
 
             return View();
         }

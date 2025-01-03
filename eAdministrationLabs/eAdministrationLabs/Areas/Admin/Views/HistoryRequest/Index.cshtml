@@ -51,13 +51,13 @@
                 <th>
                     @Html.DisplayNameFor(model => model.Notes)
                 </th>
-                <th>
+                <th class="text-center">
                     @Html.DisplayNameFor(model => model.Request)
                 </th>
-                <th>
+                <th class="text-center">
                     @Html.DisplayNameFor(model => model.StatusRequest)
                 </th>
-                <th>
+                <th class="text-center">
                     @Html.DisplayNameFor(model => model.User)
                 </th>
                 <th></th>
@@ -67,10 +67,10 @@
     @foreach (var item in Model) {
             <tr >
                 <td>
-                    <select class="form-control user-select-technical-staff" id="changedByDropdown-@item.Id" data-id="@item.Id">
+                    <select class="form-control user-select-technical-staff" id="changedByDropdown-@item.Id" data-id="@item.Id" style="border: 1px solid #ccc; border-radius: 6px;">
                         @foreach (var staff in ViewBag.TechnicalStaffUsers)
                         {
-                            <option value="@staff.Id" selected="@(staff.FullName == item.ChangedBy)">
+                            <option value="@staff.Id" selected="@(staff.FullName == item.ChangedBy)" style="text-align: center;">
                                 @staff.FullName
                             </option>
                         }
@@ -81,16 +81,16 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.ChangedAt)
                 </td>
-                <td>
+                <td class="description-cell" style="max-width: 300px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                     @Html.DisplayFor(modelItem => item.Notes)
                 </td>
-                <td>
+                <td class="text-center">
                     @Html.DisplayFor(modelItem => item.Request.Id)
                 </td>
-                <td>
+                <td class ="text-center">
                     @Html.DisplayFor(modelItem => item.StatusRequest.StatusName)
                 </td>
-                <td>
+                <td class="text-center">
                     @Html.DisplayFor(modelItem => item.User.FullName)
                 </td>
                 <td>

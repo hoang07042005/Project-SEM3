@@ -7,13 +7,15 @@
 
 
 
-<div class="row g-4">
+<div class="row g-4 justify-content-center">
     @foreach (var card in new[] {
     new { Title = "Total Users", Count = ViewData["TotalUsers"], BgColor = "bg-info", Icon = "fas fa-users" },
-    new { Title = "Total Requests", Count = ViewData["TotalRequests"], BgColor = "bg-secondary", Icon = "fas fa-file-alt" },
+    new { Title = "Total Requests", Count = ViewData["TotalRequests"], BgColor = "bg-warning", Icon = "fas fa-file-alt" },
     new { Title = "Completed Requests", Count = ViewData["CompletedRequests"], BgColor = "bg-success", Icon = "fas fa-check-circle" },
-    new { Title = "Pending Requests", Count = ViewData["PendingRequests"], BgColor = "bg-warning", Icon = "fas fa-clock" },
-    new { Title = "Total Classes", Count = ViewData["TotalClasses"], BgColor = "bg-dark", Icon = "fas fa-chalkboard-teacher" }
+    new { Title = "Pending Requests", Count = ViewData["PendingRequests"], BgColor = "bg-danger", Icon = "fas fa-clock" },
+    new { Title = "Total Labs", Count = ViewData["TotalLabs"], BgColor = "bg-secondary", Icon = "fas fa-chalkboard-teacher" }
+
+
     })
     {
         <div class="col-md-2">
@@ -44,13 +46,13 @@
     @ViewData["TotalRequests"],
     @ViewData["CompletedRequests"],
     @ViewData["PendingRequests"],
-    @ViewData["TotalClasses"]
+    @ViewData["TotalLabs"]
             ];
         const ctx = document.getElementById('myChart').getContext('2d');
         new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: ['Total Users', 'Total Requests', 'Completed Requests', 'Pending Requests', 'Total Classes'],
+                labels: ['Total Users', 'Total Requests', 'Completed Requests', 'Pending Requests', 'Total Labs'],
                 datasets: [{
                     label: 'Statistics',
                     data: data,
@@ -59,14 +61,14 @@
                         'rgba(255, 206, 86, 0.2)',
                         'rgba(75, 192, 192, 0.2)',
                         'rgba(255, 99, 132, 0.2)',
-                        'rgba(153, 102, 255, 0.2)'
+                        'rgba(169, 169, 169, 0.2)'
                     ],
                     borderColor: [
                         'rgba(54, 162, 235, 1)',
                         'rgba(255, 206, 86, 1)',
                         'rgba(75, 192, 192, 1)',
                         'rgba(255, 99, 132, 1)',
-                        'rgba(153, 102, 255, 1)'
+                        'rgba(169, 169, 169, 1)'
                     ],
                     borderWidth: 1
                 }]

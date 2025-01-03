@@ -1,21 +1,7 @@
 ﻿@import url('deletelab.css');
 
-.card-body {
-    background-color: darkgray;
-}
 
-body {
-    background-color: currentColor;
-    font-family: 'Arial', sans-serif;
-}
 
-.container {
-    max-width: 1600px;
-    width: 100%;
-    overflow-x: hidden;
-    margin: 0 auto;
-    padding: 0;
-}
 
 
 h1 {

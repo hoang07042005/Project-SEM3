@@ -1,57 +1,100 @@
 ﻿@model eAdministrationLabs.Models.Lab
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edit Lab";
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<h1>Edit</h1>
+<div class="container mt-5">
+    <h1 class="text-center text-primary">Edit Lab Information</h1>
+    <p class="text-center text-muted">Please update the details of the lab below.</p>
+    <hr />
 
-<h4>Lab</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="LabName" class="control-label"></label>
-                <input asp-for="LabName" class="form-control" />
-                <span asp-validation-for="LabName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Location" class="control-label"></label>
-                <input asp-for="Location" class="form-control" />
-                <span asp-validation-for="Location" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Capacity" class="control-label"></label>
-                <input asp-for="Capacity" class="form-control" />
-                <span asp-validation-for="Capacity" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="StatusLabId" class="control-label"></label>
-                <select asp-for="StatusLabId" class="form-control" asp-items="ViewBag.StatusLabId"></select>
-                <span asp-validation-for="StatusLabId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CreatedAt" class="control-label"></label>
-                <input asp-for="CreatedAt" class="form-control" />
-                <span asp-validation-for="CreatedAt" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UpdatedAt" class="control-label"></label>
-                <input asp-for="UpdatedAt" class="form-control" />
-                <span asp-validation-for="UpdatedAt" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10 col-sm-12">
+            <form asp-action="Edit" class="shadow p-5 bg-white rounded">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Id" />
+
+                <!-- Lab Name -->
+                <div class="form-group mb-4">
+                    <label asp-for="LabName" class="form-label fw-bold">Lab Name</label>
+                    <input asp-for="LabName" class="form-control px-3 py-2" placeholder="Enter lab name" />
+                    <span asp-validation-for="LabName" class="text-danger"></span>
+                </div>
+
+                <!-- Location -->
+                <div class="form-group mb-4">
+                    <label asp-for="Location" class="form-label fw-bold">Location</label>
+                    <input asp-for="Location" class="form-control px-3 py-2" placeholder="Enter lab location" />
+                    <span asp-validation-for="Location" class="text-danger"></span>
+                </div>
+
+                <!-- Capacity -->
+                <div class="form-group mb-4">
+                    <label asp-for="Capacity" class="form-label fw-bold">Capacity</label>
+                    <input asp-for="Capacity" class="form-control px-3 py-2" placeholder="Enter maximum capacity" />
+                    <span asp-validation-for="Capacity" class="text-danger"></span>
+                </div>
+
+                <!-- Status -->
+                <div class="form-group mb-4">
+                    <label asp-for="StatusLabId" class="form-label fw-bold">Lab Status</label>
+                    <select asp-for="StatusLabId" class="form-select px-3 py-2" asp-items="ViewBag.StatusLabId">
+                        <option value="" disabled selected>Select lab status</option>
+                    </select>
+                    <span asp-validation-for="StatusLabId" class="text-danger"></span>
+                </div>
+
+                <!-- Created At -->
+                <div class="form-group mb-4">
+                    <label asp-for="CreatedAt" class="form-label fw-bold">Created At</label>
+                    <input asp-for="CreatedAt" class="form-control px-3 py-2" readonly />
+                    <span asp-validation-for="CreatedAt" class="text-danger"></span>
+                </div>
+
+                <!-- Updated At -->
+                <div class="form-group mb-4">
+                    <label asp-for="UpdatedAt" class="form-label fw-bold">Updated At</label>
+                    <input asp-for="UpdatedAt" class="form-control px-3 py-2" readonly />
+                    <span asp-validation-for="UpdatedAt" class="text-danger"></span>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="form-group text-center">
+                    <input type="submit" value="Save Changes" class="btn btn-primary px-5 py-2" />
+                    <a asp-action="Index" class="btn btn-secondary px-5 py-2 ms-3">Back to List</a>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+<style>
+    body {
+        background-color: #f4f8fc;
+    }
 
+    .form-control, .form-select {
+        border-radius: 8px;
+        background-color: #f9fbfd;
+        border: 1px solid #ced4da;
+    }
+
+        .form-control:focus, .form-select:focus {
+            border-color: #80bdff;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.25);
+        }
+
+    .shadow {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+        font-size: 2.5rem;
+    }
+
+    label {
+        font-size: 1.1rem;
+    }
+</style>

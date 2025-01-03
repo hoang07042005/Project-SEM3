@@ -1,0 +1,26 @@
+﻿.container {
+    margin: 20px auto;
+}
+
+.moving-box {
+    background-color: #f9f9f9;
+    padding: 16px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.feedback-item {
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.username {
+    font-size: 16px;
+    font-weight: bold;
+}

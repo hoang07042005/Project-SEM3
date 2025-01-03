@@ -96,10 +96,5 @@
         color: white;
     }
 
-body.main-layout {
-    background-color: currentColor;
-}
 
-.card-body {
-    background-color: darkgrey;
-}
+

@@ -190,7 +190,7 @@ namespace eAdministrationLabs.Controllers
                                 <p><strong>Rating:</strong> {ratingStars}</p>
                                 <p><strong>Satisfaction:</strong> {satisfaction}</p>
                                 <p><strong>Quality:</strong> {quality}</p>
-                                <p><strong>Comment:</strong> {feedback.Comment}</p>
+                                <p style=""white-space: pre-wrap;""><strong>Comment:</strong> {feedback.Comment}</p>
                             </div>
                             <h2 style=""color: #4a90e2; margin-top: 30px;"">Request Completions:</h2>
                             <div class=""content"">

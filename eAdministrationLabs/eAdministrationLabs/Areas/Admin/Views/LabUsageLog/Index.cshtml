@@ -5,10 +5,9 @@
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-
 <p class="text-end">
     <a asp-action="Create" class="btn btn-success">Create New</a>
-</p>
+</p> 
 
 <!-- Dropdown lọc trạng thái -->
 <form method="get" asp-action="Index">
@@ -38,6 +37,15 @@
     <thead>
         <tr>
             <th>
+                @Html.DisplayNameFor(model => model.Lab)
+            </th>
+            <th class="text-center">
+                @Html.DisplayNameFor(model => model.User)
+            </th>
+            <th class="text-center">
+                @Html.DisplayNameFor(model => model.StatusLog)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Purpose)
             </th>
             <th>
@@ -49,21 +57,29 @@
             <th>
                 @Html.DisplayNameFor(model => model.CreatedAt)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Lab)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.User)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.StatusLog)
-            </th>
+          
             <th></th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
         <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Lab.LabName)
+                </td>
+                <td class="text-center">
+                    @Html.DisplayFor(modelItem => item.User.FullName)
+                </td>
+                <td>
+                    <select class="form-control status-dropdown" data-id="@item.Id" style="border: 1px solid #ccc; border-radius: 6px;">
+                        @foreach (var status in ViewBag.StatusOptions)
+                        {
+                            <option value="@status.Id" selected="@(item.StatusLogId == status.Id)" style="text-align: center;">
+                                @status.StatusName
+                            </option>
+                        }
+                    </select>
+                </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Purpose)
             </td>
@@ -76,27 +92,12 @@
             <td>
                 @Html.DisplayFor(modelItem => item.CreatedAt)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Lab.LabName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.User.FullName)
-            </td>
-            <td>
-                <select class="form-control status-dropdown" data-id="@item.Id">
-                    @foreach (var status in ViewBag.StatusOptions)
-                    {
-                        <option value="@status.Id" selected="@(item.StatusLogId == status.Id)">
-                            @status.StatusName
-                        </option>
-                    }
-                </select>
-            </td>
+
 
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary btn-sm">
+@*                 <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary btn-sm">
                     <i class="fas fa-edit" style="font-size:1em;"></i>
-                </a> |
+                </a> | *@
                 <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">
                     <i class="fas fa-info-circle" style="font-size:1em;"></i>
                 </a> |

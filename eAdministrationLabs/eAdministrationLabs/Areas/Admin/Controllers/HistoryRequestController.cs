@@ -232,7 +232,7 @@ namespace eAdministrationLabs.Areas.Admin.Controllers
             if (statusName == "Assigned to Request Update")
             {
                 subject = "You have been assigned to a request update";
-                body = $"{GetEmailBodyHeader(statusName)}<p>You have been assigned to handle the update for request (ID: {requestId}).</p><p>Lab Name: {labName}</p><p>Equipment Name: {nameEquipment}</p><p>Notes: {notes}</p>";
+                body = $"{GetEmailBodyHeader(statusName)}<p>You have been assigned to handle the update for request (ID: {requestId}).</p><p>Lab Name: {labName}</p><p>Equipment Name: {nameEquipment}</p><p style='white-space: pre-wrap;'>Notes: {notes}</p>";
                 if (!string.IsNullOrEmpty(imageBase64))
                 {
                     body += $"<img src='data:image/png;base64,{imageBase64}' style='max-width:100px; max-height:100px;' alt='Request Image' />";
